@@ -210,13 +210,10 @@ Prefixos:
 
 | Nome | Papel |
 |---|---|
-| Tatiana Amaral Sorrentino | Coordenadora |
-| Helber Wagner da Silva | Professor coordenador |
-| Eberton Marinho | Professor coordenador |
-| Creusa Ribeiro | Professora coordenadora |
-| Ana Barros | Professora colaboradora |
-| Bruno Vitorino | Professor colaborador |
 | Emily Amorim do Nascimento | Desenvolvedora (bolsista) |
+| Giseliane da Silva Lima | Desenvolvedora (bolsista) |
+| Iasmim Dias de Oliveira Galdino | Desenvolvedora (bolsista) |
+| Yuri Souza| Desenvolvedor (bolsista) |
 
 ---
 
