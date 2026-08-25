@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Ampliando Horizontes Digitais{% endblock %}</title>
+
+  <!-- CSS global -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
+
+  <!-- Tabler Icons (ícones usados em todo o projeto) -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+     navbar-painel → borda azul (professor/admin)
+     navbar-default → borda rosa (visitante/aluna)
+════════════════════════════════════════════ -->
+<nav class="navbar {% block navbar_class %}{% endblock %}">
+
+  <a href="{% url 'home' %}" class="navbar-logo" aria-label="Ir para a página inicial">
+    <img src="{% static 'img/logo_vertical.jpeg' %}" alt="Logo Ampliando Horizontes Digitais" height="70"> 
+  </a>
+
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" aria-label="Abrir menu" onclick="toggleMobileMenu()">
+    <i id="mobile-menu-icon" class="ti ti-menu-2"></i>
+  </button>
+
+  <div class="menu-overlay" onclick="toggleMobileMenu()"></div>
+  <div class="navbar-collapse">
+    <!-- Links de navegação principais -->
+    <div class="navbar-links">
+    <a href="{% url 'home' %}"
+       class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+      Home <i class="ti ti-home" style="opacity:0.7;"></i>
+    </a>
+    <a href="{% url 'historico' %}"
+       class="{% if request.resolver_match.url_name == 'historico' %}active{% endif %}">
+      Histórico <i class="ti ti-history" style="opacity:0.7;"></i>
+    </a>
+    <a href="{% url 'fotos' %}"
+       class="{% if request.resolver_match.url_name == 'fotos' %}active{% endif %}">
+      Fotos <i class="ti ti-photo" style="opacity:0.7;"></i>
+    </a>
+    <a href="{% url 'noticias' %}"
+       class="{% if request.resolver_match.url_name == 'noticias' %}active{% endif %}">
+      Notícias <i class="ti ti-news" style="opacity:0.7;"></i>
+    </a>
+    <a href="{% url 'sobre' %}"
+       class="{% if request.resolver_match.url_name == 'sobre' %}active{% endif %}">
+      Sobre <i class="ti ti-info-circle" style="opacity:0.7;"></i>
+    </a>
+
+    {% comment %}
+    Link "Painel" visível apenas para professores e admins
+    {% endcomment %}
+    {% if user.is_authenticated and user.tipo in 'professor,admin' %}
+    <a href="{% url 'painel' %}"
+       class="{% if 'painel' in request.resolver_match.url_name %}active-az{% endif %}">
+      Painel <i class="ti ti-dashboard" style="opacity:0.7;"></i>
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Ações: botões ou avatar do usuário logado -->
+  <div class="navbar-actions">
+    {% if user.is_authenticated %}
+      <div class="navbar-user">
+        <div class="navbar-avatar {% if user.tipo in 'professor,admin' %}az{% endif %}">
+          {{ user.nome|slice:":2"|upper }}
+        </div>
+        <span class="navbar-username">
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          {{ user.nome|truncatechars:20 }}
+        </span>
+      </div>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-entrar btn-sm">
+        Entrar
+      </a>
+      <a href="{% url 'cadastro' %}" class="btn btn-rosa btn-sm">
+        Cadastrar-se
+      </a>
+    {% endif %}
+  </div>
+  </div> <!-- /.navbar-collapse -->
+
+</nav>
+
+<!-- ══════════════════════════════════════════
+     MENSAGENS DJANGO (alerts automáticos)
+════════════════════════════════════════════ -->
+{% if messages %}
+<div style="padding: 0 32px; margin-top: 12px;">
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+      <i class="ti ti-info-circle" aria-hidden="true"></i>
+      {{ message }}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ══════════════════════════════════════════
+     CONTEÚDO PRINCIPAL
+════════════════════════════════════════════ -->
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ══════════════════════════════════════════
+     RODAPÉ
+════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-main">
+
+    <!-- Coluna 1: Logo + descrição -->
+    <div class="footer-logo">
+      <img src="{% static 'img/logo_vertical_branco.jpeg' %}" alt="Logo Ampliando Horizontes Digitais" width="200" style="border-radius: 8px; margin-bottom: 8px;"> 
+      <p>Apoiando meninas e jovens mulheres nas áreas de ciência e tecnologia no Litoral Sul Potiguar.</p>
+    </div>
+
+    <!-- Coluna 2: Navegação -->
+    <div>
+      <div class="footer-col-title">Navegação</div>
+      <a href="{% url 'home' %}"      class="footer-link">Home</a>
+      <a href="{% url 'historico' %}" class="footer-link">Histórico das alunas</a>
+      <a href="{% url 'fotos' %}"     class="footer-link">Fotos do projeto</a>
+      <a href="{% url 'noticias' %}"  class="footer-link">Notícias</a>
+      <a href="{% url 'sobre' %}"     class="footer-link">Sobre</a>
+    </div>
+
+    <!-- Coluna 3: Contato -->
+    <div>
+      <div class="footer-col-title">Contato</div>
+      <div class="footer-contact">
+        <i class="ti ti-mail" style="color:var(--branco); font-size: 18px; margin-top:2px" aria-hidden="true"></i>
+        <span style="word-break: break-all;"><a href="mailto:ampliandohorizontesdigitais.cang@ifrn.edu.br">ampliandohorizontesdigitais.cang@ifrn.edu.br</a></span>
+      </div>
+
+      <!-- Redes sociais -->
+      <div class="footer-col-title" style="margin-top:24px">Redes Sociais</div>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/ampliandohorizontesdigitais?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">
+          <i class="ti ti-brand-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="#" class="social-btn" aria-label="TikTok">
+          <i class="ti ti-brand-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Coluna 4: Parcerias -->
+    <div>
+      <div class="footer-col-title">Parcerias Institucionais</div>
+      <div class="footer-parceiros">
+        <div class="footer-parceiro">
+          <img src="{% static 'img/logo_IFRN.png' %}" alt="Logo do IFRN" class="logo-parceiro"> 
+        </div>
+        <div class="footer-parceiro">
+           <img src="{% static 'img/logo_cnpq.png' %}" alt="Logo do CNPq" class="logo-parceiro"> 
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Projeto Ampliando Horizontes Digitais</span>
+    <span class="footer-copy">CNPq Nº 31/2023 · IFRN Campus Canguaretama</span>
+  </div>
+</footer>
+
+<!-- JS global -->
+<script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+
+  </body>
+</html>

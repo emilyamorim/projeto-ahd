@@ -1,6 +1,333 @@
-<!DOCTYPE html>
-<html>
-<body>
-  <h1>Funcionando!</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home — Ampliando Horizontes Digitais
+<!-- ==============================================
+     CTA FINAL
+=============================================== -->
+<section class="sec-pad" style="background: linear-gradient(135deg, var(--rosa), var(--azul)); color: var(--branco); text-align: center; padding: 64px 24px; margin: 40px auto; border-radius: 24px; max-width: 1200px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+  <h2 style="margin-bottom: 16px; font-size: 32px; font-weight: 700; line-height: 1.2;">Pronta para transformar o futuro?</h2>
+  <p style="margin-bottom: 32px; font-size: 18px; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9; line-height: 1.6;">Junte-se ao Ampliando Horizontes Digitais e ajude a inspirar a próxima geração de mulheres na tecnologia e ciência.</p>
+  <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+    <a href="{% url 'cadastro' %}" class="btn" style="background: var(--branco); color: var(--rosa); padding: 14px 32px; font-weight: 600; font-size: 16px; border-radius: 50px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Cadastre-se Agora</a>
+    <a href="{% url 'sobre' %}" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.5); color: var(--branco); padding: 14px 32px; font-weight: 600; font-size: 16px; border-radius: 50px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='scale(1)'">Saber Mais</a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ HERO ══ -->
+<section class="page-hero" style="text-align:center; padding: 100px 32px;">
+  <h1 style="font-size:2rem; margin-bottom:10px;">
+    Ampliando Horizontes Digitais
+    <br>
+    <span style="font-family:var(--fonte-corpo); font-size:1rem; font-weight:300; opacity:.85;">
+      Mentoria de Meninas no Litoral Sul Potiguar
+    </span>
+  </h1>
+  <p style="margin: 0 auto 24px; max-width:520px;">
+    Um projeto de mentoria apoiado pelo CNPq para inserir meninas nas
+    áreas de tecnologia, robótica e ciências exatas — acompanhando
+    cada egresso em sua trajetória.
+  </p>
+  <div class="hero-actions">
+    <a href="{% url 'sobre' %}" class="btn btn-pill btn-branco" style="font-weight:600;">
+      Conhecer o projeto
+    </a>
+    <a href="{% url 'cadastro' %}" class="btn btn-pill btn-outline-branco">
+      Deixar meu relato
+    </a>
+  </div>
+</section>
+
+<!-- ══ CARROSSEL DE FOTOS ══ -->
+<div class="foto-carousel-wrapper">
+  <div class="foto-carousel">
+    <a href="{% url 'fotos' %}" class="foto-strip-cell">
+      <img src="{% static 'img/carrossel_1.jpg' %}" alt="Foto 1">
+      <div class="foto-strip-label">Reunião das Bolsistas</div>
+    </a>
+    <a href="{% url 'fotos' %}" class="foto-strip-cell">
+      <img src="{% static 'img/carrossel_2.jpg' %}" alt="Foto 2">
+      <div class="foto-strip-label">Visita e Confraternização</div>
+    </a>
+    <a href="{% url 'fotos' %}" class="foto-strip-cell">
+      <img src="{% static 'img/carrossel_3.jpg' %}" alt="Foto 3">
+      <div class="foto-strip-label">Segunda Entraga dos Certificados</div>
+    </a>
+    <a href="{% url 'fotos' %}" class="foto-strip-cell">
+      <img src="{% static 'img/carrossel_4.jpeg' %}" alt="Foto 4">
+      <div class="foto-strip-label">Bolsistas na Primeira Entraga dos Certificados</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">44</div>
+    <div class="stat-label">Bolsistas Ativas</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num az">500</div>
+    <div class="stat-label">Alunas por ano</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">7</div>
+    <div class="stat-label">Eixos temáticos</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num az">3</div>
+    <div class="stat-label">Anos de projeto</div>
+  </div>
+</div>
+
+<!-- ══ EIXOS ══ -->
+<section class="sec-pad">
+  <div class="sec-header">
+    <span class="sec-title">Os 7 Eixos do Projeto</span>
+  </div>
+  <div class="eixos-grid">
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--rosa); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--rosa); margin-bottom:0;">01</div>
+        <i class="ti ti-device-laptop" style="font-size: 26px; color:var(--rosa); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Letramento Digital</div>
+    </div>
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--azul); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--azul); margin-bottom:0;">02</div>
+        <i class="ti ti-robot" style="font-size: 26px; color:var(--azul); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Robótica Educacional</div>
+    </div>
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--rosa); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--rosa); margin-bottom:0;">03</div>
+        <i class="ti ti-medal" style="font-size: 26px; color:var(--rosa); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Olimpíadas do<br>Conhecimento</div>
+    </div>
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--azul); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--azul); margin-bottom:0;">04</div>
+        <i class="ti ti-users" style="font-size: 26px; color:var(--azul); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Eventos para<br>Formação Integral</div>
+    </div>
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--rosa); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--rosa); margin-bottom:0;">05</div>
+        <i class="ti ti-microscope" style="font-size: 26px; color:var(--rosa); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Pesquisa Científica</div>
+    </div>
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--azul); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--azul); margin-bottom:0;">06</div>
+        <i class="ti ti-school" style="font-size: 26px; color:var(--azul); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Acompanhamento<br>das Egressas</div>
+    </div>
+    <div class="eixo-card" style="background:#fff; border:1px solid var(--rosa); color:var(--preto);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div class="eixo-num" style="color:var(--rosa); margin-bottom:0;">07</div>
+        <i class="ti ti-speakerphone" style="font-size: 26px; color:var(--rosa); opacity:0.8;"></i>
+      </div>
+      <div class="eixo-nome">Divulgação das Atividades</div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ══ RELATOS ══ -->
+<section class="sec-pad" style="padding-top:0;">
+  <div class="sec-header">
+    <span class="sec-title">Relatos Recentes</span>
+    <a href="{% url 'historico' %}" class="sec-link">
+      Ver todas <i class="ti ti-arrow-right" style="font-size: 14px;"></i>
+    </a>
+  </div>
+  <div class="relatos-grid">
+    {% for relato in relatos %}
+    <div class="relato-card {% if forloop.counter|divisibleby:2 %}azul{% endif %}">
+      <div class="relato-head">
+        <div class="relato-av {% if forloop.counter|divisibleby:2 %}az{% endif %}">
+          {{ relato.usuario.nome|slice:":2"|upper }}
+        </div>
+        <div>
+          <div class="relato-nome" style="font-weight:600; font-size: 16px;">{{ relato.usuario.nome }}</div>
+          <div class="relato-data" style="font-size: 13px;">{{ relato.data_publicacao|date:"M Y" }}</div>
+        </div>
+      </div>
+      <div class="relato-txt">{{ relato.conteudo|truncatechars:180 }}</div>
+    </div>
+    {% empty %}
+    <div class="relato-card">
+      <div class="relato-head">
+        <div class="relato-av" style="background:var(--rosa-claro); color:var(--rosa); font-weight:700;">EM</div>
+        <div>
+          <div class="relato-nome" style="font-weight:600; font-size: 16px;">Emily Amorim</div>
+          <div class="relato-data" style="font-size: 13px;">Mai 2025 · Eixo 2</div>
+        </div>
+      </div>
+      <div class="relato-txt">
+        Após o projeto ingressei no curso técnico de Informática no IFRN. Foi uma experiência transformadora que abriu muitas portas na minha trajetória...
+      </div>
+    </div>
+    <div class="relato-card azul">
+      <div class="relato-head">
+        <div class="relato-av az" style="background:var(--azul-claro); color:var(--azul); font-weight:700;">GI</div>
+        <div>
+          <div class="relato-nome" style="font-weight:600; font-size: 16px;">Giseliane Lima</div>
+          <div class="relato-data" style="font-size: 13px;">Abr 2025 · Eixo 1</div>
+        </div>
+      </div>
+      <div class="relato-txt">
+        Após o projeto ingressei no curso técnico de Informática no IFRN. Foi uma experiência transformadora que abriu muitas portas na minha trajetória...
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- ══ BOLSISTAS ══ -->
+<section class="sec-pad" style="padding-top:0;">
+  <div class="sec-header">
+    <span class="sec-title">Bolsistas do Projeto (2026)</span>
+    <a href="{% url 'historico' %}" class="sec-link">
+      Ver todas <i class="ti ti-arrow-right" style="font-size: 14px;"></i>
+    </a>
+  </div>
+  <div class="row-4 bolsistas-grid">
+    {% for bolsista in bolsistas %}
+    <a href="{% url 'perfil_aluna' bolsista.id %}" class="card"
+       style="text-align:center; padding:14px 10px; text-decoration:none; color:inherit;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px;">
+        {{ bolsista.nome|slice:":2"|upper }}
+      </div>
+      <div style="font-size: 14px; font-weight:700;">{{ bolsista.nome|truncatechars:18 }}</div>
+      <div style="font-size: 12px; color:var(--cinza-sub); margin-top:2px;">{{ bolsista.eixo_principal }}</div>
+    </a>
+    {% empty %}
+    <!-- Dados de exemplo enquanto não há banco -->
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--rosa-claro); color:var(--rosa); border-color:var(--rosa);">AL</div>
+      <div style="font-size: 14px; font-weight:700;">Ana Letícia</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Letramento</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <div class="card" style="text-align:center; padding:14px 10px;">
+      <div class="sidebar-avatar" style="margin:0 auto 8px; width:40px; height:40px; font-size: 15px; background:var(--azul-claro); color:var(--azul); border-color:var(--azul);">AH</div>
+      <div style="font-size: 14px; font-weight:700;">Adi Hillary</div>
+      <div style="font-size: 13px; color:var(--cinza-texto); margin-top:2px;">Robótica</div>
+    </div>
+    <a href="{% url 'historico' %}" class="card"
+       style="text-align:center; padding:14px 10px; border:1px solid var(--cinza-borda);
+              background:var(--branco); display:flex; flex-direction:column;
+              align-items:center; justify-content:center; text-decoration:none;">
+      <i class="ti ti-plus" style="font-size: 34px; color:var(--cinza-borda);"></i>
+      <div style="font-size: 14px; color:var(--cinza-texto); margin-top:8px;">35 mais</div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ══ NOTÍCIAS ══ -->
+<section class="sec-pad" style="padding-top:0;">
+  <div class="sec-header">
+    <span class="sec-title">Notícias</span>
+    <a href="{% url 'noticias' %}" class="sec-link">
+      Ver todas <i class="ti ti-arrow-right" style="font-size: 14px;"></i>
+    </a>
+  </div>
+  <div class="noticias-grid">
+    {% for noticia in noticias %}
+    <a href="{% url 'noticias' %}" class="noticia-card">
+      <div class="noticia-img" style="background:linear-gradient(135deg,#6b1049,#981869);">
+        {% if noticia.foto_capa %}
+          <img src="{{ noticia.foto_capa.arquivo_url }}" alt="{{ noticia.titulo }}">
+        {% else %}
+          <i class="ti ti-news" style="font-size: 30px; color:rgba(255,255,255,.4);"></i>
+        {% endif %}
+      </div>
+      <div class="noticia-body">
+        <div class="noticia-data">{{ noticia.data_publicacao|date:"d M Y"|lower }}</div>
+        <div class="noticia-titulo">{{ noticia.titulo }}</div>
+        <div class="noticia-texto">{{ noticia.conteudo|truncatechars:100 }}</div>
+        <span class="badge badge-rosa" style="margin-top:8px;">{{ noticia.get_categoria_display }}</span>
+      </div>
+    </a>
+    {% empty %}
+    <!-- Exemplos estáticos -->
+    <a href="{% url 'noticias' %}" class="noticia-card">
+      <div class="noticia-img" style="background:linear-gradient(135deg,#6b1049,#981869);">
+        <i class="ti ti-photo" style="font-size: 30px; color:rgba(255,255,255,.4);"></i>
+      </div>
+      <div class="noticia-body">
+        <div class="noticia-data">12 jun 2026</div>
+        <div class="noticia-titulo">Alunas do projeto participam da SECITEX 2026</div>
+        <div class="noticia-texto">Seis bolsistas apresentaram trabalhos de robótica educacional no evento científico do IFRN...</div>
+        <span class="badge badge-rosa" style="margin-top:8px;">Eventos</span>
+      </div>
+    </a>
+    <a href="{% url 'noticias' %}" class="noticia-card">
+      <div class="noticia-img" style="background:linear-gradient(135deg,#1e3f66,#336699);">
+        <i class="ti ti-photo" style="font-size: 30px; color:rgba(255,255,255,.4);"></i>
+      </div>
+      <div class="noticia-body">
+        <div class="noticia-data">28 mai 2026</div>
+        <div class="noticia-titulo">Projeto conquista menção honrosa na OBR 2026</div>
+        <div class="noticia-texto">A equipe do eixo de robótica obteve destaque na Olimpíada Brasileira de Robótica...</div>
+        <span class="badge badge-azul" style="margin-top:8px;">Conquistas</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

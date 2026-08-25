@@ -1,0 +1,365 @@
+/* ====================================================
+   Página: Histórico das Alunas
+==================================================== */
+
+/* --- Cabeçalho da Página (Header Roxo) --- */
+.historico-header {
+  position: relative;
+  background: url('../img/hero_bg_real.jpg') center/cover no-repeat;
+  color: var(--branco);
+  padding: 64px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 1;
+}
+.historico-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(152, 24, 105, 0.85);
+  z-index: -1;
+}
+.historico-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.historico-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+.historico-title i {
+  font-size: 32px;
+}
+
+/* --- Controles: Busca e Filtro --- */
+.historico-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.search-input-wrapper {
+  position: relative;
+  width: 300px;
+}
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 18px;
+}
+.search-input-wrapper input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border-radius: 50px;
+  border: none;
+  font-size: 15px;
+  color: var(--preto);
+  outline: none;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.eixo-filter {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 12px 42px 12px 20px;
+  border-radius: 50px;
+  border: 1px solid rgba(0,0,0,0.05);
+  font-size: 15px;
+  color: var(--preto);
+  font-weight: 500;
+  outline: none;
+  font-family: inherit;
+  background: var(--branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 16px center;
+  background-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+.eixo-filter:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  border-color: rgba(0,0,0,0.1);
+}
+.type-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  padding: 4px;
+}
+.type-toggle button {
+  background: transparent;
+  border: none;
+  color: var(--branco);
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+.type-toggle button.active {
+  background: var(--branco);
+  color: #a21a71;
+}
+
+/* --- Container Principal --- */
+.historico-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- Card da Aluna --- */
+.aluna-card-wrap {
+  background: var(--branco);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.aluna-card-wrap {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.aluna-card-wrap:hover {
+  border-color: rgba(0,0,0,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+.btn-toggle-details i {
+  transition: transform 0.2s ease;
+}
+.aluna-card-wrap:hover .ti-chevron-down {
+  transform: translateY(3px);
+}
+
+.aluna-card-header {
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+}
+.aluna-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f1d5e6;
+  color: #a21a71;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.aluna-info-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.aluna-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.aluna-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--preto);
+  margin: 0;
+}
+.aluna-eixo-badge {
+  background: #d6a1c1;
+  color: #6b1049;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.aluna-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  color: #555;
+  font-size: 15px;
+}
+.aluna-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.aluna-meta-item i {
+  color: #a21a71;
+  font-size: 20px;
+}
+
+.btn-toggle-details {
+  background: #a21a71;
+  color: var(--branco);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s;
+  font-family: inherit;
+}
+.btn-toggle-details:hover {
+  background: #8e1763;
+}
+
+/* --- Card Body (Expandable) --- */
+.aluna-card-body {
+  padding: 0 24px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  border-top: 1px solid transparent;
+}
+.aluna-card-wrap.expanded .aluna-card-body {
+  padding: 24px;
+  max-height: 800px;
+  opacity: 1;
+  border-top-color: rgba(0,0,0,0.1);
+}
+
+.aluna-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.aluna-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.aluna-detail-label {
+  font-size: 14px;
+  color: #666;
+}
+.aluna-detail-value {
+  font-size: 16px;
+  color: var(--preto);
+}
+
+/* --- Linha do Tempo --- */
+.timeline-section-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--preto);
+  margin-bottom: 16px;
+}
+.timeline-list {
+  padding-left: 10px;
+  border-left: 2px dashed rgba(162, 26, 113, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.timeline-item {
+  position: relative;
+  padding: 12px 16px;
+  margin-left: 16px;
+  background: rgba(0,0,0,0.02);
+  border-radius: 8px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -23px;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #a21a71;
+  border: 3px solid var(--branco);
+  box-shadow: 0 0 0 1px rgba(162, 26, 113, 0.3);
+}
+.timeline-content {
+  font-size: 15px;
+  color: var(--preto);
+}
+.timeline-date {
+  color: #666;
+  margin-right: 8px;
+}
+.timeline-text {
+  font-weight: 500;
+}
+.ver-relatos-link {
+  color: #2196f3;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+.ver-relatos-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Botão Carregar Mais --- */
+.btn-load-more {
+  width: 100%;
+  background: var(--branco);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-load-more:hover {
+  background: rgba(0,0,0,0.02);
+  color: #a21a71;
+}
+.btn-load-more span {
+  color: #2196f3;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .aluna-card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .aluna-name-row, .aluna-meta-row {
+    justify-content: center;
+  }
+  .btn-toggle-details {
+    position: static;
+    margin-top: 16px;
+  }
+  .aluna-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
