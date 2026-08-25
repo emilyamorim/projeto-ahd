@@ -3,7 +3,14 @@
 Site do projeto de mentoria de meninas do IFRN Campus Canguaretama,
 financiado pelo CNPq (Chamada Nº 31/2023).
 
+
+> **🛑 ATENÇÃO EQUIPE:** Quer saber o que já está pronto e qual é a sua próxima tarefa? 
+> **[👉 CLIQUE AQUI PARA ACESSAR O ROADMAP DO PROJETO](ROADMAP.md)**
+>
+> Para guias de design e classes CSS oficiais, leia o **[Design System](docs/design_system.md)**.
+
 ---
+
 
 ## O que é esse projeto?
 
@@ -39,10 +46,15 @@ python3 --version
 git --version
 ```
 
-### 2. Clone o repositório
+### 2. Clone o repositório (Passo Fundamental)
+
+**IMPORTANTE:** Nunca baixe o projeto como um `.zip`. Você PRECISA usar o `git clone` para que o seu computador acompanhe o versionamento da equipe.
 
 ```bash
+# Baixa o projeto com todo o histórico do Git
 git clone https://github.com/emilyamorim/projeto-ahd.git
+
+# Entra na pasta clonada
 cd projeto-ahd
 ```
 

@@ -1,0 +1,472 @@
+/* ====================================================
+   Página: Sobre o Projeto
+==================================================== */
+
+/* --- Cabeçalho da Página (Header Azul) --- */
+.sobre-header {
+  position: relative;
+  background: url('../img/hero_bg_real.jpg') center/cover no-repeat;
+  color: var(--branco);
+  padding: 64px 24px 80px 24px;
+  text-align: center;
+  z-index: 1;
+}
+.sobre-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(51, 102, 153, 0.85); /* Azul translúcido */
+  z-index: -1;
+}
+.sobre-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+.sobre-header p {
+  font-size: 18px;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- Barra de Abas (Tabs) --- */
+.tabs-nav-wrapper {
+  background: var(--branco);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0; /* Ou ajuste dependendo da navbar global */
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+.tabs-nav {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs-nav::-webkit-scrollbar {
+  display: none;
+}
+.tab-btn {
+  flex: 1;
+  text-align: center;
+  background: none;
+  border: none;
+  padding: 20px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--preto);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+  font-family: inherit;
+}
+.tab-btn:hover {
+  opacity: 1;
+}
+.tab-btn.active {
+  opacity: 1;
+  color: var(--rosa);
+}
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--rosa);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+/* --- Container do Conteúdo --- */
+.sobre-container {
+  max-width: 1000px;
+  margin: 48px auto;
+  padding: 0 24px;
+  min-height: 60vh;
+}
+.aba-content {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
+}
+.aba-content.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Títulos Internos das Seções --- */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--preto);
+  margin: 48px 0 24px 0;
+}
+.section-title:first-child {
+  margin-top: 0;
+}
+.section-title::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 24px;
+  background: var(--rosa);
+  border-radius: 4px;
+}
+
+/* ====================================================
+   ABA 1: O PROJETO
+==================================================== */
+.boxes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.info-box {
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.info-box.bg-rosa-light { background: #fdf0f4; border-color: #f1d5e6; }
+.info-box.bg-azul-light { background: #e8f1f8; border-color: #d4e6f8; }
+.info-box.bg-cinza-light { background: #f9f9f9; border-color: #eaeaea; }
+
+.box-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+  color: var(--rosa);
+}
+.bg-azul-light .box-icon { color: var(--azul); }
+.bg-cinza-light .box-icon { color: var(--preto); }
+
+.info-box h3 {
+  font-size: 20px;
+  margin: 0 0 12px 0;
+  color: var(--preto);
+}
+.info-box p {
+  font-size: 16px;
+  color: var(--cinza-texto);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Lista de Problemas */
+.problemas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.problema-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--branco);
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: 12px;
+}
+.problema-num {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: #f1d5e6;
+  color: var(--rosa);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+.problema-texto {
+  font-size: 16px;
+  color: var(--cinza-texto);
+  line-height: 1.5;
+  margin-top: 8px; /* Alinhar opticamente com o número */
+}
+
+/* Resultados Experados (3 colunas) */
+.resultados-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.resultado-box {
+  text-align: center;
+}
+.resultado-numero {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--rosa);
+  margin-bottom: 8px;
+}
+.resultado-box:nth-child(2) .resultado-numero { color: var(--azul); }
+.resultado-box:nth-child(3) .resultado-numero { color: var(--rosa); }
+
+/* ====================================================
+   ABA 2: EIXOS
+==================================================== */
+.eixos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.eixo-item {
+  background: var(--branco);
+  border: 1px solid var(--rosa-borda, #e8c8d8);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.eixo-item:nth-child(even) {
+  border-color: var(--azul-borda, #b8d4ec);
+}
+.eixo-numero {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--rosa);
+  opacity: 0.8;
+  line-height: 1;
+}
+.eixo-item:nth-child(even) .eixo-numero { color: var(--azul); }
+.eixo-content h3 {
+  font-size: 22px;
+  color: var(--rosa);
+  margin: 0 0 8px 0;
+}
+.eixo-item:nth-child(even) .eixo-content h3 { color: var(--azul); }
+.eixo-content p {
+  font-size: 16px;
+  color: var(--cinza-texto);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ====================================================
+   ABA 3: TIME
+==================================================== */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.time-card {
+  background: var(--branco);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+.time-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px auto;
+  background: #e8f1f8;
+  color: var(--azul);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+.time-card:nth-child(even) .time-avatar {
+  background: #fdf0f4;
+  color: var(--rosa);
+}
+.time-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--preto);
+  margin: 0 0 4px 0;
+}
+.time-role {
+  font-size: 14px;
+  color: var(--cinza-sub);
+  margin: 0 0 8px 0;
+}
+.time-email {
+  font-size: 13px;
+  color: var(--azul);
+  text-decoration: none;
+}
+
+/* Listas de Bolsistas */
+.eixo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--rosa);
+  background: #fdf0f4;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  margin-top: 32px;
+}
+.eixo-tag.blue { color: var(--azul); background: #e8f1f8; }
+.eixo-tag:first-child { margin-top: 0; }
+
+.bolsistas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.bolsista-card {
+  background: var(--branco);
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--preto);
+}
+
+/* ====================================================
+   ABA 4: IDENTIDADE VISUAL
+==================================================== */
+.identidade-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.identidade-texto p {
+  font-size: 16px;
+  color: var(--cinza-texto);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.identidade-simbolo {
+  background: var(--branco);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 32px;
+}
+.simbolo-img-placeholder {
+  text-align: center;
+  margin-bottom: 24px;
+}
+/* Usaremos SVG ou logo direto no HTML, apenas centralizaremos */
+
+.paleta-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.cor-box {
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+}
+.cor-shape {
+  height: 60px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.cor-hex { font-size: 12px; color: var(--cinza-sub); }
+.cor-nome { font-size: 14px; font-weight: 700; color: var(--preto); }
+
+.tipografia-box {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+}
+.tipo-preview {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--rosa);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.tipo-preview span { color: var(--azul); }
+
+/* --- Responsividade Global da Página --- */
+@media (max-width: 800px) {
+  .boxes-grid, .resultados-grid, .identidade-grid {
+    grid-template-columns: 1fr;
+  }
+  .time-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bolsistas-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 500px) {
+  .time-grid, .bolsistas-grid {
+    grid-template-columns: 1fr;
+  }
+  .eixo-item {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Hover nos Eixos */
+.eixo-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.eixo-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+.eixo-numero {
+  transition: transform 0.3s ease;
+}
+.eixo-item:hover .eixo-numero {
+  transform: scale(1.1);
+}
+
+/* Search Bolsistas */
+.search-bolsistas-wrapper input:focus {
+  border-color: var(--rosa);
+}
+
+/* Tooltip Copy Hex */
+.cor-box {
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s;
+}
+.cor-box:hover {
+  transform: translateY(-3px);
+}
+.cor-tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--preto);
+  color: var(--branco);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.cor-box.copied .cor-tooltip {
+  opacity: 1;
+}

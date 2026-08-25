@@ -1,83 +1,40 @@
-# Como contribuir com o projeto
+# Como contribuir com o projeto (Workflow da Equipe)
 
-Leia este guia antes de começar a trabalhar no código.
-
----
-
-## Configurando o ambiente
-
-Siga o passo a passo do [README.md](README.md). Depois de configurar,
-você estará pronto para contribuir.
+Para não gerarmos conflitos no código de cada um, siga ESTRITAMENTE as regras abaixo.
 
 ---
 
-## Criando uma branch para sua tarefa
-
-Nunca trabalhe diretamente na `main` ou `develop`.
-Crie sempre uma branch nova para cada tarefa:
+## 1. Nunca mexa na `main` ou na `develop` diretamente
+Sempre que for iniciar uma tarefa nova escolhida no [ROADMAP](ROADMAP.md), crie uma "ramificação" (*branch*) separada para você.
 
 ```bash
-# 1. Atualize o develop antes de começar
+# 1. Garanta que você está na develop e está com a versão mais atual de todas
 git checkout develop
 git pull origin develop
 
 # 2. Crie uma branch com o nome da sua tarefa
 git checkout -b feature/nome-da-tarefa
-
-# Exemplos de nomes:
-# feature/tela-home
-# feature/tela-login
-# fix/erro-cadastro
-# style/ajuste-navbar
 ```
 
----
+## 2. Convenção de Nomes
+Suas branches devem seguir estes padrões:
+- `feature/...` → Para páginas ou recursos novos (Ex: `feature/tela-login`)
+- `fix/...` → Para corrigir erros e bugs (Ex: `fix/erro-botoes-fotos`)
+- `docs/...` → Apenas para atualizar documentos de texto (Ex: `docs/atualiza-roadmap`)
 
-## Fazendo commits
+## 3. Mensagens de Commit (Padrão Semântico)
+Explique exatamente o que você fez no commit:
+- 🟢 `feat: adiciona formulario de login na auth`
+- 🔴 `fix: corrige margin-top do grid de fotos`
+- 🎨 `style: adiciona hover nos cards de noticia`
 
-Escreva mensagens claras que expliquem o que foi feito:
+Evite mensagens genéricas como "arrumei o bug" ou "update".
 
+## 4. Finalizando o Trabalho
+Quando terminar e testar na sua máquina:
 ```bash
-# Boas mensagens
-git commit -m "feat: adiciona página de login"
-git commit -m "fix: corrige validação do e-mail no cadastro"
-git commit -m "style: ajusta tamanho da fonte na navbar"
-git commit -m "docs: atualiza instruções no README"
-
-# Mensagens ruins (evite)
-git commit -m "update"
-git commit -m "arrumei"
-git commit -m "alterações"
-```
-
-Prefixos disponíveis:
-- `feat:` → novo recurso ou página
-- `fix:` → correção de erro
-- `style:` → mudança visual (CSS, HTML)
-- `docs:` → atualização de documentação
-- `refactor:` → melhoria de código sem mudar o resultado
-
----
-
-## Subindo seu trabalho para o GitHub
-
-```bash
-# Salve seus arquivos e faça o commit
 git add .
-git commit -m "feat: adiciona tela de histórico"
-
-# Suba para o GitHub
-git push origin feature/nome-da-sua-branch
+git commit -m "feat: sua mensagem"
+git push origin feature/nome-da-tarefa
 ```
-
-Depois, abra um **Pull Request** no GitHub apontando
-sua branch para a `develop`.
-
----
-
-## Reportando um erro
-
-Se encontrar um erro no projeto, abra uma **Issue** no GitHub com:
-- O que você estava tentando fazer
-- O que aconteceu (mensagem de erro, se houver)
-- Em qual página ou funcionalidade ocorreu
+Vá ao repositório no GitHub e abra um **Pull Request (PR)** apontando a sua branch para a `develop`. Comunique a equipe no grupo para alguém revisar e aprovar seu código!

@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sobre o Projeto - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<!-- CSS Específico desta página -->
+<link rel="stylesheet" href="{% static 'css/sobre.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- HEADER AZUL -->
+<div class="sobre-header">
+  <h1>Sobre o projeto</h1>
+  <p>
+    O Ampliando Horizontes Digitais é um projeto de mentoria financiado pelo CNPq (Chamada Nº 31/2023 &mdash; Meninas nas Ciências Exatas, Engenharias e Computação) com duração de 3 anos, voltado para meninas em transição do Ensino Fundamental II para o Ensino Médio no Litoral Sul Potiguar.
+  </p>
+</div>
+
+<!-- BARRA DE NAVEGAÇÃO DE ABAS -->
+<div class="tabs-nav-wrapper">
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-target="aba-projeto">O projeto</button>
+    <button class="tab-btn" data-target="aba-eixos">Eixos temáticos</button>
+    <button class="tab-btn" data-target="aba-time">Nosso time</button>
+    <button class="tab-btn" data-target="aba-identidade">Identidade visual</button>
+  </div>
+</div>
+
+<div class="sobre-container">
+  
+  <!-- ==========================================
+       ABA 1: O PROJETO
+       ========================================== -->
+  <div id="aba-projeto" class="aba-content active">
+    
+    <h2 class="section-title">Missão e objetivos</h2>
+    
+    <div class="boxes-grid">
+      <div class="info-box bg-rosa-light">
+        <i class="ti ti-target box-icon"></i>
+        <h3>Objetivo geral</h3>
+        <p>Apoiar meninas na conclusão do Ensino Fundamental II e no início do Ensino Médio, inserindo-as na área de tecnologia por meio do letramento digital e da robótica educacional, estimulando o interesse pelo ingresso nas ciências exatas, engenharias e computação.</p>
+      </div>
+      <div class="info-box bg-azul-light">
+        <i class="ti ti-calendar box-icon"></i>
+        <h3>Duração e abrangência</h3>
+        <p>Apoiar meninas na conclusão do Ensino Fundamental II e no início do Ensino Médio, inserindo-as na área de tecnologia por meio do letramento digital e da robótica educacional, estimulando o interesse pelo ingresso nas ciências exatas, engenharias e computação.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Problemas que o projeto aborda</h2>
+    
+    <div class="problemas-list">
+      <div class="problema-item">
+        <div class="problema-num">1</div>
+        <div class="problema-texto">Grande parte das crianças e jovens brasileiros não conseguem concluir os estudos básicos, especialmente em regiões menos favorecidas.</div>
+      </div>
+      <div class="problema-item">
+        <div class="problema-num">2</div>
+        <div class="problema-texto">Muitas meninas precisam ajudar nas tarefas de casa e no sustento familiar, o que impacta diretamente na sua vida escolar.</div>
+      </div>
+      <div class="problema-item">
+        <div class="problema-num">3</div>
+        <div class="problema-texto">A gravidez precoce também afeta a continuidade dos estudos de adolescentes na região.</div>
+      </div>
+      <div class="problema-item">
+        <div class="problema-num">4</div>
+        <div class="problema-texto">Evasão escolar &mdash; especialmente na transição do Ensino Fundamental II para o Ensino Médio, período mais crítico de abandono.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Resultados esperados</h2>
+    
+    <div class="resultados-grid">
+      <div class="info-box bg-rosa-light resultado-box">
+        <div class="resultado-numero counter" data-target="1500" data-prefix="" data-suffix="">0</div>
+        <p>Alunas capacitadas ao longo dos 3 anos de projeto (≈500/ano)</p>
+      </div>
+      <div class="info-box bg-azul-light resultado-box">
+        <div class="resultado-numero counter" data-target="40" data-prefix="" data-suffix="+">0</div>
+        <p>Alunas bolsistas atuando ativamente no projeto</p>
+      </div>
+      <div class="info-box bg-rosa-light resultado-box">
+        <div class="resultado-numero counter" data-target="6" data-prefix="" data-suffix="+">0</div>
+        <p>Eventos acadêmico-científicos para integração e formação em cidadania</p>
+      </div>
+    </div>
+
+  </div> <!-- /ABA 1 -->
+
+
+  <!-- ==========================================
+       ABA 2: EIXOS
+       ========================================== -->
+  <div id="aba-eixos" class="aba-content">
+    <h2 class="section-title">Os 7 eixos temáticos</h2>
+    
+    <div class="eixos-list">
+      <!-- Eixo 1 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">01</div>
+        <div class="eixo-content">
+          <h3>Letramento Digital</h3>
+          <p>Capacitação das alunas no uso das tecnologias digitais &mdash; computadores, internet, aplicativos e ferramentas para o cotidiano e o mundo do trabalho.</p>
+        </div>
+      </div>
+      
+      <!-- Eixo 2 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">02</div>
+        <div class="eixo-content">
+          <h3>Robótica Educacional</h3>
+          <p>Capacitação das alunas no uso das tecnologias digitais &mdash; computadores, internet, aplicativos e ferramentas para o cotidiano e o mundo do trabalho.</p>
+        </div>
+      </div>
+
+      <!-- Eixo 3 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">03</div>
+        <div class="eixo-content">
+          <h3>Preparação para as Olimpíadas do Conhecimento</h3>
+          <p>Estudo e treino para olimpíadas científicas &mdash; OBR (Robótica), OBMEP (Matemática) e outras competições que ampliam o horizonte acadêmico das alunas.</p>
+        </div>
+      </div>
+
+      <!-- Eixo 4 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">04</div>
+        <div class="eixo-content">
+          <h3>Eventos para a Formação Integral</h3>
+          <p>Capacitação das alunas no uso das tecnologias digitais &mdash; computadores, internet, aplicativos e ferramentas para o cotidiano e o mundo do trabalho.</p>
+        </div>
+      </div>
+
+      <!-- Eixo 5 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">05</div>
+        <div class="eixo-content">
+          <h3>Pesquisa Científica</h3>
+          <p>Iniciação científica para as bolsistas: desenvolvimento de projetos de pesquisa, participação em eventos científicos como SECITEX e publicação de trabalhos.</p>
+        </div>
+      </div>
+
+      <!-- Eixo 6 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">06</div>
+        <div class="eixo-content">
+          <h3>Acompanhamento das Egressas</h3>
+          <p>Iniciação científica para as bolsistas: desenvolvimento de projetos de pesquisa, participação em eventos científicos como SECITEX e publicação de trabalhos.</p>
+        </div>
+      </div>
+
+      <!-- Eixo 7 -->
+      <div class="eixo-item">
+        <div class="eixo-numero">07</div>
+        <div class="eixo-content">
+          <h3>Divulgação das Atividades</h3>
+          <p>Comunicação e divulgação do projeto nas redes sociais, no site e em eventos &mdash; produção de conteúdo, fotografias, vídeos e materiais institucionais.</p>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /ABA 2 -->
+
+
+  <!-- ==========================================
+       ABA 3: NOSSO TIME
+       ========================================== -->
+  <div id="aba-time" class="aba-content">
+    <h2 class="section-title">Professores coordenadores</h2>
+    
+    <div class="time-grid">
+      <!-- Prof 1 -->
+      <div class="time-card">
+        <div class="time-avatar"><i class="ti ti-photo"></i></div>
+        <h3 class="time-name">Tatiana Amaral Sorrentino</h3>
+        <p class="time-role">Coordenadora do projeto</p>
+        <a href="mailto:tatiana.sorrentino@ifrn.edu.br" class="time-email">tatiana.sorrentino@ifrn.edu.br</a>
+      </div>
+      <!-- Prof 2 -->
+      <div class="time-card">
+        <div class="time-avatar"><i class="ti ti-photo"></i></div>
+        <h3 class="time-name">Helber Wagner da Silva</h3>
+        <p class="time-role">Professor coordenador</p>
+        <a href="mailto:helber.silva@ifrn.edu.br" class="time-email">helber.silva@ifrn.edu.br</a>
+      </div>
+      <!-- Prof 3 -->
+      <div class="time-card">
+        <div class="time-avatar"><i class="ti ti-photo"></i></div>
+        <h3 class="time-name">Eberton Marinho</h3>
+        <p class="time-role">Professor coordenador</p>
+        <a href="mailto:eberton.marinho@ifrn.edu.br" class="time-email">eberton.marinho@ifrn.edu.br</a>
+      </div>
+      <!-- Prof 4 -->
+      <div class="time-card">
+        <div class="time-avatar"><i class="ti ti-photo"></i></div>
+        <h3 class="time-name">Creusa Ribeiro</h3>
+        <p class="time-role">Professora coordenadora</p>
+        <a href="mailto:creusa.ribeiro@ifrn.edu.br" class="time-email">creusa.ribeiro@ifrn.edu.br</a>
+      </div>
+      <!-- Prof 5 -->
+      <div class="time-card">
+        <div class="time-avatar"><i class="ti ti-photo"></i></div>
+        <h3 class="time-name">Ana Barros</h3>
+        <p class="time-role">Professora colaboradora</p>
+        <a href="mailto:ana.barros@ifrn.edu.br" class="time-email">ana.barros@ifrn.edu.br</a>
+      </div>
+      <!-- Prof 6 -->
+      <div class="time-card">
+        <div class="time-avatar"><i class="ti ti-photo"></i></div>
+        <h3 class="time-name">Bruno Vitorino</h3>
+        <p class="time-role">Professor colaborador</p>
+        <a href="mailto:bruno.vitorino@ifrn.edu.br" class="time-email">bruno.vitorino@ifrn.edu.br</a>
+      </div>
+    </div>
+
+        <h2 class="section-title" style="margin-bottom: 24px;">Alunas bolsistas 2026 &mdash; 44 bolsistas</h2>
+    
+    <div class="search-bolsistas-wrapper" style="margin-bottom: 24px; position: relative; max-width: 400px;">
+      <i class="ti ti-search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+      <input type="text" id="searchBolsistas" placeholder="Buscar aluna por nome..." style="width: 100%; padding: 12px 16px 12px 42px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.2); outline: none; font-family: inherit;">
+    </div>
+    
+    <!-- Eixo 1 -->
+    <div class="eixo-tag"><i class="ti ti-device-laptop"></i> Letramento Digital (Eixo 01)</div>
+    <div class="bolsistas-grid">
+      <div class="bolsista-card">Ana Carolina da Silva Bezerril</div>
+      <div class="bolsista-card">Ana Letícia Cirilo de Lima</div>
+      <div class="bolsista-card">Carolina Oliveira Nogueira</div>
+      <div class="bolsista-card">Dayana Vitória Freire da Silva</div>
+      <div class="bolsista-card">Ester Eloiza Da Silva</div>
+      <div class="bolsista-card">Ingrid Samara Torres Dias</div>
+      <div class="bolsista-card">Jamilly Costa Silva</div>
+      <div class="bolsista-card">Leticce Marianne Maximino</div>
+      <div class="bolsista-card">Lilianny da Silva Fernandes</div>
+      <div class="bolsista-card">Manuele Silva de Oliveira</div>
+      <div class="bolsista-card">Maria Eduarda Cavalcante</div>
+      <div class="bolsista-card">Maria Eloiza de Lima Nascimento</div>
+      <div class="bolsista-card">Maria Gabrielle da Rocha Freire</div>
+      <div class="bolsista-card">Maria Luiza Nascimento Galdino</div>
+      <div class="bolsista-card">Maria Luiza Pessoa Freire</div>
+      <div class="bolsista-card">Maria Rita Azevedo de Carvalho</div>
+      <div class="bolsista-card">Mariana Cristina Nascimento</div>
+      <div class="bolsista-card">Samira Oliveira da Cruz</div>
+      <div class="bolsista-card">Sônia Maria Martins de Lima</div>
+      <div class="bolsista-card">Sthefanny Karoline Bezerra</div>
+      <div class="bolsista-card">Welyda Evelly Soares da Silva</div>
+    </div>
+
+    <!-- Eixo 2 -->
+    <div class="eixo-tag blue"><i class="ti ti-robot"></i> Robótica Educacional (Eixo 02)</div>
+    <div class="bolsistas-grid">
+      <div class="bolsista-card">Adi Hillary Soares de Oliveira</div>
+      <div class="bolsista-card">Adriely Da Silva Martins</div>
+      <div class="bolsista-card">Ághatta Sophya Soares da Silva</div>
+      <div class="bolsista-card">Aíla Ludmila Gonçalves Silva</div>
+      <div class="bolsista-card">Alice Jacielly Silva da Costa</div>
+      <div class="bolsista-card">Ana Clara da Silva Pimentel</div>
+      <div class="bolsista-card">Anna Clara Dias Da Cunha</div>
+      <div class="bolsista-card">Cassiane do Nascimento Silva</div>
+      <div class="bolsista-card">Emanuela Guedes de Macedo</div>
+      <div class="bolsista-card">Evelly Isabelle Bernardo</div>
+      <div class="bolsista-card">Evellyn Da Silva Santos</div>
+      <div class="bolsista-card">Priscila Bianca Soares</div>
+    </div>
+
+    <!-- Eixo 3 -->
+    <div class="eixo-tag"><i class="ti ti-medal"></i> Olimpíadas do Conhecimento (Eixo 03)</div>
+    <div class="bolsistas-grid">
+      <div class="bolsista-card">Laura Vitória Silva de Medeiros</div>
+      <div class="bolsista-card">Maria Clara Dias de Souza</div>
+    </div>
+
+    <!-- Eixo 4 -->
+    <div class="eixo-tag blue"><i class="ti ti-users"></i> Eventos &mdash; Formação Integral (Eixo 04)</div>
+    <div class="bolsistas-grid">
+      <div class="bolsista-card">Emilly Thayna da Silva Galdino</div>
+      <div class="bolsista-card">Fabiana dos Santos Bezerra</div>
+      <div class="bolsista-card">Fernanda Clara Paulino da Silva</div>
+      <div class="bolsista-card">Emilly Thayna da Silva Galdino</div>
+      <div class="bolsista-card">Fabiana dos Santos Bezerra</div>
+      <div class="bolsista-card">Fernanda Clara Paulino da Silva</div>
+    </div>
+
+    <!-- Eixo 6 -->
+    <div class="eixo-tag"><i class="ti ti-school"></i> Acompanhamento das Egressas (Eixo 06)</div>
+    <div class="bolsistas-grid">
+      <div class="bolsista-card">Emily Amorim do Nascimento</div>
+      <div class="bolsista-card">Giseliane da Silva Lima</div>
+      <div class="bolsista-card">Iasmim Dias de Oliveira Galdino</div>
+    </div>
+
+    <!-- Eixo 7 -->
+    <div class="eixo-tag blue"><i class="ti ti-speakerphone"></i> Divulgação das Atividades (Eixo 07)</div>
+    <div class="bolsistas-grid">
+      <div class="bolsista-card">Alicia Sophia Pegado de Lima</div>
+      <div class="bolsista-card">Gabrielly da Silva Nascimento</div>
+      <div class="bolsista-card">Kemili Soares de Oliveira</div>
+    </div>
+
+  </div> <!-- /ABA 3 -->
+
+
+  <!-- ==========================================
+       ABA 4: IDENTIDADE VISUAL
+       ========================================== -->
+  <div id="aba-identidade" class="aba-content">
+    
+    <div class="identidade-grid">
+      <!-- Coluna Esquerda -->
+      <div>
+        <h2 class="section-title" style="margin-top: 0;">Nossa identidade</h2>
+        <div class="identidade-texto">
+          <p>A identidade visual do Ampliando Horizontes Digitais foi criada para refletir o encontro entre o humano e o digital. O símbolo das duas mãos estilizadas com traços de circuito representa a conexão entre pessoas e tecnologia &mdash; a mentoria como ponte entre o potencial das meninas e o mundo digital.</p>
+          <p>O rosa (#981869) carrega força, identidade e o protagonismo feminino. O azul (#336699) remete à tecnologia, ao conhecimento e à inovação. Juntos, os dois formam uma paleta que combina acolhimento e ciência &mdash; valores centrais do projeto.</p>
+        </div>
+      </div>
+      
+      <!-- Coluna Direita -->
+      <div>
+        <h2 class="section-title" style="margin-top: 0;">Símbolo</h2>
+        <div class="identidade-simbolo">
+          <div class="simbolo-img-placeholder">
+            <!-- Vou colocar o SVG/IMG da logo direto aqui. Como não tenho o SVG exato, uso a logo_horizontal cortada via CSS ou icone -->
+            <img src="{% static 'img/logo_horizontal.jpeg' %}" alt="Mãos circuito" style="max-height: 100px; opacity: 0.9;">
+          </div>
+          <p style="font-size: 14px; color: var(--cinza-texto); margin: 0; line-height: 1.5;">O símbolo representa duas mãos estilizadas com traços de circuito digital. As linhas curvadas formam as palmas das mãos, enquanto os pontos e ramificações evocam os componentes de uma placa de circuito &mdash; fundindo o gesto humano de acolhimento com a linguagem da tecnologia.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Paleta de cores ofical</h2>
+    
+    <div class="paleta-grid">
+      <div class="cor-box" onclick="copyHex('#981869', this)">
+        <div class="cor-tooltip">Copiado!</div>
+        <div class="cor-shape" style="background: #981869;"></div>
+        <div class="cor-hex">#981869</div>
+        <div class="cor-nome">Rosa</div>
+      </div>
+      <div class="cor-box" onclick="copyHex('#336699', this)">
+        <div class="cor-tooltip">Copiado!</div>
+        <div class="cor-shape" style="background: #336699;"></div>
+        <div class="cor-hex">#336699</div>
+        <div class="cor-nome">Azul</div>
+      </div>
+      <div class="cor-box" onclick="copyHex('#1A1A1A', this)">
+        <div class="cor-tooltip">Copiado!</div>
+        <div class="cor-shape" style="background: #1A1A1A;"></div>
+        <div class="cor-hex">#1A1A1A</div>
+        <div class="cor-nome">Preto</div>
+      </div>
+      <div class="cor-box" onclick="copyHex('#FFFFFF', this)">
+        <div class="cor-tooltip">Copiado!</div>
+        <div class="cor-shape" style="background: #FFFFFF; border: 1px solid rgba(0,0,0,0.2);"></div>
+        <div class="cor-hex">#FFFFFF</div>
+        <div class="cor-nome">Branco</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Tipografia &mdash; Share Bold</h2>
+    
+    <div class="tipografia-box">
+      <div class="tipo-preview">
+        AMPLIANDO<br>
+        <span>H O R I Z O N T E S</span><br>
+        DIGITAIS
+      </div>
+      <div style="color: var(--cinza-texto); font-size: 16px;">Share Bold &mdash; fonte principal do projeto</div>
+    </div>
+
+  </div> <!-- /ABA 4 -->
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/sobre.js' %}"></script>
+{% endblock %}

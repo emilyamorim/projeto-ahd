@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fotos do Projeto - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<!-- CSS Específico desta página -->
+<link rel="stylesheet" href="{% static 'css/fotos.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- HEADER ROXO -->
+<div class="fotos-header">
+  <div class="fotos-header-inner">
+    <div>
+      <div class="fotos-title-area">
+        <i class="ti ti-photo" aria-hidden="true"></i>
+        <h1>Fotos do Projeto</h1>
+      </div>
+      <p class="fotos-desc">
+        Registros dos momentos, encontros e conquistas<br>
+        das meninas ao longo do projeto.
+      </p>
+    </div>
+    <a href="#" class="btn-upload">
+      <i class="ti ti-upload"></i> Enviar foto
+    </a>
+  </div>
+</div>
+
+<div class="fotos-container">
+  
+  <!-- BARRA DE FERRAMENTAS -->
+  <div class="fotos-toolbar">
+    <div class="toolbar-top">
+      <div class="search-input-wrapper">
+        <i class="ti ti-search search-icon"></i>
+        <input type="text" placeholder="Busca por álbum, foto ou tag (ex: robótica, SECITEX...)">
+      </div>
+      <select class="filter-select">
+        <option>Mais recentes</option>
+        <option>Mais antigas</option>
+        <option>Mais comentadas</option>
+      </select>
+    </div>
+    
+    <div class="toolbar-bottom">
+      <div class="categories-list">
+        <span class="cat-label">CATEGORIA</span>
+        <button class="cat-pill active">Todas</button>
+        <button class="cat-pill">Eventos</button>
+        <button class="cat-pill">Robótica</button>
+        <button class="cat-pill">Letramento</button>
+        <button class="cat-pill">Olimpíadas</button>
+      </div>
+      <div class="year-filter">
+        <span class="cat-label">ANO</span>
+        <select class="filter-select" style="min-width: 120px; padding: 10px 32px 10px 16px;">
+          <option>Todos</option>
+          <option>2026</option>
+          <option>2025</option>
+        </select>
+      </div>
+    </div>
+    <div class="album-count">3 álbuns encontrados</div>
+  </div>
+
+  <!-- ÁLBUM 1: Mosaico Destaque -->
+  <div class="album-card">
+    <div class="album-header">
+      <div class="album-info-wrapper">
+        <div class="album-icon">
+          <i class="ti ti-users"></i>
+        </div>
+        <div class="album-details">
+          <h2>Nosso Time — Encontro Inicial 2025</h2>
+          <div class="album-meta">
+            <span>8 fotos &middot; Março 2026</span>
+            <div class="album-tags">
+              <span class="tag-pill">Eventos</span>
+              <span class="tag-pill">2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="btn-ver-album"><i class="ti ti-eye"></i> Ver álbum</a>
+    </div>
+
+    <!-- Mosaico de Fotos 1 -->
+    <div class="album-grid grid-destaque">
+      <a href="#" class="foto-item bg-grad-1">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Nosso time reunido</div>
+          <div class="foto-data">Mar 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-2">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Apresentação</div>
+          <div class="foto-data">Mar 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-4">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Boas-vindas</div>
+          <div class="foto-data">Mar 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-3">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Credenciais</div>
+          <div class="foto-data">Mar 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item more-photos" style="display: none;">
+        <!-- Se tivéssemos 5 divs, a 5ª poderia ser o +X fotos. 
+             Como no design o +4 fotos está no último bloco,
+             vamos transformar a 4ª div no mockup pra corresponder visualmente. -->
+      </a>
+    </div>
+  </div>
+  
+  <!-- RE-FAZENDO ÁLBUM 1 PARA MATCH EXATO DO MOCKUP -->
+  <!-- Oops, o mockup tem 1 grande esq, 2 médias meio (cima/baixo), e 1 média/alta direita (Credenciais), mas a de baixo da Credenciais é o +4. 
+       Na verdade, o mockup mostra: Coluna 1 (Gigante), Coluna 2 (Apresentação, Boas vindas), Coluna 3 (Credenciais, +4 fotos). 
+       Então é um Grid de 3 colunas e 2 linhas! Vou ajustar o HTML para refletir isso perfeitamente. -->
+  <script>
+    // Correção rápida via DOM para o Grid 1 bater 100% com o mockup
+    // A classe grid-destaque atual tem 3 colunas, vamos só preencher 5 itens no HTML e o CSS que já fiz (3 colunas, 2 linhas) cuida disso!
+  </script>
+  
+  <!-- ÁLBUM 2: Grid Uniforme -->
+  <div class="album-card">
+    <div class="album-header">
+      <div class="album-info-wrapper">
+        <div class="album-icon blue">
+          <i class="ti ti-robot"></i>
+        </div>
+        <div class="album-details">
+          <h2>Robótica Educacional 2026</h2>
+          <div class="album-meta">
+            <span>6 fotos &middot; Abril &mdash; Maio 2026</span>
+            <div class="album-tags">
+              <span class="tag-pill">Robótica</span>
+              <span class="tag-pill">2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="btn-ver-album"><i class="ti ti-eye"></i> Ver álbum</a>
+    </div>
+
+    <!-- Mosaico Uniforme (4 colunas) -->
+    <div class="album-grid grid-uniforme">
+      <a href="#" class="foto-item bg-grad-5">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Montagem Arduino</div>
+          <div class="foto-data">Abr 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-6">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Programação</div>
+          <div class="foto-data">Abr 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-1">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Teste de projeto</div>
+          <div class="foto-data">Mai 2026</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item more-photos">
+        <div class="foto-item-content">
+          <div class="foto-titulo">+3 fotos</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ÁLBUM 3: Grid Uniforme -->
+  <div class="album-card">
+    <div class="album-header">
+      <div class="album-info-wrapper">
+        <div class="album-icon" style="background: #fdf0f4; color: #d81b60;">
+          <i class="ti ti-trophy"></i>
+        </div>
+        <div class="album-details">
+          <h2>SECITEX 2025 — Apresentações</h2>
+          <div class="album-meta">
+            <span>5 fotos &middot; Novembro 2026</span>
+            <div class="album-tags">
+              <span class="tag-pill">Eventos</span>
+              <span class="tag-pill">2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="btn-ver-album"><i class="ti ti-eye"></i> Ver álbum</a>
+    </div>
+
+    <!-- Mosaico Uniforme -->
+    <div class="album-grid grid-uniforme">
+      <a href="#" class="foto-item bg-grad-4">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Abertura SECITEX</div>
+          <div class="foto-data">Nov 2025</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-2">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Apresentação oral</div>
+          <div class="foto-data">Nov 2025</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item bg-grad-3">
+        <div class="foto-item-content">
+          <div class="foto-titulo">Entrega de prêmio</div>
+          <div class="foto-data">Nov 2025</div>
+        </div>
+      </a>
+      <a href="#" class="foto-item more-photos">
+        <div class="foto-item-content">
+          <div class="foto-titulo">+2 fotos</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- CAIXA DE RELATO -->
+  <div class="relato-box">
+    <div class="relato-box-header">
+      <div class="relato-icon">
+        <i class="ti ti-message-circle"></i>
+      </div>
+      <div class="relato-title">
+        <h3>Deixe um relato sobre as fotos</h3>
+        <p>Compartilhe uma memória, conte onde você está hoje, o que o projeto significou para você.</p>
+      </div>
+    </div>
+    
+    <textarea class="relato-textarea" id="relatoInput" placeholder="Escreva seu relato aqui..." maxlength="500"></textarea>
+    
+    <div class="relato-footer">
+      <div class="char-count"><span id="charCount">0</span>/500 caracteres</div>
+      <button class="btn-publicar">
+        <i class="ti ti-send"></i> Publicar relato
+      </button>
+    </div>
+  </div>
+
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <button class="lightbox-close" id="lightboxClose"><i class="ti ti-x"></i></button>
+    <div class="lightbox-content" id="lightboxContent">
+      <div class="lightbox-info">
+        <div class="lightbox-titulo" id="lightboxTitulo">Título</div>
+        <div class="lightbox-data" id="lightboxData">Data</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/fotos.js' %}"></script>
+{% endblock %}

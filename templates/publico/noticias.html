@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notícias do Projeto - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<!-- CSS Específico desta página -->
+<link rel="stylesheet" href="{% static 'css/noticias.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- HEADER AZUL -->
+<div class="noticias-header">
+  <h1>Notícias do projeto</h1>
+  <p>Fique por dentro das novidades, eventos e conquistas do Ampliando Horizontes Digitais.</p>
+</div>
+
+<div class="noticias-filtros">
+  <button class="filtro-btn active">Todas</button>
+  <button class="filtro-btn">Eventos</button>
+  <button class="filtro-btn">Conquista</button>
+  <button class="filtro-btn">Formatura</button>
+  <button class="filtro-btn">Início</button>
+</div>
+
+<div class="noticias-container">
+  
+  <!-- GRID DE NOTÍCIAS -->
+  <div class="noticias-grid">
+    
+    <!-- Cartão 1 -->
+    <a href="#" class="noticias-card-grande">
+      <div class="card-top bg-rosa">
+        <i class="ti ti-photo"></i>
+      </div>
+      <div class="card-body">
+        <div class="card-data">12 jun 2026</div>
+        <h2 class="card-titulo">Alunas participam da SECITEX 2026</h2>
+        <p class="card-texto">
+          Seis bolsistas apresentaram trabalhos de robótica educacional no evento científico do IFRN. Os projetos receberam elogios do corpo docente e de pesquisadores convidados.
+        </p>
+        <div class="card-footer">
+        <span class="card-tag tag-rosa">Eventos</span>
+        <div class="ler-mais">Ler notícia <i class="ti ti-arrow-right"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Cartão 2 -->
+    <a href="#" class="noticias-card-grande">
+      <div class="card-top bg-azul">
+        <i class="ti ti-photo"></i>
+      </div>
+      <div class="card-body">
+        <div class="card-data">28 mai 2026</div>
+        <h2 class="card-titulo">Projeto conquista menção honrosa na OBR 2026</h2>
+        <p class="card-texto">
+          A equipe do eixo de robótica obteve destaque na Olimpíada Brasileira de Robótica, representando o Litoral Sul Potiguar com excelência.
+        </p>
+        <div class="card-footer">
+        <span class="card-tag tag-azul-claro">Conquista</span>
+        <div class="ler-mais">Ler notícia <i class="ti ti-arrow-right"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Cartão 3 -->
+    <a href="#" class="noticias-card-grande">
+      <div class="card-top bg-azul">
+        <i class="ti ti-photo"></i>
+      </div>
+      <div class="card-body">
+        <div class="card-data">15 abr 2026</div>
+        <h2 class="card-titulo">Entrega de certificados — 1º ciclo de oficinas</h2>
+        <p class="card-texto">
+          As alunas que concluíram o primeiro ciclo de oficinas de robótica receberam seus certificados em cerimônia realizada no campus.
+        </p>
+        <div class="card-footer">
+        <span class="card-tag tag-azul-claro">Formatura</span>
+        <div class="ler-mais">Ler notícia <i class="ti ti-arrow-right"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Cartão 4 -->
+    <a href="#" class="noticias-card-grande">
+      <div class="card-top bg-rosa">
+        <i class="ti ti-photo"></i>
+      </div>
+      <div class="card-body">
+        <div class="card-data">02 mar 2026</div>
+        <h2 class="card-titulo">Início das atividades do projeto em 2026</h2>
+        <p class="card-texto">
+          As bolsistas do novo ciclo foram recebidas no campus com uma programação especial de boas-vindas e apresentação do projeto.
+        </p>
+        <div class="card-footer">
+        <span class="card-tag tag-rosa-claro">Início</span>
+        <div class="ler-mais">Ler notícia <i class="ti ti-arrow-right"></i></div>
+        </div>
+      </div>
+    </a>
+
+  </div> <!-- /noticias-grid -->
+  
+  <div class="carregar-mais-container" id="carregarContainer">
+    <button class="btn-carregar" id="btnCarregarMais">
+      Carregar mais notícias <i class="ti ti-reload"></i>
+    </button>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/noticias.js' %}"></script>
+{% endblock %}
