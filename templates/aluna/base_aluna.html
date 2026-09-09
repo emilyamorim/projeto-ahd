@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard da Aluna - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<!-- CSS Específico do Dashboard -->
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=2">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  
+  <!-- BARRA LATERAL (SIDEBAR) FIXA -->
+  <aside class="dashboard-sidebar">
+    
+    <!-- Cabeçalho do Perfil -->
+    <div class="sidebar-header">
+      <div class="sidebar-avatar">
+        EA
+      </div>
+      <div class="sidebar-name">
+        Emily Amorim do Nascimento
+      </div>
+      <div class="sidebar-info">
+        Goianinha, RN<br>
+        IFRN Campus Canguaretama
+      </div>
+      <div class="sidebar-badges">
+        <span class="badge-pill">Bolsista</span>
+        <span class="badge-pill">2025</span>
+      </div>
+    </div>
+
+    <!-- Navegação Interna -->
+    <ul class="sidebar-menu">
+      <li class="{% block nav_perfil %}{% endblock %}">
+        <a href="{% url 'meu_perfil' %}">
+          <i class="ti ti-user"></i> Meu perfil
+        </a>
+      </li>
+      <li class="{% block nav_relatos %}{% endblock %}">
+        <a href="{% url 'meus_relatos' %}">
+          <i class="ti ti-message-circle"></i> Meus relatos
+        </a>
+      </li>
+      <li class="{% block nav_fotos %}{% endblock %}">
+        <a href="{% url 'minhas_fotos' %}">
+          <i class="ti ti-photo"></i> Minhas fotos
+        </a>
+      </li>
+    </ul>
+
+    <!-- Eixos de Atuação -->
+    <div class="sidebar-section">
+      <h4>Eixos de atuação</h4>
+      
+      <div class="eixo-tag principal">
+        <div class="eixo-tag-num">02</div>
+        <div>
+          <span class="eixo-tag-text">Robótica Educacional</span>
+          <span class="eixo-tag-sub">Eixo temático do projeto</span>
+        </div>
+      </div>
+      
+      <div class="eixo-tag">
+        <div class="eixo-tag-num" style="color:var(--rosa)">06</div>
+        <div>
+          <span class="eixo-tag-text" style="color:var(--rosa)">Acomp. das Egressas</span>
+          <span class="eixo-tag-sub">Eixo temático do projeto</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumo Numérico -->
+    <div class="sidebar-section">
+      <h4>Resumo</h4>
+      <div class="resumo-grid">
+        <div class="resumo-card">
+          <div class="resumo-num" style="color:var(--rosa)">5</div>
+          <div class="resumo-label">Atividades</div>
+        </div>
+        <div class="resumo-card">
+          <div class="resumo-num" style="color:var(--azul)">2</div>
+          <div class="resumo-label">Relatos</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ÁREA DE CONTEÚDO PRINCIPAL (Diferente para cada tela) -->
+  <main class="dashboard-content">
+    {% block dashboard_content %}
+    {% endblock %}
+  </main>
+
+</div>
+{% endblock %}

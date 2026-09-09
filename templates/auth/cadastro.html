@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Criar meu cadastro - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<!-- CSS Específico de Autenticação -->
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=7">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card wizard">
+    
+    <!-- Cabeçalho Principal -->
+    <div class="auth-header">
+      <h2><i class="ti ti-user-plus"></i> Criar meu cadastro</h2>
+      <p>Preencha os dados abaixo. Após o envio, a coordenação aprovará seu acesso em até 2 dias úteis.</p>
+    </div>
+
+    <!-- Indicador de Passos -->
+    <div class="wizard-header">
+      <div class="wizard-step active" id="indicator-1">
+        <div class="step-circle"><i class="ti ti-check" id="check-1" style="display:none;"></i><span id="num-1">1</span></div> Dados pessoais
+      </div>
+      <div class="wizard-step" id="indicator-2">
+        <div class="step-circle"><i class="ti ti-check" id="check-2" style="display:none;"></i><span id="num-2">2</span></div> Tipo e eixo
+      </div>
+      <div class="wizard-step" id="indicator-3">
+        <div class="step-circle"><i class="ti ti-check" id="check-3" style="display:none;"></i><span id="num-3">3</span></div> Acesso
+      </div>
+    </div>
+
+    <!-- Formulário e Passos -->
+    <form class="auth-form" action="#" method="POST" id="cadastroForm">
+      {% csrf_token %}
+      
+      <div class="wizard-content">
+        
+        <!-- =========================
+             PASSO 1: DADOS PESSOAIS
+             ========================= -->
+        <div class="step-pane active" id="step-1">
+          <div class="form-group">
+            <label>Nome completo <span class="required">*</span></label>
+            <input type="text" name="nome" placeholder="Digite seu nome" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Data de nascimento <span class="required">*</span></label>
+              <!-- Input date no padrão HTML5 -->
+              <input type="date" name="data_nascimento" required style="font-family: inherit;">
+            </div>
+            <div class="form-group">
+              <label>Cidade <span class="required">*</span></label>
+              <input type="text" name="cidade" placeholder="Sua cidade" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Escola <span class="required">*</span></label>
+            <input type="text" name="escola" placeholder="Nome da escola em que estuda" required>
+          </div>
+        </div>
+
+        <!-- =========================
+             PASSO 2: TIPO E EIXO
+             ========================= -->
+        <div class="step-pane" id="step-2">
+          
+          <div class="form-group">
+            <label>Tipo de participação <span class="required">*</span></label>
+            <div class="cards-selection">
+              <!-- Label agindo como botão rádio -->
+              <label class="card-option" id="card-bolsista">
+                <input type="radio" name="tipo_participacao" value="bolsista">
+                <h4 class="card-title-inline"><i class="ti ti-star"></i> Bolsista</h4>
+                <p>Selecionada com bolsa CNPq para atuar no projeto.</p>
+              </label>
+              
+              <label class="card-option" id="card-cursista">
+                <input type="radio" name="tipo_participacao" value="cursista">
+                <h4 class="card-title-inline"><i class="ti ti-book"></i> Cursista</h4>
+                <p>Participante das atividades e cursos do projeto.</p>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Eixo(s) de atuação <span class="required">*</span></label>
+            <p style="font-size: 14px; color: #666; margin-bottom: 8px;">
+              <i class="ti ti-info-circle"></i> Selecione até 2 eixos. 1º clique = principal, 2º clique = secundário.
+            </p>
+            
+            <div class="eixos-grid" id="eixosGrid">
+              <!-- Grid dinâmico gerado via JS ou repetição HTML -->
+              <!-- Eixo 01 -->
+              <label class="eixo-option" data-eixo-id="01" data-eixo-name="Letramento Digital">
+                <input type="checkbox" value="01">
+                <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
+                <div class="eixo-num">01</div>
+                <div class="eixo-label">Letramento Digital</div>
+              </label>
+              
+              <!-- Eixo 02 -->
+              <label class="eixo-option" data-eixo-id="02" data-eixo-name="Robótica Educacional">
+                <input type="checkbox" value="02">
+                <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
+                <div class="eixo-num">02</div>
+                <div class="eixo-label">Robótica Educacional</div>
+              </label>
+              
+              <!-- Eixo 03 -->
+              <label class="eixo-option" data-eixo-id="03" data-eixo-name="Olimpíadas do Conhecimento">
+                <input type="checkbox" value="03">
+                <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
+                <div class="eixo-num">03</div>
+                <div class="eixo-label">Olimpíadas do<br>Conhecimento</div>
+              </label>
+              
+              <!-- Eixo 04 -->
+              <label class="eixo-option" data-eixo-id="04" data-eixo-name="Eventos — Formação Integral">
+                <input type="checkbox" value="04">
+                <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
+                <div class="eixo-num">04</div>
+                <div class="eixo-label">Eventos —<br>Formação Integral</div>
+              </label>
+              
+              <!-- Eixo 05 -->
+              <label class="eixo-option" data-eixo-id="05" data-eixo-name="Pesquisa Científica">
+                <input type="checkbox" value="05">
+                <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
+                <div class="eixo-num">05</div>
+                <div class="eixo-label">Pesquisa Científica</div>
+              </label>
+              
+              <!-- Eixo 06 -->
+              <label class="eixo-option" data-eixo-id="06" data-eixo-name="Acomp. das Egressas">
+                <input type="checkbox" value="06">
+                <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
+                <div class="eixo-num">06</div>
+                <div class="eixo-label">Acomp. das Egressas</div>
+              </label>
+            </div>
+            
+            <!-- Resumo da Seleção -->
+            <div class="eixos-result" id="eixosResult" style="display: none;">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- =========================
+             PASSO 3: ACESSO
+             ========================= -->
+        <div class="step-pane" id="step-3">
+          
+          <div class="alert-info-box">
+            <i class="ti ti-info-circle"></i>
+            <div>
+              Após aprovação do cadastro, você receberá sua senha por e-mail. A foto de perfil pode ser adicionada depois, já dentro do site.
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>E-mail <span class="required">*</span></label>
+            <input type="email" name="email" placeholder="seuemail@exemplo.com" required>
+            <p style="font-size: 14px; color: #666; margin-top: 4px;">Use um e-mail que você acessa com frequência.</p>
+          </div>
+          
+          <div class="form-group">
+            <label>Confimar e-mail <span class="required">*</span></label>
+            <input type="email" name="confirm_email" placeholder="seuemail@exemplo.com" required>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Rodapé com Botões de Navegação -->
+      <div class="wizard-footer">
+        <div class="step-counter" id="stepCounter">Passo 1 de 3</div>
+        
+        <div class="wizard-buttons" style="display: flex; gap: 12px;">
+          <button type="button" class="btn-wizard btn-wizard-outline" id="btnVoltar" style="display: none;">
+            <i class="ti ti-arrow-left"></i> Voltar
+          </button>
+          
+          <button type="button" class="btn-wizard btn-wizard-primary" id="btnAvancar">
+            Avançar <i class="ti ti-arrow-right"></i>
+          </button>
+          
+          <!-- Botão Final (oculto no início) -->
+          <button type="submit" class="btn-wizard btn-wizard-primary" id="btnEnviar" style="display: none;">
+            Enviar cadastro <i class="ti ti-send"></i>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  
+  // ==========================================
+  // LÓGICA DO WIZARD (Passos)
+  // ==========================================
+  const totalSteps = 3;
+  let currentStep = 1;
+  
+  const btnVoltar = document.getElementById("btnVoltar");
+  const btnAvancar = document.getElementById("btnAvancar");
+  const btnEnviar = document.getElementById("btnEnviar");
+  const stepCounter = document.getElementById("stepCounter");
+  
+  function updateWizard() {
+    // Esconde todos os passos e mostra o atual
+    for(let i = 1; i <= totalSteps; i++) {
+      document.getElementById(`step-${i}`).classList.remove("active");
+      
+      // Estilização do cabeçalho do wizard
+      const ind = document.getElementById(`indicator-${i}`);
+      const check = document.getElementById(`check-${i}`);
+      const num = document.getElementById(`num-${i}`);
+      
+      ind.classList.remove("active");
+      
+      if (i < currentStep) {
+        // Passo anterior concluído
+        ind.style.color = "var(--rosa)";
+        check.style.display = "block";
+        num.style.display = "none";
+      } else if (i === currentStep) {
+        // Passo atual
+        ind.classList.add("active");
+        ind.style.color = ""; // reseta cor inline para usar css class
+        check.style.display = "none";
+        num.style.display = "block";
+      } else {
+        // Passo futuro
+        ind.style.color = "";
+        check.style.display = "none";
+        num.style.display = "block";
+      }
+    }
+    document.getElementById(`step-${currentStep}`).classList.add("active");
+    
+    // Texto do contador
+    stepCounter.textContent = `Passo ${currentStep} de 3`;
+    
+    // Controle dos botões
+    if(currentStep === 1) {
+      btnVoltar.style.display = "none";
+      btnAvancar.style.display = "flex";
+      btnEnviar.style.display = "none";
+    } else if(currentStep === totalSteps) {
+      btnVoltar.style.display = "flex";
+      btnAvancar.style.display = "none";
+      btnEnviar.style.display = "flex";
+    } else {
+      btnVoltar.style.display = "flex";
+      btnAvancar.style.display = "flex";
+      btnEnviar.style.display = "none";
+    }
+  }
+  
+  btnAvancar.addEventListener("click", () => {
+    if(currentStep < totalSteps) {
+      currentStep++;
+      updateWizard();
+    }
+  });
+  
+  btnVoltar.addEventListener("click", () => {
+    if(currentStep > 1) {
+      currentStep--;
+      updateWizard();
+    }
+  });
+
+  // ==========================================
+  // LÓGICA DE SELEÇÃO: TIPO DE PARTICIPAÇÃO
+  // ==========================================
+  const cardOptions = document.querySelectorAll(".card-option");
+  cardOptions.forEach(card => {
+    card.addEventListener("click", function() {
+      // Remover active de todos
+      cardOptions.forEach(c => c.classList.remove("active"));
+      // Adicionar active neste
+      this.classList.add("active");
+    });
+  });
+
+  // ==========================================
+  // LÓGICA DE SELEÇÃO: EIXOS DE ATUAÇÃO (MÁX 2)
+  // ==========================================
+  const eixoOptions = document.querySelectorAll(".eixo-option");
+  const resultArea = document.getElementById("eixosResult");
+  let selecionados = []; // Guarda os IDs selecionados ordenados pelo clique
+  
+  function updateEixosUI() {
+    // Limpa estado visual de todos
+    eixoOptions.forEach(opt => {
+      opt.classList.remove("selected-1", "selected-2");
+      const badge = opt.querySelector(".badge-eixo");
+      if (badge) badge.remove(); // remove badges antigos se houver
+    });
+    
+    // Atualiza baseados na ordem de seleção
+    if(selecionados.length > 0) {
+      // O primeiro do array é o Principal
+      const principal = document.querySelector(`.eixo-option[data-eixo-id="${selecionados[0]}"]`);
+      if(principal) {
+        principal.classList.add("selected-1");
+        principal.insertAdjacentHTML("beforeend", `<div class="badge-eixo badge-principal">principal</div>`);
+      }
+    }
+    
+    if(selecionados.length > 1) {
+      // O segundo do array é o Secundário
+      const secundario = document.querySelector(`.eixo-option[data-eixo-id="${selecionados[1]}"]`);
+      if(secundario) {
+        secundario.classList.add("selected-2");
+        secundario.insertAdjacentHTML("beforeend", `<div class="badge-eixo badge-secundaria">secundário</div>`);
+      }
+    }
+    
+    // Atualiza a área de resumo embaixo
+    resultArea.innerHTML = "";
+    if(selecionados.length > 0) {
+      resultArea.style.display = "flex";
+      
+      const nomePrin = document.querySelector(`.eixo-option[data-eixo-id="${selecionados[0]}"]`).getAttribute("data-eixo-name");
+      resultArea.insertAdjacentHTML("beforeend", `
+        <div class="result-pill principal">
+          ${nomePrin} <span>(principal)</span>
+        </div>
+      `);
+      
+      if(selecionados.length > 1) {
+        const nomeSec = document.querySelector(`.eixo-option[data-eixo-id="${selecionados[1]}"]`).getAttribute("data-eixo-name");
+        resultArea.insertAdjacentHTML("beforeend", `
+          <div class="result-pill secundaria">
+            ${nomeSec} <span>(secundária)</span>
+          </div>
+        `);
+      }
+    } else {
+      resultArea.style.display = "none";
+    }
+  }
+
+  eixoOptions.forEach(opt => {
+    opt.addEventListener("click", function(e) {
+      e.preventDefault(); // Evita marcar o checkbox nativo de forma estranha
+      const id = this.getAttribute("data-eixo-id");
+      const checkbox = this.querySelector("input[type='checkbox']");
+      
+      // Se já tá selecionado, desseleciona
+      if(selecionados.includes(id)) {
+        selecionados = selecionados.filter(item => item !== id);
+        checkbox.checked = false;
+      } 
+      // Se não tá selecionado, mas já tem 2, não faz nada ou substitui o último (vamos substituir o último para UX melhor ou não fazer nada)
+      else {
+        if(selecionados.length >= 2) {
+          // Desmarca o último
+          const idRemovido = selecionados.pop();
+          document.querySelector(`.eixo-option[data-eixo-id="${idRemovido}"] input[type='checkbox']`).checked = false;
+        }
+        selecionados.push(id);
+        checkbox.checked = true;
+      }
+      
+      updateEixosUI();
+    });
+  });
+
+});
+</script>
+{% endblock %}
