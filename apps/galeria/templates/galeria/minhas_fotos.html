@@ -1,0 +1,68 @@
+{% extends "aluna/base_aluna.html" %}
+{% load static %}
+
+{% block title %}Minhas Fotos - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'galeria/style.css' %}">
+{% endblock %}
+
+{% block nav_fotos %}active{% endblock %}
+
+{% block dashboard_content %}
+
+{% if messages %}
+  <div class="fotos-mensagens">
+    {% for mensagem in messages %}
+      <div class="mensagem mensagem-{{ mensagem.tags }}">{{ mensagem }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<section class="card">
+  <h3>Enviar nova foto</h3>
+  <form id="upload-form" action="{% url 'enviar_foto' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label class="field-label" for="{{ form.album.id_for_label }}">Álbum de destino</label>
+    {{ form.album }}
+
+    <div class="dropzone" id="dropzone">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+      <strong>Arraste fotos aqui ou clique para selecionar</strong>
+      <div class="hint">JPG, PNG ou WEBP · Máx. 5MB por foto</div>
+      <button class="select-btn" type="button" id="selectBtn">+ Selecionar fotos</button>
+    </div>
+    <input type="file" name="imagens" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
+  </form>
+</section>
+
+<section class="card">
+  <div class="section-title-row">
+    <h3>Fotos enviadas por mim</h3>
+    <span class="count-tag">{{ total_fotos }} foto{{ total_fotos|pluralize }}</span>
+  </div>
+
+  <div class="photo-grid">
+    {% for foto in fotos %}
+      <div class="photo-card">
+        <div class="photo-thumb">
+          <img src="{{ foto.imagem.url }}" alt="{{ foto.nome_original }}">
+        </div>
+        <div class="photo-meta">
+          <span title="{{ foto.nome_original }}">{{ foto.nome_original|truncatechars:14 }}</span>
+          <form action="{% url 'excluir_foto' foto.id %}" method="post" onsubmit="return confirm('Excluir esta foto?');">
+            {% csrf_token %}
+            <button class="del-btn" type="submit" title="Excluir">🗑️</button>
+          </form>
+        </div>
+      </div>
+    {% empty %}
+      <p class="empty-state">Você ainda não enviou nenhuma foto. Que tal começar agora?</p>
+    {% endfor %}
+  </div>
+</section>
+
+<script src="{% static 'galeria/script.js' %}"></script>
+{% endblock %}

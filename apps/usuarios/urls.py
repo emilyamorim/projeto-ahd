@@ -7,7 +7,7 @@ organizadas por nível de acesso.
 
 from django.urls import path
 from django.views.generic import TemplateView
-
+from apps.galeria import views as galeria_views
 urlpatterns = [
 
     # ----------------------------------------------------------
@@ -28,12 +28,20 @@ urlpatterns = [
         name="historico",
     ),
 
-    # P03 — Galeria de fotos do projeto
+      # P03 — Galeria de fotos do projeto
     path(
         "fotos/",
         TemplateView.as_view(template_name="publico/fotos.html"),
         name="fotos",
     ),
+
+    # L03 — Enviar fotos para os álbuns do projeto
+    path(
+        "minha-area/fotos/",
+        galeria_views.minhas_fotos,
+        name="minhas_fotos",
+    ),
+    
 
     # P04 — Notícias e novidades do projeto
     path(
