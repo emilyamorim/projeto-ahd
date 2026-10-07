@@ -1,0 +1,16 @@
+{% extends "aluna/base_aluna.html" %}
+
+{% block nav_relatos %}active{% endblock %}
+
+{% block dashboard_content %}
+<div class="content-header">
+  <h3>Meus relatos</h3>
+  <button type="button" class="btn-sm-primary"><i class="ti ti-plus"></i> Novo relato</button>
+</div>
+
+<div style="text-align: center; padding: 64px 24px; color: #666;">
+  <i class="ti ti-message-circle" style="font-size: 48px; color: #ddd; margin-bottom: 16px; display: block;"></i>
+  <h4>Nenhum relato ainda</h4>
+  <p style="font-size: 14px;">Você ainda não escreveu nenhum relato sobre as suas atividades.</p>
+</div>
+{% endblock %}
