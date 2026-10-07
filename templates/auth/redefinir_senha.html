@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Entrar no projeto - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<!-- CSS Específico de Autenticação -->
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    
+    <!-- Cabeçalho do Card -->
+    <div class="auth-header">
+      <h2><i class="ti ti-login"></i>Redefinir Senha</h2>
+      <p>Informe seu e-mail cadastrado. Enviaremos um link para você criar uma nova senha.</p>
+    </div>
+
+    <!-- Corpo do Formulário -->
+    <div class="auth-body">
+      <form class="auth-form" action="#" method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="id_email">E-mail cadastrado <span class="required">*</span></label>
+          <input type="email" id="id_email" name="email" placeholder="seuemail@exemplo.com" required>
+        </div>
+        
+        
+        <button type="submit" class="btn-auth-outline">
+          <i class="ti ti-login-2"></i> Enviar link de redefinição
+        </button>
+        
+        <div class="auth-divider">
+          <span>Lembrou a senha?</span>
+        </div>
+        
+        <a href="{% url 'login' %}" class="link-criar-cadastro">Voltar para Login</a>
+        
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggleBtn = document.getElementById("togglePasswordBtn");
+    const passwordInput = document.getElementById("id_senha");
+    const toggleIcon = document.getElementById("toggleIcon");
+
+    if (toggleBtn && passwordInput) {
+      toggleBtn.addEventListener("click", function() {
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+        
+        if (type === "text") {
+          toggleIcon.classList.remove("ti-eye");
+          toggleIcon.classList.add("ti-eye-off");
+        } else {
+          toggleIcon.classList.remove("ti-eye-off");
+          toggleIcon.classList.add("ti-eye");
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

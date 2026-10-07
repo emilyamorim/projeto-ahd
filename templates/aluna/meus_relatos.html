@@ -1,0 +1,265 @@
+import React, { useState } from "react";
+import { Send, Pencil, Trash2, User, MessageCircle, Image } from "lucide-react";
+
+const MAGENTA = "#981869";
+const BLUE = "#336699";
+
+const EIXOS = [
+  { numero: "02", titulo: "Robótica Educacional", cor: BLUE, bg: "#EAEFF4" },
+  { numero: "06", titulo: "Acomp. das Egressas", cor: MAGENTA, bg: "#F4E7EF" },
+];
+
+const RELATOS_INICIAIS = [
+  {
+    id: 1,
+    data: "15 de maio de 2026",
+    texto:
+      "Participei do meu primeiro workshop de robótica e foi incrível! Nunca imaginei que um dia ia programar um Arduino. Quando o LED piscou pela primeira vez, eu e minhas colegas comemoramos muito. Esse projeto está mudando completamente a minha visão sobre tecnologia e o que eu quero fazer no futuro.",
+  },
+  {
+    id: 2,
+    data: "2 de abril de 2026",
+    texto:
+      "Quando me disseram que eu tinha sido selecionada como bolsista fiquei muito feliz e um pouco com medo ao mesmo tempo. Nunca tinha tido contato com robótica antes. Mas as professoras são incríveis e estou aprendendo muito desde o primeiro dia.",
+  },
+];
+
+function formatarDataHoje() {
+  return new Date().toLocaleDateString("pt-BR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+export default function PerfilMeusRelatos() {
+  const [relatos, setRelatos] = useState(RELATOS_INICIAIS);
+  const [novoRelato, setNovoRelato] = useState("");
+  const [editandoId, setEditandoId] = useState(null);
+  const [textoEdicao, setTextoEdicao] = useState("");
+
+  const LIMITE = 500;
+
+  function handlePublicar() {
+    const texto = novoRelato.trim();
+    if (!texto) return;
+    const relato = { id: Date.now(), data: formatarDataHoje(), texto };
+    setRelatos([relato, ...relatos]);
+    setNovoRelato("");
+  }
+
+  function iniciarEdicao(relato) {
+    setEditandoId(relato.id);
+    setTextoEdicao(relato.texto);
+  }
+
+  function salvarEdicao(id) {
+    setRelatos(
+      relatos.map((r) => (r.id === id ? { ...r, texto: textoEdicao.trim() } : r))
+    );
+    setEditandoId(null);
+    setTextoEdicao("");
+  }
+
+  function excluirRelato(id) {
+    setRelatos(relatos.filter((r) => r.id !== id));
+  }
+
+  return(
+    <div className="min-h-screen bg-[#FAFAFA] p-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6">
+        {/* Sidebar */}
+        <aside>
+          <div className="bg-white rounded-2xl overflow-hidden border border-gray-200">
+            {/* Painel do perfil */}
+            <div
+              className="px-8 pt-9 pb-7 text-center"
+              style={{ backgroundColor: MAGENTA }}
+            >
+              <div
+                className="w-28 h-28 rounded-full bg-white flex items-center justify-center text-2xl mx-auto"
+                style={{ color: MAGENTA }}
+              >
+                EA
+              </div>
+              <h2 className="font-bold text-xl text-white mt-5 leading-snug">
+                Emily Amorim do Nascimento
+              </h2>
+              <p className="text-white/70 mt-3">Goianinha, RN</p>
+              <p className="text-white/70">IFRN Campus Canguaretama</p>
+              <div className="flex items-center justify-center gap-3 mt-5">
+                <span className="text-white bg-white/25 rounded-full px-5 py-2">
+                  Bolsista
+                </span>
+                <span className="text-white bg-white/25 rounded-full px-5 py-2">
+                  2025
+                </span>
+              </div>
+            </div>
+
+            {/* Navegação */}
+            <nav className="py-2">
+              <button className="w-full flex items-center gap-3 px-7 py-4 text-gray-900 hover:bg-gray-50">
+                <User size={20} />
+                Meu perfil
+              </button>
+              <button
+                className="w-full flex items-center gap-3 px-7 py-4 font-medium border-l-4"
+                style={{ backgroundColor: "#F4E7EF", borderColor: MAGENTA, color: MAGENTA }}
+              >
+                <MessageCircle size={20} />
+                Meus relatos
+              </button>
+              <button className="w-full flex items-center gap-3 px-7 py-4 text-gray-900 hover:bg-gray-50">
+                <Image size={20} />
+                Minhas fotos
+              </button>
+            </nav>
+
+            {/* Eixos de atuação */}
+            <div className="px-7 py-6 border-t border-gray-200">
+              <p className="text-gray-500 mb-4">Eixos de atuação</p>
+              <div className="space-y-3">
+                {EIXOS.map((eixo) => (
+                  <div
+                    key={eixo.numero}
+                    className="rounded-lg px-4 py-3"
+                    style={{ backgroundColor: eixo.bg, color: eixo.cor }}
+                  >
+                    <p className="font-bold text-xl leading-tight">{eixo.numero}</p>
+                    <p className="font-semibold leading-snug">{eixo.titulo}</p>
+                    <p className="opacity-70">Eixo temático do projeto</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Resumo */}
+            <div className="px-7 py-6 border-t border-gray-200">
+              <p className="text-gray-900 font-bold text-lg mb-4">Resumo</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-[#F3F3F3] rounded-lg py-5 text-center">
+                  <p className="text-2xl font-bold" style={{ color: MAGENTA }}>
+                    5
+                  </p>
+                  <p className="text-gray-500 mt-1">Atividades</p>
+                </div>
+                <div className="bg-[#F3F3F3] rounded-lg py-5 text-center">
+                  <p className="text-2xl font-bold" style={{ color: BLUE }}>
+                    {relatos.length}
+                  </p>
+                  <p className="text-gray-500 mt-1">Relatos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Conteúdo principal */}
+        <main className="space-y-6">
+          {/* Novo relato */}
+          <section className="bg-white rounded-2xl border border-gray-200 p-6">
+            <h3 className="flex items-center gap-3 font-semibold text-lg text-black pb-4 mb-5 border-b-2 border-black">
+              <span
+                className="inline-block w-1.5 h-5 rounded-sm"
+                style={{ backgroundColor: MAGENTA }}
+              />
+              Novo relato
+            </h3>
+
+            <div className="border-2 border-black rounded-xl overflow-hidden">
+              <textarea
+                value={novoRelato}
+                onChange={(e) => setNovoRelato(e.target.value.slice(0, LIMITE))}
+                placeholder="Conte como o projeto está impactando sua vida, onde você está hoje, seus planos..."
+                rows={2}
+                className="w-full resize-none p-5 text-gray-600 placeholder-gray-500 focus:outline-none"
+              />
+              <div className="flex items-center justify-between bg-[#F3F3F3] border-t-2 border-black px-5 py-4">
+                <span className="text-gray-800">{novoRelato.length}/{LIMITE}</span>
+                <button
+                  onClick={handlePublicar}
+                  disabled={!novoRelato.trim()}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-600 text-black font-medium bg-white disabled:opacity-60 transition-colors"
+                  style={
+                    novoRelato.trim()
+                      ? { backgroundColor: MAGENTA, borderColor: MAGENTA, color: "white" }
+                      : {}
+                  }
+                >
+                  <Send size={16} />
+                  Publicar
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* Relatos publicados */}
+          <section className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="flex items-center justify-between pb-4 mb-2 border-b-2 border-black">
+              <h3 className="flex items-center gap-3 font-semibold text-lg text-black">
+                <span
+                  className="inline-block w-1.5 h-5 rounded-sm"
+                  style={{ backgroundColor: MAGENTA }}
+                />
+                Relatos publicados
+              </h3>
+              <span className="text-gray-600">{relatos.length} relatos</span>
+            </div>
+
+            {relatos.length === 0 && (
+              <p className="text-gray-400 py-8 text-center">
+                Você ainda não publicou nenhum relato.
+              </p>
+            )}
+
+            {relatos.map((relato) => (
+              <div key={relato.id} className="py-5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[#333]">{relato.data}</span>
+                  <div className="flex gap-2">
+                    {editandoId === relato.id ? (
+                      <button
+                        onClick={() => salvarEdicao(relato.id)}
+                        className="text-sm font-medium px-4 py-2 rounded-xl text-white"
+                        style={{ backgroundColor: MAGENTA }}
+                      >
+                        Salvar
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => iniciarEdicao(relato)}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-600 text-black hover:bg-gray-50"
+                      >
+                        <Pencil size={15} />
+                        Editar
+                      </button>
+                    )}
+                    <button
+                      onClick={() => excluirRelato(relato.id)}
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-600 text-black hover:bg-gray-50"
+                    >
+                      <Trash2 size={15} />
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+
+                {editandoId === relato.id ? (
+                  <textarea
+                    value={textoEdicao}
+                    onChange={(e) => setTextoEdicao(e.target.value.slice(0, LIMITE))}
+                    rows={4}
+                    className="w-full resize-none rounded-xl border-2 border-black p-4 text-black focus:outline-none"
+                  />
+                ) : (
+                  <p className="text-black leading-relaxed">{relato.texto}</p>
+                )}
+              </div>
+            ))}
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+}
