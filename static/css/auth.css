@@ -1,0 +1,539 @@
+/* ESTILOS PARA AS PÁGINAS DE AUTENTICAÇÃO (Login, Cadastro) */
+
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 150px);
+  padding: 40px 24px;
+  background-color: var(--fundo, #fdfdfd);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--branco, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid var(--cinza-borda, #eaeaea);
+}
+
+.auth-header {
+  background: var(--rosa, #981869);
+  color: var(--branco, #fff);
+  padding: 32px 32px;
+  text-align: left;
+}
+
+.auth-header h2 {
+  font-family: var(--fonte-titulo, "Share", cursive, sans-serif);
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-header p {
+  font-family: var(--fonte-corpo, "Inter", sans-serif);
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.auth-body {
+  padding: 32px;
+}
+
+.auth-form .form-group {
+  margin-bottom: 24px;
+}
+
+.auth-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: var(--preto, #333);
+}
+
+.auth-form label .required {
+  color: var(--rosa, #981869);
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"],
+.auth-form input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--cinza-borda, #ccc);
+  border-radius: 8px;
+  font-family: var(--fonte-corpo, "Inter", sans-serif);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.auth-form input:focus {
+  border-color: var(--rosa, #981869);
+  box-shadow: 0 0 0 3px rgba(152, 24, 105, 0.1);
+}
+
+/* Wrapper de senha para o ícone do olho */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Aumentando o tamanho do olhinho */
+}
+
+.link-esqueceu-senha {
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--rosa, #981869);
+  text-decoration: none;
+}
+.link-esqueceu-senha:hover {
+  text-decoration: underline;
+}
+
+/* Botão entrar */
+.btn-auth-outline {
+  width: 100%;
+  padding: 14px;
+  border-radius: 50px;
+  border: 1px solid var(--cinza-borda, #ccc);
+  background: var(--branco, #fff);
+  color: var(--preto, #333);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 32px;
+}
+.btn-auth-outline:hover {
+  background: var(--rosa, #981869);
+  border-color: var(--rosa, #981869);
+  color: var(--branco, #fff);
+}
+
+/* Divisor */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 32px 0;
+  color: #666;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--cinza-borda, #eaeaea);
+}
+.auth-divider span {
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+/* Link criar cadastro */
+.link-criar-cadastro {
+  display: block;
+  text-align: center;
+  color: var(--rosa, #981869);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+}
+.link-criar-cadastro:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .auth-container {
+    padding: 24px 16px;
+  }
+  .auth-header {
+    padding: 24px;
+  }
+  .auth-body {
+    padding: 24px;
+  }
+}
+
+/* ========================================================
+   ESTILOS ESPECÍFICOS: CADASTRO WIZARD
+======================================================== */
+
+.auth-card.wizard {
+  max-width: 600px;
+}
+
+/* Indicador de Passos */
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--cinza-borda, #eaeaea);
+  padding: 0 16px;
+  background: var(--branco);
+}
+
+.wizard-step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  padding: 16px 8px;
+  color: #999;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.wizard-step.active {
+  color: var(--rosa, #981869);
+  font-weight: 600;
+}
+
+.wizard-step.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--rosa, #981869);
+}
+
+.step-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #eee;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.wizard-step.active .step-circle {
+  background: var(--rosa, #981869);
+  color: #fff;
+}
+
+/* Área de Conteúdo (esconde os passos não ativos) */
+.wizard-content {
+  padding: 32px;
+  min-height: 250px;
+}
+
+.step-pane {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.step-pane.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grid para Formulários (2 colunas) */
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.form-row .form-group {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+@media (max-width: 500px) {
+  .form-row { flex-direction: column; }
+}
+
+/* Rodapé do Wizard */
+.wizard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #f4f4f4;
+  border-top: 1px solid var(--cinza-borda, #eaeaea);
+}
+
+.step-counter {
+  font-size: 14px;
+  color: var(--rosa, #981869);
+  font-weight: 600;
+}
+
+.btn-wizard {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-wizard-outline {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #333;
+}
+.btn-wizard-outline:hover {
+  background: #eaeaea;
+}
+.btn-wizard-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-wizard-primary {
+  background: var(--rosa, #981869);
+  border: 1px solid var(--rosa, #981869);
+  color: #fff;
+}
+.btn-wizard-primary:hover {
+  background: #7a1354;
+  border-color: #7a1354;
+}
+
+/* Seletores Estilo Card (Bolsista/Cursista) */
+.cards-selection {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.card-option {
+  flex: 1;
+  border: 1px solid var(--cinza-borda, #ccc);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.card-option:hover {
+  border-color: #999;
+}
+.card-option.active {
+  border-color: var(--rosa, #981869);
+  background: #fdf0f4;
+}
+.card-title-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px 0;
+  color: #333;
+  font-size: 18px;
+}
+.card-title-inline i {
+  font-size: 24px;
+  color: #666;
+}
+.card-option.active .card-title-inline,
+.card-option.active .card-title-inline i {
+  color: var(--rosa, #981869);
+}
+.card-option p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+/* Input radio oculto dentro do card */
+.card-option input[type="radio"] {
+  display: none;
+}
+
+/* Grid de Eixos */
+.eixos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+@media (max-width: 600px) {
+  .eixos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.eixo-option {
+  border: 1px solid var(--cinza-borda, #ccc);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+  position: relative;
+}
+.eixo-option:hover {
+  background: #f9f9f9;
+}
+/* Custom checkbox */
+.eixo-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: transparent;
+  transition: all 0.2s;
+  margin-top: 2px;
+}
+.eixo-option input[type="checkbox"] {
+  display: none;
+}
+
+/* Estado Selecionado 1 (Azul - Principal) */
+.eixo-option.selected-1 {
+  border-color: var(--azul, #336699);
+  background: #e8f1f8;
+}
+.eixo-option.selected-1 .eixo-checkbox {
+  background: var(--azul, #336699);
+  border-color: var(--azul, #336699);
+  color: #fff;
+}
+/* Estado Selecionado 2 (Rosa - Secundário) */
+.eixo-option.selected-2 {
+  border-color: var(--rosa, #981869);
+  background: #fdf0f4;
+}
+.eixo-option.selected-2 .eixo-checkbox {
+  background: var(--rosa, #981869);
+  border-color: var(--rosa, #981869);
+  color: #fff;
+}
+
+/* Eixo Number e Label */
+.eixo-num {
+  font-weight: 700;
+  color: #666;
+  font-size: 14px;
+  width: 20px;
+  margin-top: 2px;
+}
+.eixo-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+@keyframes popInBadge {
+  0% { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
+}
+/* Badge dentro da label */
+.badge-eixo {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-weight: bold;
+  animation: popInBadge 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.badge-principal {
+  background: var(--azul, #336699);
+  color: #fff;
+}
+.badge-secundaria {
+  background: var(--rosa, #981869);
+  color: #fff;
+}
+
+/* Área de Resultado dos Eixos Selecionados */
+.eixos-result {
+  margin-top: 24px;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.result-pill {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  gap: 8px;
+}
+.result-pill.principal {
+  background: #e8f1f8;
+  color: var(--azul, #336699);
+}
+.result-pill.secundaria {
+  background: #fdf0f4;
+  color: var(--rosa, #981869);
+}
+.result-pill span {
+  opacity: 0.7;
+  font-weight: normal;
+}
+
+/* Caixa de info */
+.alert-info-box {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.alert-info-box i {
+  color: #666;
+  font-size: 20px;
+}

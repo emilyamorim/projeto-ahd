@@ -1,0 +1,108 @@
+{% extends "aluna/base_aluna.html" %}
+
+{% block nav_perfil %}active{% endblock %}
+
+{% block dashboard_content %}
+<!-- Cabeçalho -->
+<div class="content-header">
+  <h3>Dados pessoais</h3>
+  <button type="button" class="btn-sm-outline" id="btnEditarPerfil"><i class="ti ti-edit"></i> Editar</button>
+</div>
+
+<!-- Upload de Foto de Perfil -->
+<div class="profile-photo-upload">
+  <label for="fotoUpload" class="photo-circle clickable-avatar">
+    EA
+    <div class="avatar-overlay"><i class="ti ti-camera" style="font-size:24px"></i></div>
+  </label>
+  <input type="file" id="fotoUpload" accept="image/png, image/jpeg" style="display:none;">
+  <div class="photo-info">
+    <h4>Foto de perfil</h4>
+    <p>JPG ou PNG, máx. 2MB.<br>Aparece no seu perfil público.</p>
+  </div>
+  <button class="btn-sm-outline" style="margin-left: auto;">
+    <i class="ti ti-upload"></i> Enviar foto
+  </button>
+</div>
+
+<!-- Formulário de Dados Pessoais (Leitura) -->
+<form class="dash-form">
+  
+  <div class="form-group">
+    <label>Nome completo</label>
+    <input type="text" value="Emily Amorim do Nascimento" readonly>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label>Data de nascimento</label>
+      <!-- Usando input tipo texto para mostrar a data formatada corretamente conforme mockup -->
+      <input type="text" value="05/05/2005" readonly>
+    </div>
+    <div class="form-group">
+      <label>Cidade</label>
+      <input type="text" value="Goianinha" readonly>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label>Escola</label>
+    <input type="text" value="IFRN - Campus Canguaretama" readonly>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label>Tipo de participação</label>
+      <input type="text" value="Bolsista" readonly>
+      <div class="form-help">Definido pela coordenação</div>
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" value="emily.amorim@gmail.com" readonly>
+    </div>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnEditar = document.getElementById('btnEditarPerfil');
+    const formInputs = document.querySelectorAll('.dash-form input');
+    let isEditing = false;
+    
+    btnEditar.addEventListener('click', function() {
+      isEditing = !isEditing;
+      
+      if(isEditing) {
+        // Entra no modo edição
+        btnEditar.innerHTML = '<i class="ti ti-check"></i> Salvar';
+        btnEditar.className = 'btn-sm-primary';
+        
+        formInputs.forEach(input => {
+          // Não destrava campos que são restritos por regra de negócio
+          if(input.value !== "Bolsista" && input.value !== "IFRN - Campus Canguaretama" && input.value !== "emily.amorim@gmail.com") {
+             input.removeAttribute('readonly');
+          }
+        });
+        
+        // Foca no primeiro campo (Nome)
+        formInputs[0].focus();
+        
+      } else {
+        // Salva e trava
+        btnEditar.innerHTML = '<i class="ti ti-edit"></i> Editar';
+        btnEditar.className = 'btn-sm-outline';
+        
+        formInputs.forEach(input => {
+           input.setAttribute('readonly', true);
+        });
+        
+        // Simular feedback visual para a aluna
+        alert('✨ Seus dados foram atualizados com sucesso!');
+      }
+    });
+  });
+</script>
+{% endblock %}
