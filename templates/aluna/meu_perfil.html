@@ -12,7 +12,11 @@
 <!-- Upload de Foto de Perfil -->
 <div class="profile-photo-upload">
   <label for="fotoUpload" class="photo-circle clickable-avatar">
-    EA
+    {% if request.user.foto_perfil %}
+      <img src="{{ request.user.foto_perfil.url }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+    {% else %}
+      {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+    {% endif %}
     <div class="avatar-overlay"><i class="ti ti-camera" style="font-size:24px"></i></div>
   </label>
   <input type="file" id="fotoUpload" accept="image/png, image/jpeg" style="display:none;">
@@ -20,7 +24,7 @@
     <h4>Foto de perfil</h4>
     <p>JPG ou PNG, máx. 2MB.<br>Aparece no seu perfil público.</p>
   </div>
-  <button class="btn-sm-outline" style="margin-left: auto;">
+  <button class="btn-sm-outline btn-upload">
     <i class="ti ti-upload"></i> Enviar foto
   </button>
 </div>
@@ -30,35 +34,34 @@
   
   <div class="form-group">
     <label>Nome completo</label>
-    <input type="text" value="Emily Amorim do Nascimento" readonly>
+    <input type="text" value="{{ request.user.get_full_name }}" readonly>
   </div>
   
   <div class="form-row">
     <div class="form-group">
       <label>Data de nascimento</label>
-      <!-- Usando input tipo texto para mostrar a data formatada corretamente conforme mockup -->
-      <input type="text" value="05/05/2005" readonly>
+      <input type="text" value="{% if perfil and perfil.data_nascimento %}{{ perfil.data_nascimento|date:'d/m/Y' }}{% endif %}" readonly>
     </div>
     <div class="form-group">
       <label>Cidade</label>
-      <input type="text" value="Goianinha" readonly>
+      <input type="text" value="{% if perfil %}{{ perfil.cidade }}{% endif %}" readonly>
     </div>
   </div>
   
   <div class="form-group">
     <label>Escola</label>
-    <input type="text" value="IFRN - Campus Canguaretama" readonly>
+    <input type="text" value="{% if perfil %}{{ perfil.escola }}{% endif %}" readonly>
   </div>
   
   <div class="form-row">
     <div class="form-group">
       <label>Tipo de participação</label>
-      <input type="text" value="Bolsista" readonly>
+      <input type="text" value="{% if perfil %}{{ perfil.get_tipo_participacao_display }}{% endif %}" readonly>
       <div class="form-help">Definido pela coordenação</div>
     </div>
     <div class="form-group">
       <label>E-mail</label>
-      <input type="email" value="emily.amorim@gmail.com" readonly>
+      <input type="email" value="{{ request.user.email }}" readonly>
     </div>
   </div>
 

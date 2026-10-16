@@ -1,0 +1,130 @@
+{% extends "aluna/base_aluna.html" %}
+
+{% block nav_fotos %}active{% endblock %}
+
+{% block dashboard_content %}
+<div class="panel-card">
+  <div class="panel-header" style="margin-bottom: 24px;">
+    <h3>Enviar nova foto</h3>
+  </div>
+
+  <form action="{% url 'enviar_foto' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="dash-form" style="margin-bottom: 24px;">
+      <label>Álbum de destino (opcional)</label>
+      <select name="album" style="width: 100%; height: 44px; padding: 10px 14px; border: 1px solid var(--cinza-borda, #ccc); border-radius: 8px; font-family: var(--fonte-corpo, 'Inter', sans-serif); font-size: 15px; outline: none; background: #fff;">
+        <option value="">Sem álbum definido</option>
+        {% for album in form.fields.album.queryset %}
+          <option value="{{ album.id }}">{{ album.nome }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="upload-zone" id="uploadZone">
+      <i class="ti ti-cloud-upload" id="uploadIcon"></i>
+      <div class="upload-zone-title" id="uploadTitle">Arraste fotos aqui ou clique para selecionar</div>
+      <div class="upload-zone-subtitle" id="uploadSubtitle">JPG, PNG ou WEBP &middot; Máx. 5MB por foto</div>
+      <input type="file" name="imagens" id="fileInput" style="display: none;" multiple accept="image/jpeg,image/png,image/webp">
+      <button type="button" class="btn-sm-outline" style="margin: 0 auto;" id="btnSelect">
+        <i class="ti ti-plus"></i> Selecionar fotos
+      </button>
+    </div>
+    <div style="margin-top: 16px; text-align: right;">
+      <button type="submit" class="btn-sm-primary" id="btnSubmitForm"><i class="ti ti-send"></i> Enviar Arquivos</button>
+    </div>
+  </form>
+</div>
+
+<div class="panel-card">
+  <div class="panel-header">
+    <h3>Fotos enviadas por mim</h3>
+    <span style="color: #666; font-size: 14px;">3 fotos</span>
+  </div>
+
+  <div class="photo-grid">
+    {% for foto in fotos %}
+    <div class="photo-card">
+      <div class="photo-card-img" style="background-image: url('{{ foto.imagem.url }}'); background-size: cover; background-position: center; border: none;">
+      </div>
+      <div class="photo-card-footer">
+        <div class="photo-card-title" title="{{ foto.nome_original }}">{{ foto.nome_original|truncatechars:18 }}</div>
+        <form action="{% url 'excluir_foto' foto.id %}" method="POST" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="photo-card-btn" aria-label="Excluir" onclick="return confirm('Tem certeza que deseja apagar esta foto?');"><i class="ti ti-trash"></i></button>
+        </form>
+      </div>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 32px 0; color: #666;">
+      <i class="ti ti-photo" style="font-size: 48px; color: #ddd; margin-bottom: 16px; display: block;"></i>
+      <p>Nenhuma foto enviada ainda.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const uploadZone = document.getElementById('uploadZone');
+  const fileInput = document.getElementById('fileInput');
+  const btnSelect = document.getElementById('btnSelect');
+  const uploadTitle = document.getElementById('uploadTitle');
+  const uploadSubtitle = document.getElementById('uploadSubtitle');
+  const uploadIcon = document.getElementById('uploadIcon');
+
+  // Abrir o seletor de arquivos ao clicar na zona ou no botão
+  uploadZone.addEventListener('click', function(e) {
+    if (e.target !== btnSelect) {
+      fileInput.click();
+    }
+  });
+  btnSelect.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  // Simular progresso ao selecionar um arquivo
+  fileInput.addEventListener('change', function() {
+    if (fileInput.files.length > 0) {
+      simularUpload();
+    }
+  });
+
+  function simularUpload() {
+    // 1. Estado de carregamento
+    uploadZone.style.pointerEvents = 'none';
+    uploadIcon.className = 'ti ti-loader';
+    uploadIcon.style.animation = 'spin 1s linear infinite';
+    uploadTitle.textContent = 'Enviando foto...';
+    uploadSubtitle.textContent = 'Por favor, aguarde.';
+    btnSelect.style.display = 'none';
+
+    // 2. Estado de sucesso (após 1.5s)
+    setTimeout(() => {
+      uploadIcon.style.animation = 'none';
+      uploadIcon.className = 'ti ti-check';
+      uploadIcon.style.color = 'var(--verde, #2ea36f)';
+      uploadTitle.textContent = 'Foto enviada com sucesso!';
+      uploadTitle.style.color = 'var(--verde, #2ea36f)';
+      uploadSubtitle.textContent = 'A página será recarregada em breve.';
+
+      // Resetar após 3s para fins de demonstração
+      setTimeout(() => {
+        uploadIcon.className = 'ti ti-cloud-upload';
+        uploadIcon.style.color = '';
+        uploadTitle.textContent = 'Arraste fotos aqui ou clique para selecionar';
+        uploadTitle.style.color = '';
+        uploadSubtitle.textContent = 'JPG, PNG ou WEBP · Máx. 5MB por foto';
+        btnSelect.style.display = '';
+        uploadZone.style.pointerEvents = 'auto';
+        fileInput.value = '';
+      }, 3000);
+    }, 1500);
+  }
+});
+</script>
+<style>
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+{% endblock %}

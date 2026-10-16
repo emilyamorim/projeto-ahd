@@ -1,21 +1,7 @@
+{% extends "base_skeleton.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Ampliando Horizontes Digitais{% endblock %}</title>
 
-  <!-- CSS global -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
-
-  <!-- Tabler Icons (ícones usados em todo o projeto) -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-
-  {% block extra_css %}{% endblock %}
-</head>
-<body>
+{% block body %}
 
 <!-- ══════════════════════════════════════════
      NAVBAR
@@ -35,6 +21,11 @@
 
   <div class="menu-overlay" onclick="toggleMobileMenu()"></div>
   <div class="navbar-collapse">
+    <!-- Botão de Fechar Sutil (estilo SUAP) -->
+    <button class="close-menu-subtle-btn" aria-label="Fechar menu" onclick="toggleMobileMenu()">
+      <i class="ti ti-chevron-right"></i>
+    </button>
+    
     <!-- Links de navegação principais -->
     <div class="navbar-links">
     <a href="{% url 'home' %}"
@@ -63,7 +54,7 @@
     {% endcomment %}
     {% if user.is_authenticated and user.tipo in 'professor,admin' %}
     <a href="{% url 'painel' %}"
-       class="{% if 'painel' in request.resolver_match.url_name %}active-az{% endif %}">
+       class="{% if 'painel' in request.resolver_match.url_name %}active{% endif %}">
       Painel <i class="ti ti-dashboard" style="opacity:0.7;"></i>
     </a>
     {% endif %}
@@ -73,13 +64,45 @@
   <div class="navbar-actions">
     {% if user.is_authenticated %}
       <div class="navbar-user">
-        <div class="navbar-avatar {% if user.tipo in 'professor,admin' %}az{% endif %}">
-          {{ user.nome|slice:":2"|upper }}
+        <div class="navbar-avatar">
+          {% if user.foto_perfil %}
+            <img src="{{ user.foto_perfil.url }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+          {% else %}
+            {% if user.first_name %}
+              {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+            {% else %}
+              <i class="ti ti-user"></i>
+            {% endif %}
+          {% endif %}
         </div>
-        <span class="navbar-username">
-          <i class="ti ti-chevron-down" aria-hidden="true"></i>
-          {{ user.nome|truncatechars:20 }}
+        <span class="navbar-username" style="display:flex; align-items:center;">
+          {% if user.first_name %}
+            {{ user.first_name|truncatechars:15 }}
+          {% else %}
+            {{ user.email|truncatechars:15 }}
+          {% endif %}
+          <i class="ti ti-chevron-down" aria-hidden="true" style="margin-left: 4px;"></i>
         </span>
+        
+        <!-- Menu Dropdown -->
+        <div class="navbar-dropdown">
+          <div class="dropdown-header">
+            <strong>
+              {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}Administrador{% endif %}
+            </strong>
+            <p>{{ user.email }}</p>
+          </div>
+          <div class="dropdown-divider"></div>
+          {% if user.tipo == 'aluna' and not user.is_superuser %}
+            <a href="{% url 'meu_perfil' %}" class="dropdown-item"><i class="ti ti-user"></i> Minha Área</a>
+          {% else %}
+            <a href="{% url 'painel' %}" class="dropdown-item"><i class="ti ti-dashboard"></i> Meu Painel</a>
+            <a href="{% url 'editar_perfil_professor' %}" class="dropdown-item"><i class="ti ti-user-edit"></i> Editar Perfil</a>
+            <a href="{% url 'perfil_professor' user.id %}" class="dropdown-item"><i class="ti ti-user"></i> Meu Perfil Público</a>
+          {% endif %}
+          <div class="dropdown-divider"></div>
+          <a href="{% url 'logout' %}" class="dropdown-item text-danger"><i class="ti ti-logout"></i> Sair</a>
+        </div>
       </div>
     {% else %}
       <a href="{% url 'login' %}" class="btn btn-entrar btn-sm">
@@ -179,9 +202,4 @@
   </div>
 </footer>
 
-<!-- JS global -->
-<script src="{% static 'js/main.js' %}"></script>
-  {% block extra_js %}{% endblock %}
-
-  </body>
-</html>
+{% endblock body %}

@@ -4,8 +4,8 @@ Este documento centraliza o que já foi feito, o que estamos fazendo agora e qua
 
 ---
 
-## 🚀 Status: Fase 1 (Frontend Público) Concluída!
-A base visual do site e as principais páginas de apresentação (Área Pública) foram finalizadas com sucesso, recebendo um design premium e responsivo. O foco agora muda para a **Área de Autenticação e Backend (Django)**.
+## 🚀 Status: Fase 2 (Autenticação, Backend e Painéis) Concluída!
+A base visual do site, o sistema de autenticação, os modelos de banco de dados, o painel do professor e a área da aluna foram implementados. O foco agora muda para **conectar os dados dinâmicos às páginas públicas e preparar o deploy**.
 
 ---
 
@@ -20,17 +20,20 @@ A base visual do site e as principais páginas de apresentação (Área Pública
 - [x] **P03 - Fotos:** Galeria dinâmica com visualizador Lightbox e filtros.
 - [x] **P04 - Notícias:** Grid de notícias com animações "Ler mais" e "Carregar mais".
 - [x] **P05 - Sobre:** Apresentação da missão, eixos e bolsistas com busca em tempo real.
+- [x] **Painel do Professor (G01 a G04 / AD01 a AD02):** Telas do dashboard administrativo, gerenciamento de alunas, fotos, notícias, aprovação de cadastros e usuários.
+- [x] **A01 - Tela de Cadastro:** Formulário de registro de alunas em etapas (wizard) conectado ao backend.
+- [x] **A02 - Tela de Login:** Login integrado ao Django com redirecionamento dinâmico por perfil (aluna ou coordenação).
+- [x] **A03 - Recuperar Senha:** Tela de redefinição de senha (`templates/auth/redefinir_senha.html`).
+- [x] **Modelagem do Banco de Dados:** Models criados (`Usuario`, `AlunaPerfil`, `Eixo`, `Noticia`, `Relato`, `Foto`, `Album`) com migrations aplicadas.
+- [x] **Área da Aluna Logada (L01, L02, L03):** Visualização de perfil, upload e moderação de fotos e envio de relatos.
 
 ### 🔄 A Fazer (Próximos Passos Imediatos)
 *Quem for pegar essas tarefas, lembre-se de criar uma branch (`feature/...`).*
-- [ ] **A02 - Tela de Login:** Criar `templates/auth/login.html` seguindo o design system.
-- [ ] **A01 - Tela de Cadastro:** Criar formulário de registro de alunas `templates/auth/cadastro.html`.
-- [ ] **A03 - Recuperar Senha:** Telas de "Esqueci minha senha".
-- [ ] **Backend de Autenticação:** Conectar essas telas com o sistema de `auth` nativo do Django (models, views e forms).
+- [ ] **Páginas Públicas Dinâmicas:** Conectar as páginas de Notícias, Fotos e Histórico para puxar dados diretamente do banco via views.
+- [ ] **Ações em Relatos da Aluna:** Permitir editar e excluir relatos publicados pela aluna.
+- [ ] **Envio de E-mail de Recuperação de Senha:** Configurar backend de envio de e-mails para o fluxo de reset de senha.
 
 ### 🔮 Futuro (Backlog)
 *Tarefas maiores para os próximos meses.*
-- [ ] **Modelagem do Banco de Dados:** Criar os *models* reais de Alunas, Notícias, Fotos e Relatos no `models.py`.
-- [ ] **Área da Aluna Logada (L01, L02, L03):** Painel onde a aluna visualiza seu progresso e envia relatos.
-- [ ] **Painel do Professor (G01 a G04):** Telas de aprovação de cadastros, gerenciamento e postagem de notícias.
-- [ ] **Implantação (Deploy):** Configurar banco PostgreSQL, Gunicorn e Nginx para colocar o site no ar no servidor do IFRN.
+- [ ] **Implantação (Deploy):** Configurar banco PostgreSQL, Gunicorn e WhiteNoise/Nginx para colocar o site no ar no servidor do IFRN.
+
