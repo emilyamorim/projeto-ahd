@@ -20,7 +20,7 @@ def minhas_fotos(request):
         "form": form,
         "total_fotos": fotos.count(),
     }
-    return render(request, "galeria/minhas_fotos.html", contexto)
+    return render(request, "aluna/minhas_fotos.html", contexto)
 
 
 @login_required
@@ -68,3 +68,18 @@ def excluir_foto(request, foto_id):
     foto.delete()
     messages.success(request, "Foto excluída.")
     return redirect("minhas_fotos")
+
+@login_required
+def gerenciar_fotos_view(request):
+    if request.user.tipo not in ['professor', 'admin']:
+        messages.error(request, 'Acesso restrito à coordenação.')
+        return redirect('home')
+
+    albuns = Album.objects.all().prefetch_related('fotos')
+    fotos_pendentes = Foto.objects.filter(album__isnull=True).order_by('-enviado_em')
+
+    context = {
+        'albuns': albuns,
+        'fotos_pendentes': fotos_pendentes,
+    }
+    return render(request, 'painel/gerenciar_fotos.html', context)
