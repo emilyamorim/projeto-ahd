@@ -97,7 +97,7 @@
               <!-- Grid dinâmico gerado via JS ou repetição HTML -->
               <!-- Eixo 01 -->
               <label class="eixo-option" data-eixo-id="01" data-eixo-name="Letramento Digital">
-                <input type="checkbox" value="01">
+                <input type="checkbox" name="eixos" value="01">
                 <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
                 <div class="eixo-num">01</div>
                 <div class="eixo-label">Letramento Digital</div>
@@ -105,7 +105,7 @@
               
               <!-- Eixo 02 -->
               <label class="eixo-option" data-eixo-id="02" data-eixo-name="Robótica Educacional">
-                <input type="checkbox" value="02">
+                <input type="checkbox" name="eixos" value="02">
                 <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
                 <div class="eixo-num">02</div>
                 <div class="eixo-label">Robótica Educacional</div>
@@ -113,7 +113,7 @@
               
               <!-- Eixo 03 -->
               <label class="eixo-option" data-eixo-id="03" data-eixo-name="Olimpíadas do Conhecimento">
-                <input type="checkbox" value="03">
+                <input type="checkbox" name="eixos" value="03">
                 <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
                 <div class="eixo-num">03</div>
                 <div class="eixo-label">Olimpíadas do<br>Conhecimento</div>
@@ -121,7 +121,7 @@
               
               <!-- Eixo 04 -->
               <label class="eixo-option" data-eixo-id="04" data-eixo-name="Eventos — Formação Integral">
-                <input type="checkbox" value="04">
+                <input type="checkbox" name="eixos" value="04">
                 <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
                 <div class="eixo-num">04</div>
                 <div class="eixo-label">Eventos —<br>Formação Integral</div>
@@ -129,7 +129,7 @@
               
               <!-- Eixo 05 -->
               <label class="eixo-option" data-eixo-id="05" data-eixo-name="Pesquisa Científica">
-                <input type="checkbox" value="05">
+                <input type="checkbox" name="eixos" value="05">
                 <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
                 <div class="eixo-num">05</div>
                 <div class="eixo-label">Pesquisa Científica</div>
@@ -137,7 +137,7 @@
               
               <!-- Eixo 06 -->
               <label class="eixo-option" data-eixo-id="06" data-eixo-name="Acomp. das Egressas">
-                <input type="checkbox" value="06">
+                <input type="checkbox" name="eixos" value="06">
                 <div class="eixo-checkbox"><i class="ti ti-check"></i></div>
                 <div class="eixo-num">06</div>
                 <div class="eixo-label">Acomp. das Egressas</div>
@@ -160,7 +160,7 @@
           <div class="alert-info-box">
             <i class="ti ti-info-circle"></i>
             <div>
-              Após aprovação do cadastro, você receberá sua senha por e-mail. A foto de perfil pode ser adicionada depois, já dentro do site.
+              Defina sua senha de acesso abaixo. <b>Atenção:</b> Após o cadastro, sua conta ficará em análise pela coordenação. Você só conseguirá acessar o painel após a aprovação.
             </div>
           </div>
           
@@ -171,8 +171,25 @@
           </div>
           
           <div class="form-group">
-            <label>Confimar e-mail <span class="required">*</span></label>
+            <label>Confirmar e-mail <span class="required">*</span></label>
             <input type="email" name="confirm_email" placeholder="seuemail@exemplo.com" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Senha <span class="required">*</span></label>
+              <div style="position: relative;">
+                <input type="password" name="password" id="password" placeholder="Digite uma senha forte" required style="padding-right: 40px;">
+                <i class="ti ti-eye toggle-password" data-target="password" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; font-size: 20px;"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Confirmar Senha <span class="required">*</span></label>
+              <div style="position: relative;">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Repita a senha" required style="padding-right: 40px;">
+                <i class="ti ti-eye toggle-password" data-target="confirm_password" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; font-size: 20px;"></i>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -379,6 +396,25 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       
       updateEixosUI();
+    });
+  });
+
+  // ==========================================
+  // LÓGICA DE MOSTRAR/OCULTAR SENHA
+  // ==========================================
+  document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', function() {
+      const targetId = this.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        this.classList.remove('ti-eye');
+        this.classList.add('ti-eye-off');
+      } else {
+        input.type = 'password';
+        this.classList.remove('ti-eye-off');
+        this.classList.add('ti-eye');
+      }
     });
   });
 

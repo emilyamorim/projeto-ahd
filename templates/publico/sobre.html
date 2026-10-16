@@ -170,48 +170,25 @@
     <h2 class="section-title">Professores coordenadores</h2>
     
     <div class="time-grid">
-      <!-- Prof 1 -->
+      {% for membro in equipe %}
       <div class="time-card">
-        <div class="time-avatar"><i class="ti ti-photo"></i></div>
-        <h3 class="time-name">Tatiana Amaral Sorrentino</h3>
-        <p class="time-role">Coordenadora do projeto</p>
-        <a href="mailto:tatiana.sorrentino@ifrn.edu.br" class="time-email">tatiana.sorrentino@ifrn.edu.br</a>
+        {% if membro.conta %}
+          <a href="{% url 'perfil_professor' membro.conta.pk %}" class="time-avatar" title="Ver perfil de {{ membro.nome }}" style="overflow: hidden; text-decoration: none; font-size: 26px; font-weight: 700;">
+            {% if membro.conta.foto_perfil %}
+              <img src="{{ membro.conta.foto_perfil.url }}" alt="Foto de {{ membro.nome }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+              {{ membro.iniciais }}
+            {% endif %}
+          </a>
+          <h3 class="time-name"><a href="{% url 'perfil_professor' membro.conta.pk %}" style="color: inherit; text-decoration: none;">{{ membro.nome }}</a></h3>
+        {% else %}
+          <div class="time-avatar" style="font-size: 26px; font-weight: 700;">{{ membro.iniciais }}</div>
+          <h3 class="time-name">{{ membro.nome }}</h3>
+        {% endif %}
+        <p class="time-role">{{ membro.cargo }}</p>
+        <a href="mailto:{{ membro.email }}" class="time-email">{{ membro.email }}</a>
       </div>
-      <!-- Prof 2 -->
-      <div class="time-card">
-        <div class="time-avatar"><i class="ti ti-photo"></i></div>
-        <h3 class="time-name">Helber Wagner da Silva</h3>
-        <p class="time-role">Professor coordenador</p>
-        <a href="mailto:helber.silva@ifrn.edu.br" class="time-email">helber.silva@ifrn.edu.br</a>
-      </div>
-      <!-- Prof 3 -->
-      <div class="time-card">
-        <div class="time-avatar"><i class="ti ti-photo"></i></div>
-        <h3 class="time-name">Eberton Marinho</h3>
-        <p class="time-role">Professor coordenador</p>
-        <a href="mailto:eberton.marinho@ifrn.edu.br" class="time-email">eberton.marinho@ifrn.edu.br</a>
-      </div>
-      <!-- Prof 4 -->
-      <div class="time-card">
-        <div class="time-avatar"><i class="ti ti-photo"></i></div>
-        <h3 class="time-name">Creusa Ribeiro</h3>
-        <p class="time-role">Professora coordenadora</p>
-        <a href="mailto:creusa.ribeiro@ifrn.edu.br" class="time-email">creusa.ribeiro@ifrn.edu.br</a>
-      </div>
-      <!-- Prof 5 -->
-      <div class="time-card">
-        <div class="time-avatar"><i class="ti ti-photo"></i></div>
-        <h3 class="time-name">Ana Barros</h3>
-        <p class="time-role">Professora colaboradora</p>
-        <a href="mailto:ana.barros@ifrn.edu.br" class="time-email">ana.barros@ifrn.edu.br</a>
-      </div>
-      <!-- Prof 6 -->
-      <div class="time-card">
-        <div class="time-avatar"><i class="ti ti-photo"></i></div>
-        <h3 class="time-name">Bruno Vitorino</h3>
-        <p class="time-role">Professor colaborador</p>
-        <a href="mailto:bruno.vitorino@ifrn.edu.br" class="time-email">bruno.vitorino@ifrn.edu.br</a>
-      </div>
+      {% endfor %}
     </div>
 
         <h2 class="section-title" style="margin-bottom: 24px;">Alunas bolsistas 2026 &mdash; 44 bolsistas</h2>
@@ -285,7 +262,7 @@
     <!-- Eixo 6 -->
     <div class="eixo-tag"><i class="ti ti-school"></i> Acompanhamento das Egressas (Eixo 06)</div>
     <div class="bolsistas-grid">
-      <div class="bolsista-card">Emily Amorim do Nascimento</div>
+      <a href="{% url 'perfil_aluna' 2 %}" style="text-decoration: none; color: inherit; display: block;"><div class="bolsista-card">Emily Amorim do Nascimento</div></a>
       <div class="bolsista-card">Giseliane da Silva Lima</div>
       <div class="bolsista-card">Iasmim Dias de Oliveira Galdino</div>
     </div>

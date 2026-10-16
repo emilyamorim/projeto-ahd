@@ -1,0 +1,670 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Perfil: Emily Amorim do Nascimento - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* BANNER PRINCIPAL COM GRADIENTE */
+  .profile-banner {
+    background: linear-gradient(135deg, var(--rosa, #981869) 0%, #6b0f49 100%);
+    padding: 80px 0 100px 0;
+    color: white;
+    position: relative;
+  }
+  
+  /* Onda suave (Wave) no fundo do banner */
+  .profile-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* Remove linha invisível no Chrome */
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23fafafa' fill-opacity='1' d='M0,160L48,165.3C96,171,192,181,288,165.3C384,149,480,107,576,112C672,117,768,171,864,186.7C960,203,1056,181,1152,149.3C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .profile-banner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .banner-avatar {
+    width: 140px;
+    height: 140px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rosa, #981869);
+    font-size: 48px;
+    font-weight: bold;
+    flex-shrink: 0;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+
+  .banner-info h1 {
+    font-size: 38px;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .banner-meta {
+    display: flex;
+    gap: 24px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .banner-meta div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .banner-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .badge-tag {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+  }
+  .badge-tag:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* LAYOUT GERAL */
+  main {
+    background-color: #fafafa;
+  }
+
+  .profile-container {
+    max-width: 1200px;
+    margin: 40px auto 60px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 48px;
+    align-items: start;
+    position: relative;
+    z-index: 3;
+  }
+
+  @media (max-width: 900px) {
+    .profile-banner-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+    .banner-meta, .banner-tags {
+      justify-content: center;
+    }
+    .profile-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* TÍTULOS DE SEÇÃO */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #eee;
+  }
+  .section-title i {
+    color: var(--rosa, #981869);
+    font-size: 26px;
+  }
+
+  /* TIMELINE (HISTÓRICO) */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 48px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 3px;
+    background: linear-gradient(to bottom, #e0e0e0 0%, #f0f0f0 100%);
+    border-radius: 3px;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 48px;
+    transition: all 0.3s ease;
+  }
+  
+  .timeline-icon {
+    position: absolute;
+    left: -53px;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--azul, #336699);
+    color: var(--azul, #336699);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  .timeline-icon.rosa {
+    border-color: var(--rosa, #981869);
+    color: var(--rosa, #981869);
+  }
+
+  .timeline-item:hover .timeline-icon {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+
+  .timeline-date {
+    font-size: 14px;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .timeline-content h3 {
+    font-size: 20px;
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-weight: 700;
+  }
+
+  .timeline-content p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+    margin: 0 0 16px 0;
+  }
+
+  .timeline-badge {
+    display: inline-block;
+    background: #f0f7ff;
+    color: var(--azul, #336699);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .timeline-badge.rosa {
+    background: #fdf5f8;
+    color: var(--rosa, #981869);
+  }
+
+  /* RELATOS COM EFEITO DE CARTÃO FLUTUANTE E ASPAS */
+  .relato-card {
+    background: #ffffff;
+    border: none;
+    border-left: 5px solid var(--rosa, #981869);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .relato-card::before {
+    content: '"';
+    position: absolute;
+    top: -30px;
+    right: 20px;
+    font-size: 160px;
+    color: rgba(152, 24, 105, 0.03);
+    font-family: Georgia, serif;
+    z-index: -1;
+    transition: all 0.3s ease;
+  }
+
+  .relato-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  .relato-card:hover::before {
+    transform: scale(1.1);
+    color: rgba(152, 24, 105, 0.06);
+  }
+
+  .relato-date {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .relato-text {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #444;
+    font-style: italic;
+    margin: 0;
+  }
+  .relato-card.azul {
+    border-left-color: var(--azul, #336699);
+  }
+  .relato-card.azul::before {
+    color: rgba(51, 102, 153, 0.03);
+  }
+  .relato-card.azul:hover::before {
+    color: rgba(51, 102, 153, 0.06);
+  }
+
+  /* BARRA LATERAL (DIREITA) */
+  .sidebar-block {
+    margin-bottom: 48px;
+  }
+  
+  .info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .info-list li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .info-list i {
+    color: #aaa;
+    font-size: 22px;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  }
+  .info-list-title {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 2px 0;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .info-list-value {
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  /* THEME BOXES (02 e 06) */
+  .theme-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+  }
+  .theme-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  }
+  .theme-box.azul { border-left: 4px solid var(--azul, #336699); }
+  .theme-box.rosa { border-left: 4px solid var(--rosa, #981869); }
+  
+  .theme-num {
+    font-size: 36px;
+    font-weight: 900;
+  }
+  .theme-box.azul .theme-num { color: var(--azul, #336699); }
+  .theme-box.rosa .theme-num { color: var(--rosa, #981869); }
+  
+  .theme-title {
+    font-weight: 800;
+    font-size: 16px;
+    color: #2c3e50;
+    margin: 0 0 4px 0;
+  }
+  .theme-subtitle {
+    font-size: 13px;
+    color: #777;
+    margin: 0;
+  }
+
+  /* ESTATÍSTICAS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    text-align: center;
+    padding: 28px 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  }
+  .stat-num {
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--azul, #336699);
+    margin-bottom: 4px;
+  }
+  .stat-card:nth-child(2) .stat-num {
+    color: var(--rosa, #981869);
+  }
+  .stat-label {
+    font-size: 15px;
+    color: #666;
+    font-weight: 600;
+  }
+
+  /* OUTRAS BOLSISTAS */
+  .bolsista-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .bolsista-card:hover {
+    transform: translateX(6px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  }
+  .bolsista-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    transition: all 0.3s ease;
+  }
+  .bolsista-card:hover .bolsista-avatar {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .bg-rosa { background: #fdf5f8; color: var(--rosa, #981869); border: 2px solid var(--rosa, #981869); }
+  .bg-azul { background: #f4f8fb; color: var(--azul, #336699); border: 2px solid var(--azul, #336699); }
+  .bg-cinza { background: #eee; color: #555; border: 2px solid #ccc; }
+
+  .bolsista-info h4 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+  .bolsista-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+    line-height: 1.4;
+  }
+</style>
+{% endblock %}{% block content %}
+    <!-- BANNER TOPO -->
+    <div class="profile-banner">
+      <div class="profile-banner-inner">
+        {% if user.is_authenticated and user.pk == aluna.pk %}
+        <a href="{% url 'meu_perfil' %}" class="banner-avatar banner-avatar-editavel" title="Alterar foto">
+        {% else %}
+        <div class="banner-avatar">
+        {% endif %}
+          {% if aluna.foto_perfil %}
+            <img src="{{ aluna.foto_perfil.url }}" alt="Foto de {{ aluna.get_full_name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+          {% else %}
+            {{ aluna.first_name|first|upper }}{{ aluna.last_name|first|upper }}
+          {% endif %}
+        {% if user.is_authenticated and user.pk == aluna.pk %}
+          <span class="avatar-camera"><i class="ti ti-camera"></i>Alterar</span>
+        </a>
+        {% else %}
+        </div>
+        {% endif %}
+        <div class="banner-info">
+          <h1>{{ aluna.get_full_name|default:aluna.username }}</h1>
+          <div class="banner-meta">
+            {% if perfil.cidade or aluna.cidade %}
+              <div><i class="ti ti-map-pin"></i> {{ perfil.cidade|default:aluna.cidade }}</div>
+            {% endif %}
+            {% if perfil.ano_ingresso %}
+              <div><i class="ti ti-calendar"></i> No projeto desde {{ perfil.ano_ingresso }}</div>
+            {% endif %}
+          </div>
+          <div class="banner-tags">
+            {% if perfil %}
+              <span class="badge-tag">{{ perfil.get_tipo_participacao_display }}</span>
+              {% for eixo in perfil.eixos.all %}
+                <span class="badge-tag">{{ eixo.nome }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        {% include "publico/_botao_editar_perfil.html" with dono=aluna url_editar="meu_perfil" %}
+      </div>
+    </div>
+
+    <div class="profile-container">
+      
+      <!-- COLUNA PRINCIPAL -->
+      <div class="profile-main">
+        
+        <!-- Histórico -->
+        <h2 class="section-title"><i class="ti ti-history"></i> Histórico de atividades</h2>
+        <div class="timeline">
+          
+          <div class="timeline-item">
+            <div class="timeline-icon azul"><i class="ti ti-star"></i></div>
+            <div class="timeline-date">Abril 2025</div>
+            <div class="timeline-content">
+              <h3>Ingresso no projeto como bolsista</h3>
+              <p>Selecionada na chamada CNPq 31/2023 para atuar no eixo de Robótica Educacional.</p>
+              <span class="timeline-badge azul">Robótica Educacional</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-icon rosa"><i class="ti ti-settings"></i></div>
+            <div class="timeline-date">Maio 2025</div>
+            <div class="timeline-content">
+              <h3>Capacitação em Arduino</h3>
+              <p>Início do treinamento técnico e aprofundamento em eletrônica e programação com Arduino para a preparação das oficinas prático-educacionais.</p>
+              <span class="timeline-badge rosa">Robótica Educacional</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-icon azul"><i class="ti ti-users"></i></div>
+            <div class="timeline-date">Junho 2025</div>
+            <div class="timeline-content">
+              <h3>Aulas com a primeira turma</h3>
+              <p>Início da experiência em sala de aula, ministrando os primeiros conteúdos práticos e facilitando o aprendizado de robótica para as meninas da primeira turma.</p>
+              <span class="timeline-badge azul">Robótica Educacional</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-icon rosa"><i class="ti ti-certificate"></i></div>
+            <div class="timeline-date">Setembro 2025</div>
+            <div class="timeline-content">
+              <h3>Primeira entrega de certificados</h3>
+              <p>Celebração e encerramento do primeiro ciclo de oficinas, com a cerimônia oficial de entrega dos certificados para as alunas concluintes.</p>
+              <span class="timeline-badge rosa">Eventos para Formação Integral</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-icon azul"><i class="ti ti-bulb"></i></div>
+            <div class="timeline-date">Novembro 2025</div>
+            <div class="timeline-content">
+              <h3>Participação na SECITEX 2025</h3>
+              <p>Representação do projeto Ampliando Horizontes Digitais no evento, apresentando os trabalhos, o impacto e os resultados obtidos com foco na Robótica Educacional.</p>
+              <span class="timeline-badge azul">Eventos para Formação Integral</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Relatos -->
+        <h2 class="section-title"><i class="ti ti-quote"></i> Relatos</h2>
+        
+        <div class="relato-card">
+          <div class="relato-date">15 de maio de 2026</div>
+          <p class="relato-text">"Participei do meu primeiro workshop de robótica e foi incrível! Nunca imaginei que um dia ia programar um Arduino. Quando o LED piscou pela primeira vez, eu e minhas colegas comemoramos muito. Esse projeto está mudando completamente a minha visão sobre tecnologia e o que eu quero fazer no futuro."</p>
+        </div>
+
+        <div class="relato-card azul">
+          <div class="relato-date">2 de abril de 2026</div>
+          <p class="relato-text">"Quando me disseram que eu tinha sido selecionada como bolsista fiquei muito feliz e um pouco com medo ao mesmo tempo. Nunca tinha tido contato com robótica antes. Mas as professoras são incríveis e estou aprendendo muito desde o primeiro dia."</p>
+        </div>
+
+      </div>
+
+      <!-- COLUNA LATERAL -->
+      <aside class="profile-sidebar">
+        
+        <!-- Ficha Técnica -->
+        <div class="sidebar-block">
+          <ul class="info-list">
+            <li>
+              <i class="ti ti-cake"></i>
+              <div>
+                <p class="info-list-title">Data de nascimento</p>
+                <p class="info-list-value">05/05/2005</p>
+              </div>
+            </li>
+            <li>
+              <i class="ti ti-map-pin"></i>
+              <div>
+                <p class="info-list-title">Cidade de origem</p>
+                <p class="info-list-value">Goianinha, RN</p>
+              </div>
+            </li>
+            <li>
+              <i class="ti ti-user"></i>
+              <div>
+                <p class="info-list-title">Tipo de participação</p>
+                <p class="info-list-value">Bolsista</p>
+              </div>
+            </li>
+            <li>
+              <i class="ti ti-calendar-event"></i>
+              <div>
+                <p class="info-list-title">Ano de ingresso</p>
+                <p class="info-list-value">2025</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Eixos -->
+        <div class="sidebar-block">
+          <div class="theme-box azul">
+            <div class="theme-num">02</div>
+            <div>
+              <p class="theme-title">Robótica Educacional</p>
+              <p class="theme-subtitle">Eixo temático do projeto</p>
+            </div>
+          </div>
+          <div class="theme-box rosa">
+            <div class="theme-num">06</div>
+            <div>
+              <p class="theme-title">Acompanhamento das Egressas</p>
+              <p class="theme-subtitle">Eixo temático do projeto</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="sidebar-block">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-num">5</div>
+              <div class="stat-label">Atividades</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">2</div>
+              <div class="stat-label">Relatos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outras bolsistas -->
+        <div class="sidebar-block">
+          <h2 class="section-title"><i class="ti ti-users"></i> Outras bolsistas</h2>
+          
+          <div class="bolsista-card">
+            <div class="bolsista-avatar bg-rosa">GI</div>
+            <div class="bolsista-info">
+              <h4>Giseliane Lima</h4>
+              <p>Eixo 01 - Letramento<br>Eixo 06 - Egressas</p>
+            </div>
+          </div>
+
+          <div class="bolsista-card">
+            <div class="bolsista-avatar bg-azul">WE</div>
+            <div class="bolsista-info">
+              <h4>Welyda Evelly</h4>
+              <p>Eixo 01 - Letramento</p>
+            </div>
+          </div>
+
+          <div class="bolsista-card">
+            <div class="bolsista-avatar bg-rosa">AD</div>
+            <div class="bolsista-info">
+              <h4>Adriely Martins</h4>
+              <p>Eixo 02 - Robótica</p>
+            </div>
+          </div>
+
+        </div>
+
+      </aside>
+    </div>
+{% endblock %}

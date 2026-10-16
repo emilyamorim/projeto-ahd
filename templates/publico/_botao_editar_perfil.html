@@ -1,0 +1,61 @@
+{% comment %}
+  Botão "Editar perfil" exibido no banner do perfil público,
+  apenas quando o usuário logado é o dono do perfil.
+  Uso: {% include "publico/_botao_editar_perfil.html" with dono=professor url_editar="editar_perfil_professor" %}
+{% endcomment %}
+{% if user.is_authenticated and user.pk == dono.pk %}
+<style>
+  .btn-editar-perfil {
+    position: absolute;
+    top: 0;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-editar-perfil:hover {
+    background: #fff;
+    color: var(--rosa, #981869);
+    transform: translateY(-1px);
+  }
+  .banner-avatar-editavel {
+    position: relative;
+    text-decoration: none;
+    overflow: hidden;
+  }
+  .banner-avatar-editavel .avatar-camera {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .banner-avatar-editavel .avatar-camera i { font-size: 28px; }
+  .banner-avatar-editavel:hover .avatar-camera { opacity: 1; }
+  @media (max-width: 768px) {
+    .btn-editar-perfil { position: static; margin-top: 16px; }
+  }
+</style>
+<a href="{% url url_editar %}" class="btn-editar-perfil" id="btn-editar-perfil">
+  <i class="ti ti-pencil"></i> Editar perfil
+</a>
+{% endif %}

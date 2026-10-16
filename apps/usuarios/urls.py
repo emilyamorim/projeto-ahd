@@ -7,7 +7,11 @@ organizadas por nível de acesso.
 
 from django.urls import path
 from django.views.generic import TemplateView
-from apps.galeria import views as galeria_views
+from django.contrib.auth import views as auth_views
+from . import views
+from apps.galeria.views import gerenciar_fotos_view
+from apps.conteudo.views import publicar_noticia_view
+
 urlpatterns = [
 
     # ----------------------------------------------------------
@@ -35,13 +39,6 @@ urlpatterns = [
         name="fotos",
     ),
 
-    # L03 — Enviar fotos para os álbuns do projeto
-    path(
-        "minha-area/fotos/",
-        galeria_views.minhas_fotos,
-        name="minhas_fotos",
-    ),
-    
 
     # P04 — Notícias e novidades do projeto
     path(
@@ -53,7 +50,7 @@ urlpatterns = [
     # P05 — Informações sobre o projeto
     path(
         "sobre/",
-        TemplateView.as_view(template_name="publico/sobre.html"),
+        views.sobre_view,
         name="sobre",
     ),
 
@@ -62,14 +59,14 @@ urlpatterns = [
     # Exemplo: /aluna/5/ mostra o perfil da aluna com id 5
     path(
         "aluna/<int:pk>/",
-        TemplateView.as_view(template_name="publico/perfil_aluna.html"),
+        views.perfil_aluna_view,
         name="perfil_aluna",
     ),
 
     # P07 — Perfil público de um professor
     path(
         "professor/<int:pk>/",
-        TemplateView.as_view(template_name="publico/perfil_professor.html"),
+        views.perfil_professor_view,
         name="perfil_professor",
     ),
 
@@ -80,15 +77,22 @@ urlpatterns = [
     # A01 — Formulário de cadastro em 3 passos
     path(
         "cadastro/",
-        TemplateView.as_view(template_name="auth/cadastro.html"),
+        views.cadastro_view,
         name="cadastro",
     ),
 
     # A02 — Página de login
     path(
         "login/",
-        TemplateView.as_view(template_name="auth/login.html"),
+        views.CustomLoginView.as_view(),
         name="login",
+    ),
+
+    # A02B — Logout
+    path(
+        "logout/",
+        auth_views.LogoutView.as_view(),
+        name="logout",
     ),
 
     # A03 — Página para redefinir a senha por e-mail
@@ -105,22 +109,8 @@ urlpatterns = [
     # L01 — Dados pessoais e foto de perfil
     path(
         "minha-area/perfil/",
-        TemplateView.as_view(template_name="aluna/meu_perfil.html"),
+        views.meu_perfil_aluna_view,
         name="meu_perfil",
-    ),
-
-    # L02 — Publicar, editar e excluir relatos
-    path(
-        "minha-area/relatos/",
-        TemplateView.as_view(template_name="aluna/meus_relatos.html"),
-        name="meus_relatos",
-    ),
-
-    # L03 — Enviar fotos para os álbuns do projeto
-    path(
-        "minha-area/fotos/",
-        TemplateView.as_view(template_name="aluna/minhas_fotos.html"),
-        name="minhas_fotos",
     ),
 
     # ----------------------------------------------------------
@@ -130,28 +120,35 @@ urlpatterns = [
     # G01 — Visão geral: stats, pendentes e alunas sem atividade
     path(
         "painel/",
-        TemplateView.as_view(template_name="painel/dashboard.html"),
+        views.dashboard_view,
         name="painel",
+    ),
+
+    # G01B — Editar o próprio perfil (nome, cidade, foto)
+    path(
+        "painel/meu-perfil/",
+        views.editar_perfil_professor_view,
+        name="editar_perfil_professor",
     ),
 
     # G02 — Lista e gerenciamento de todas as alunas
     path(
         "painel/alunas/",
-        TemplateView.as_view(template_name="painel/gerenciar_alunas.html"),
+        views.gerenciar_alunas_view,
         name="gerenciar_alunas",
     ),
 
     # G03 — Gerenciamento de álbuns e fotos
     path(
         "painel/fotos/",
-        TemplateView.as_view(template_name="painel/gerenciar_fotos.html"),
+        gerenciar_fotos_view,
         name="gerenciar_fotos",
     ),
 
     # G04 — Criar e editar notícias do projeto
     path(
         "painel/noticias/",
-        TemplateView.as_view(template_name="painel/publicar_noticia.html"),
+        publicar_noticia_view,
         name="publicar_noticia",
     ),
 
@@ -162,14 +159,14 @@ urlpatterns = [
     # AD01 — Fila de cadastros aguardando aprovação
     path(
         "painel/cadastros/",
-        TemplateView.as_view(template_name="painel/aprovar_cadastros.html"),
+        views.aprovar_cadastros_view,
         name="aprovar_cadastros",
     ),
 
     # AD02 — Criar e editar contas de professores e admins
     path(
         "painel/usuarios/",
-        TemplateView.as_view(template_name="painel/gerenciar_usuarios.html"),
+        views.gerenciar_usuarios_view,
         name="gerenciar_usuarios",
     ),
 ]
