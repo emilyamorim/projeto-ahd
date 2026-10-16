@@ -1,0 +1,194 @@
+{% extends "painel/base_painel.html" %}
+{% load static %}
+
+{% block title %}Aprovar Cadastros - Ampliando Horizontes Digitais{% endblock %}
+
+{% block nav_cadastros %}active{% endblock %}
+
+{% block extra_painel_css %}
+<style>
+  .panel-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--rosa, #981869);
+    padding-left: 12px;
+    margin-bottom: 32px;
+  }
+  
+  .panel-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .cadastro-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .cadastro-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .cadastro-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .cadastro-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .avatar-rosa {
+    border: 1px solid var(--rosa, #981869);
+    color: var(--rosa, #981869);
+    background: #fdf5f8;
+  }
+
+  .avatar-azul {
+    border: 1px solid var(--azul, #336699);
+    color: var(--azul, #336699);
+    background: #f4f8fb;
+  }
+
+  .cadastro-text h4 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .cadastro-text p {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .cadastro-text p.meta {
+    font-size: 13px;
+    color: #888;
+  }
+
+  .cadastro-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-outline-action {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+  }
+
+  .btn-outline-action:hover {
+    background: var(--rosa, #981869);
+    color: white;
+    border-color: var(--rosa, #981869);
+  }
+
+  /* Responsividade para Telas Pequenas */
+  @media (max-width: 900px) {
+    .cadastro-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .cadastro-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .btn-outline-action {
+      justify-content: center;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="panel-card">
+  <div class="panel-header">
+    <h3>Cadastros aguardando aprovação</h3>
+  </div>
+  
+  <div class="cadastro-list">
+    
+    {% if pendentes %}
+      {% for perfil in pendentes %}
+      <div class="cadastro-item">
+        <div class="cadastro-info">
+          <!-- Você pode randomizar a cor ou usar a inicial do nome -->
+          <div class="cadastro-avatar avatar-rosa">{{ perfil.usuario.first_name|first|upper }}</div>
+          <div class="cadastro-text">
+            <h4>{{ perfil.usuario.first_name }} {{ perfil.usuario.last_name }}</h4>
+            <p>{{ perfil.get_tipo_participacao_display }} &middot; 
+               {% for eixo in perfil.eixos.all %}{{ eixo.nome }}{% if not forloop.last %}, {% endif %}{% endfor %} &middot; 
+               {{ perfil.cidade }}
+            </p>
+            <p class="meta">
+              {% if perfil.data_nascimento %}Nasc. {{ perfil.data_nascimento|date:"d/m/Y" }} &middot;{% endif %}
+              {{ perfil.escola }} &middot; 
+              Cadastrado {{ perfil.usuario.date_joined|timesince }} atrás
+            </p>
+          </div>
+        </div>
+        <div class="cadastro-actions">
+          <form method="POST" style="display:inline-block; margin:0;">
+            {% csrf_token %}
+            <input type="hidden" name="perfil_id" value="{{ perfil.id }}">
+            <input type="hidden" name="acao" value="aprovar">
+            <button type="submit" class="btn-outline-action"><i class="ti ti-check"></i> Aprovar</button>
+          </form>
+          
+          <form method="POST" style="display:inline-block; margin:0;">
+            {% csrf_token %}
+            <input type="hidden" name="perfil_id" value="{{ perfil.id }}">
+            <input type="hidden" name="acao" value="recusar">
+            <button type="submit" class="btn-outline-action" onclick="return confirm('Tem certeza que deseja recusar e excluir este cadastro?');"><i class="ti ti-x"></i> Recusar</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="color: #666; font-style: italic;">Não há novos cadastros aguardando aprovação.</p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

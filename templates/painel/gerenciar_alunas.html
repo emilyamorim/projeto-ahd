@@ -1,0 +1,294 @@
+{% extends "painel/base_painel.html" %}
+{% load static %}
+
+{% block title %}Gerenciar Alunas - Ampliando Horizontes Digitais{% endblock %}
+
+{% block nav_alunas %}active{% endblock %}
+
+{% block extra_painel_css %}
+<style>
+  .panel-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--rosa, #981869);
+    padding-left: 12px;
+    margin-bottom: 24px;
+  }
+  
+  .panel-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .filters-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    position: relative;
+    width: 300px;
+  }
+  
+  .search-box input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+  }
+
+  .filter-btns {
+    display: flex;
+    gap: 12px;
+  }
+
+  .filter-btn {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #333;
+    transition: 0.2s;
+  }
+
+  .filter-btn.active, .filter-btn:hover {
+    border-color: #333;
+    background: #f9f9f9;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 100px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #eee;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 100px;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table-row:last-child {
+    border-bottom: none;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .avatar-rosa {
+    border: 1px solid var(--rosa, #981869);
+    color: var(--rosa, #981869);
+    background: #fdf5f8;
+  }
+
+  .avatar-azul {
+    border: 1px solid var(--azul, #336699);
+    color: var(--azul, #336699);
+    background: #f4f8fb;
+  }
+
+  .user-text {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .eixo-text {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .badge-success {
+    background: #e6f6ec;
+    color: #0e8a43;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .badge-warning {
+    background: #fdf3e8;
+    color: #d48806;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .btn-icon {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: 0.2s;
+  }
+
+  .btn-icon:hover {
+    background: #f5f5f5;
+  }
+
+  .load-more {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .load-more a {
+    color: var(--azul, #336699);
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .filters-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .search-box {
+      width: 100%;
+    }
+    .filter-btns {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      white-space: nowrap;
+    }
+    .table-container {
+      overflow-x: auto;
+    }
+    .table-header, .table-row {
+      min-width: 650px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="panel-card">
+  <div class="panel-header">
+    <h3>Todas as alunas &mdash; 131</h3>
+  </div>
+  
+  <div class="filters-row">
+    <div class="search-box">
+      <i class="ti ti-search"></i>
+      <input type="text" placeholder="Buscar por nome">
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active">Todas</button>
+      <button class="filter-btn">Bolsistas</button>
+      <button class="filter-btn">Cursista</button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="table-header">
+      <div>Nome</div>
+      <div>Eixo</div>
+      <div>Status</div>
+      <div></div>
+    </div>
+    
+    {% for aluna in alunas %}
+    <div class="table-row">
+      <div class="user-info">
+        <div class="user-avatar {% if forloop.counter|divisibleby:2 %}avatar-azul{% else %}avatar-rosa{% endif %}">
+          {% if aluna.usuario.foto_perfil %}
+            <img src="{{ aluna.usuario.foto_perfil.url }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+          {% else %}
+            {{ aluna.usuario.first_name|first|upper }}{{ aluna.usuario.last_name|first|upper }}
+          {% endif %}
+        </div>
+        <div class="user-text">{{ aluna.usuario.first_name }}<br>{{ aluna.usuario.last_name }}</div>
+      </div>
+      <div class="eixo-text">
+        {% for eixo in aluna.eixos.all %}
+          {{ eixo.nome }}<br>
+        {% empty %}
+          Sem eixo
+        {% endfor %}
+      </div>
+      <div><span class="badge-success">Ativa</span></div>
+      <div class="row-actions">
+        <button class="btn-icon" title="Adicionar atividade"><i class="ti ti-plus"></i></button>
+        <button class="btn-icon" title="Editar"><i class="ti ti-pencil"></i></button>
+      </div>
+    </div>
+    {% empty %}
+    <div style="padding: 24px; text-align: center; color: #666;">
+      Nenhuma aluna encontrada.
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="load-more">
+    Total: {{ alunas.count }} alunas
+  </div>
+</div>
+
+{% endblock %}

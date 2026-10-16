@@ -1,0 +1,392 @@
+{% extends "painel/base_painel.html" %}
+{% load static %}
+
+{% block title %}Publicar Notícia - Ampliando Horizontes Digitais{% endblock %}
+
+{% block nav_noticias %}active{% endblock %}
+
+{% block extra_painel_css %}
+<style>
+  .panel-card {
+    background: white;
+    border: 1px solid var(--cinza-borda, #eaeaea);
+    border-radius: 8px;
+    padding: 32px;
+    margin: 0 auto 24px auto;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  }
+
+  .panel-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .panel-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .required {
+    color: var(--rosa, #981869);
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--rosa, #981869);
+  }
+
+  /* Select Rosa Personalizado e Bonitinho */
+  .select-rosa {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--rosa, #981869);
+    color: white;
+    border: 1px solid var(--rosa, #981869);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    padding-right: 40px; /* Espaço para a setinha */
+    /* Setinha SVG customizada na cor branca */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 18px;
+    transition: all 0.2s;
+  }
+  .select-rosa:hover {
+    background-color: #7a1354;
+    border-color: #7a1354;
+  }
+  .select-rosa:focus {
+    box-shadow: 0 0 0 4px rgba(152, 24, 105, 0.25);
+    outline: none;
+  }
+  .select-rosa option {
+    background-color: white;
+    color: #333;
+    font-weight: normal;
+  }
+
+  /* Título da Notícia Gigante */
+  .input-title-huge {
+    font-size: 24px !important;
+    font-weight: bold;
+    padding: 16px 20px !important;
+    border: none !important;
+    border-bottom: 2px solid #ccc !important;
+    border-radius: 0 !important;
+    background: transparent;
+  }
+  .input-title-huge:focus {
+    border-bottom-color: var(--rosa, #981869) !important;
+  }
+
+  /* Editor Rico (Mockup) */
+  .rich-editor {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .editor-toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+  }
+  .toolbar-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #444;
+    font-size: 16px;
+  }
+  .toolbar-btn:hover {
+    background: #e9ecef;
+    border-color: #ddd;
+  }
+  .toolbar-divider {
+    width: 1px;
+    background: #ccc;
+    margin: 0 8px;
+  }
+  .editor-textarea {
+    width: 100%;
+    min-height: 400px;
+    border: none;
+    padding: 24px;
+    font-family: var(--fonte-corpo, "Inter", sans-serif);
+    font-size: 16px;
+    line-height: 1.6;
+    outline: none;
+    resize: vertical;
+  }
+
+  /* Upload Box */
+  .upload-box {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 32px 16px;
+    text-align: center;
+    background: #fafafa;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .upload-box:hover {
+    border-color: var(--rosa, #981869);
+    background: #fdf5f8;
+  }
+  .upload-icon {
+    font-size: 32px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  .upload-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .upload-hint {
+    font-size: 12px;
+    color: #888;
+  }
+  .upload-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+  .upload-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .upload-remove:hover {
+    background: rgba(200,0,0,0.8);
+  }
+
+  /* Botões de Ação */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+  }
+
+  .btn-submit {
+    padding: 12px 24px;
+    background: var(--rosa, #981869);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+  }
+  .btn-submit:hover {
+    background: #7a1354;
+  }
+
+  .btn-draft {
+    padding: 12px 24px;
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .btn-draft:hover {
+    background: #f5f5f5;
+  }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<form action="#" method="POST">
+  <div class="panel-card">
+    
+    <div class="panel-header">
+      <h3>Nova Notícia</h3>
+    </div>
+
+    <!-- TÍTULO -->
+    <div class="form-group">
+      <input type="text" class="input-title-huge" placeholder="Digite o título da notícia aqui..." required>
+    </div>
+
+    <!-- DATA E CATEGORIA -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Data de Publicação <span class="required">*</span></label>
+        <input type="date" required>
+      </div>
+      <div class="form-group">
+        <label>Categoria <span class="required">*</span></label>
+        <select class="select-rosa">
+          <option>Eventos</option>
+          <option>Olimpíadas</option>
+          <option>Avisos</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- IMAGEM DE CAPA -->
+    <div class="form-group">
+      <label>Imagem de Capa</label>
+      <div class="upload-box" id="coverUploadBox">
+        <i class="ti ti-cloud-upload upload-icon"></i>
+        <div class="upload-text">Enviar Imagem</div>
+        <div class="upload-hint">JPG ou PNG &middot; Máx. 5MB</div>
+        <img src="" alt="Preview" class="upload-preview" id="coverPreview">
+        <button type="button" class="upload-remove" id="btnRemoveCover" title="Remover capa"><i class="ti ti-x"></i></button>
+        <input type="file" id="coverInput" accept="image/*" style="display: none;">
+      </div>
+    </div>
+
+    <!-- CONTEÚDO (EDITOR RICO) -->
+    <div class="form-group">
+      <label>Conteúdo da Notícia <span class="required">*</span></label>
+      <div class="rich-editor">
+        <!-- Barra de ferramentas do Editor Visual -->
+        <div class="editor-toolbar">
+          <button type="button" class="toolbar-btn" title="Negrito"><i class="ti ti-bold"></i></button>
+          <button type="button" class="toolbar-btn" title="Itálico"><i class="ti ti-italic"></i></button>
+          <button type="button" class="toolbar-btn" title="Sublinhado"><i class="ti ti-underline"></i></button>
+          <div class="toolbar-divider"></div>
+          <button type="button" class="toolbar-btn" title="Lista com marcadores"><i class="ti ti-list"></i></button>
+          <button type="button" class="toolbar-btn" title="Lista numerada"><i class="ti ti-list-numbers"></i></button>
+          <div class="toolbar-divider"></div>
+          <button type="button" class="toolbar-btn" title="Inserir Link"><i class="ti ti-link"></i></button>
+          <button type="button" class="toolbar-btn" title="Inserir Imagem"><i class="ti ti-photo"></i></button>
+          <button type="button" class="toolbar-btn" title="Inserir Vídeo"><i class="ti ti-video"></i></button>
+        </div>
+        <!-- Área de Texto -->
+        <textarea class="editor-textarea" placeholder="Comece a escrever sua notícia..." required></textarea>
+      </div>
+    </div>
+
+    <!-- BOTÕES DE AÇÃO -->
+    <div class="form-actions">
+      <button type="button" class="btn-draft">Salvar Rascunho</button>
+      <button type="submit" class="btn-submit">
+        <i class="ti ti-send"></i> Publicar Notícia
+      </button>
+    </div>
+
+  </div>
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const uploadBox = document.getElementById('coverUploadBox');
+  const fileInput = document.getElementById('coverInput');
+  const previewImg = document.getElementById('coverPreview');
+  const btnRemove = document.getElementById('btnRemoveCover');
+
+  // Abre o seletor de arquivos
+  uploadBox.addEventListener('click', function(e) {
+    if (e.target !== btnRemove && e.target !== btnRemove.querySelector('i')) {
+      fileInput.click();
+    }
+  });
+
+  // Simula o preview da imagem
+  fileInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImg.style.display = 'block';
+        btnRemove.style.display = 'flex';
+      }
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+
+  // Remove a imagem
+  btnRemove.addEventListener('click', function(e) {
+    e.stopPropagation(); // Evita abrir o seletor de arquivos novamente
+    fileInput.value = '';
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+    btnRemove.style.display = 'none';
+  });
+});
+</script>
+{% endblock %}

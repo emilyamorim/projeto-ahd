@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Painel do Professor - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+  <!-- CSS Específico do Dashboard -->
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=13">
+  {% block extra_painel_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  
+  <!-- BARRA LATERAL (SIDEBAR) FIXA -->
+  <aside class="dashboard-sidebar">
+    
+    <!-- Cabeçalho do Perfil -->
+    <div class="sidebar-header">
+      <a href="{% url 'editar_perfil_professor' %}" class="sidebar-avatar" title="Editar perfil" style="overflow:hidden; text-decoration:none;">
+        {% if user.foto_perfil %}
+          <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+        {% else %}
+          {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+        {% endif %}
+      </a>
+      <div class="sidebar-name">
+        Prof. {{ user.get_full_name|default:user.username|truncatechars:24 }}
+      </div>
+      <div class="sidebar-info">
+        Coordenação
+      </div>
+    </div>
+
+    <!-- Navegação Interna -->
+    <ul class="sidebar-menu">
+      <li class="{% block nav_painel %}{% endblock %}">
+        <a href="{% url 'painel' %}">
+          <i class="ti ti-chart-bar"></i> Painel
+        </a>
+      </li>
+      <li class="{% block nav_perfil %}{% endblock %}">
+        <a href="{% url 'editar_perfil_professor' %}">
+          <i class="ti ti-user-edit"></i> Meu perfil
+        </a>
+      </li>
+      <li class="{% block nav_alunas %}{% endblock %}">
+        <a href="{% url 'gerenciar_alunas' %}">
+          <i class="ti ti-users"></i> Gerenciar alunas
+        </a>
+      </li>
+      <li class="{% block nav_fotos %}{% endblock %}">
+        <a href="{% url 'gerenciar_fotos' %}">
+          <i class="ti ti-photo-filled"></i> Gerenciar fotos
+        </a>
+      </li>
+      <li class="{% block nav_noticias %}{% endblock %}">
+        <a href="{% url 'publicar_noticia' %}">
+          <i class="ti ti-file-text"></i> Publicar notícia
+        </a>
+      </li>
+      <li class="{% block nav_cadastros %}{% endblock %}">
+        <a href="{% url 'aprovar_cadastros' %}">
+          <i class="ti ti-user-check"></i> Aprovar cadastros
+        </a>
+      </li>
+      <li class="{% block nav_usuarios %}{% endblock %}">
+        <a href="{% url 'gerenciar_usuarios' %}">
+          <i class="ti ti-shield"></i> Gerenciar usuários
+        </a>
+      </li>
+    </ul>
+
+  </aside>
+
+  <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
+  <main class="dashboard-content">
+    {% block dashboard_content %}
+    {% endblock %}
+  </main>
+
+</div>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends "painel/base_painel.html" %}
+{% load static %}
+
+{% block title %}Painel - Ampliando Horizontes Digitais{% endblock %}
+
+{% block nav_painel %}active{% endblock %}
+
+{% block extra_painel_css %}
+<style>
+  .panel-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--rosa, #981869);
+    padding-left: 12px;
+    margin-bottom: 32px;
+  }
+  
+  .panel-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .btn-outline {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .btn-outline:hover {
+    background: #f9f9f9;
+  }
+
+  /* Visão Geral (Cards) */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--azul, #336699);
+    margin-bottom: 4px;
+  }
+  
+  .stat-label {
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  /* Listas (Cadastros pendentes e Sem atividade) */
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .list-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .list-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .list-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .avatar-rosa {
+    border: 1px solid var(--rosa, #981869);
+    color: var(--rosa, #981869);
+    background: #fdf5f8;
+  }
+
+  .avatar-azul {
+    border: 1px solid var(--azul, #336699);
+    color: var(--azul, #336699);
+    background: #f4f8fb;
+  }
+
+  .list-text h4 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .list-text p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+  }
+
+  .list-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-icon {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: 0.2s;
+  }
+
+  .btn-icon:hover {
+    background: #f5f5f5;
+  }
+
+  .badge-warning {
+    background: #fdf3e8;
+    color: #d48806;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* ── MOBILE RESPONSIVENESS ── */
+  @media (max-width: 768px) {
+    .panel-card {
+      padding: 16px;
+    }
+    
+    .panel-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .list-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .list-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    
+    .list-actions form,
+    .list-actions .btn-outline {
+      width: 100%;
+    }
+    
+    .btn-icon {
+      flex-shrink: 0;
+    }
+  }
+
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Visão Geral -->
+<div class="panel-card">
+  <div class="panel-header" style="margin-bottom: 24px;">
+    <h3>Visão geral</h3>
+  </div>
+  
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">{{ total_bolsistas }}</div>
+      <div class="stat-label">Bolsistas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color: var(--rosa, #981869);">{{ total_cursistas }}</div>
+      <div class="stat-label">Cursistas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color: #d48806;">{{ total_pendentes }}</div>
+      <div class="stat-label">Pendentes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ total_relatos }}</div>
+      <div class="stat-label">Relatos novos</div>
+    </div>
+  </div>
+</div>
+
+<!-- Cadastros Pendentes -->
+<div class="panel-card">
+  <div class="panel-header">
+    <h3>Cadastros pendentes</h3>
+    <a href="{% url 'aprovar_cadastros' %}" class="btn-outline">
+      Ver todas <i class="ti ti-arrow-right"></i>
+    </a>
+  </div>
+  
+  {% for pendente in pendentes_recentes %}
+  <div class="list-item">
+    <div class="list-info">
+      <div class="list-avatar {% if forloop.counter|divisibleby:2 %}avatar-azul{% else %}avatar-rosa{% endif %}">
+        {{ pendente.usuario.first_name|first|upper }}{{ pendente.usuario.last_name|first|upper }}
+      </div>
+      <div class="list-text">
+        <h4>{{ pendente.usuario.first_name }} {{ pendente.usuario.last_name }}</h4>
+        <p>{{ pendente.get_tipo_participacao_display }} &middot; {{ pendente.usuario.date_joined|date:"d/m/Y" }}</p>
+      </div>
+    </div>
+    <div class="list-actions">
+      <!-- Forms to approve / reject inline -->
+      <form method="POST" action="{% url 'aprovar_cadastros' %}" style="display: inline-block;">
+        {% csrf_token %}
+        <input type="hidden" name="perfil_id" value="{{ pendente.id }}">
+        <button type="submit" name="acao" value="aprovar" class="btn-outline"><i class="ti ti-check"></i> Aprovar</button>
+        <button type="submit" name="acao" value="recusar" class="btn-icon" title="Recusar"><i class="ti ti-x"></i></button>
+      </form>
+    </div>
+  </div>
+  {% empty %}
+  <div style="text-align: center; color: var(--cinza-sub); padding: 24px;">
+    <p>Nenhum cadastro pendente no momento.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Alunas Recentes -->
+<div class="panel-card">
+  <div class="panel-header">
+    <h3>Alunas cadastradas recentemente</h3>
+    <a href="{% url 'gerenciar_alunas' %}" class="btn-outline">
+      Gerenciar todas <i class="ti ti-arrow-right"></i>
+    </a>
+  </div>
+  
+  {% for aluna in alunas_recentes %}
+  <div class="list-item">
+    <div class="list-info">
+      <div class="list-avatar {% if forloop.counter|divisibleby:2 %}avatar-rosa{% else %}avatar-azul{% endif %}">
+        {% if aluna.usuario.foto_perfil %}
+          <img src="{{ aluna.usuario.foto_perfil.url }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+        {% else %}
+          {{ aluna.usuario.first_name|first|upper }}{{ aluna.usuario.last_name|first|upper }}
+        {% endif %}
+      </div>
+      <div class="list-text">
+        <h4>{{ aluna.usuario.first_name }} {{ aluna.usuario.last_name }}</h4>
+        <p>{{ aluna.get_tipo_participacao_display }} &middot; {% for eixo in aluna.eixos.all %}{{ eixo.nome }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+      </div>
+    </div>
+    <div class="list-actions">
+      <a href="{% url 'perfil_aluna' aluna.usuario.id %}" class="btn-outline" target="_blank"><i class="ti ti-external-link"></i> Ver perfil</a>
+    </div>
+  </div>
+  {% empty %}
+  <div style="text-align: center; color: var(--cinza-sub); padding: 24px;">
+    <p>Nenhuma aluna cadastrada ainda.</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
