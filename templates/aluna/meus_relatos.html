@@ -3,14 +3,55 @@
 {% block nav_relatos %}active{% endblock %}
 
 {% block dashboard_content %}
-<div class="content-header">
+<div class="content-header" style="margin-bottom: 24px;">
   <h3>Meus relatos</h3>
-  <button type="button" class="btn-sm-primary"><i class="ti ti-plus"></i> Novo relato</button>
+  <p style="color: #666; font-size: 14px; margin-top: 4px;">Conte como o projeto está impactando sua vida.</p>
 </div>
 
-<div style="text-align: center; padding: 64px 24px; color: #666;">
-  <i class="ti ti-message-circle" style="font-size: 48px; color: #ddd; margin-bottom: 16px; display: block;"></i>
-  <h4>Nenhum relato ainda</h4>
-  <p style="font-size: 14px;">Você ainda não escreveu nenhum relato sobre as suas atividades.</p>
+<!-- Novo Relato -->
+<div class="panel-card" style="margin-bottom: 32px;">
+  <div class="panel-header">
+    <h3>Novo relato</h3>
+  </div>
+  <form method="POST" action="{% url 'meus_relatos' %}">
+    {% csrf_token %}
+    <div style="padding: 16px;">
+      <textarea name="conteudo" rows="4" style="width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 12px; font-family: inherit; font-size: 15px; resize: vertical;" placeholder="Onde você está hoje, seus planos, o que aprendeu..." required></textarea>
+    </div>
+    <div style="background: #f9f9f9; padding: 12px 16px; border-top: 1px solid #eee; display: flex; justify-content: flex-end;">
+      <button type="submit" class="btn-sm-primary">
+        <i class="ti ti-send"></i> Publicar
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Lista de Relatos -->
+<div class="panel-card">
+  <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h3>Relatos publicados</h3>
+    <span style="color: #666; font-size: 14px;">{{ relatos.count }} relato{{ relatos.count|pluralize }}</span>
+  </div>
+  
+  <div style="padding: 24px;">
+    {% for relato in relatos %}
+    <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #eee;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: #555; font-size: 14px;">
+        <strong>{{ relato.criado_em|date:"d \d\e F \d\e Y" }}</strong>
+        <div style="display: flex; gap: 8px;">
+          <button style="border: none; background: none; color: #666; cursor: pointer;"><i class="ti ti-pencil"></i></button>
+          <button style="border: none; background: none; color: #d9534f; cursor: pointer;"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      <p style="color: #333; line-height: 1.6; margin: 0; font-size: 15px;">{{ relato.conteudo }}</p>
+    </div>
+    {% empty %}
+    <div style="text-align: center; padding: 32px 0; color: #666;">
+      <i class="ti ti-message-circle" style="font-size: 48px; color: #ddd; margin-bottom: 16px; display: block;"></i>
+      <h4>Nenhum relato publicado</h4>
+      <p style="font-size: 14px;">Seus relatos aparecerão aqui após publicados.</p>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
