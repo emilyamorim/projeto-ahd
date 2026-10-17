@@ -171,32 +171,36 @@
     flex-wrap: nowrap;
   }
 
-  /* BOTÃO ESCOLHER FOTO (COM ÍCONE BRANCO) */
+  /* BOTÃO ESCOLHER FOTO (ELEGANTE E MODERNO) */
   .btn-escolher-foto {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 40px;
+    height: 38px;
     padding: 0 18px;
-    background: var(--rosa, #981869);
+    background: linear-gradient(135deg, #a01a6f 0%, #821056 100%);
     color: #ffffff !important;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 50px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(152, 24, 105, 0.2);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(152, 24, 105, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
     box-sizing: border-box;
     white-space: nowrap;
     margin: 0;
     flex-shrink: 0;
   }
   .btn-escolher-foto:hover {
-    background: #7e1357;
+    background: linear-gradient(135deg, #b3217d 0%, #911562 100%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(152, 24, 105, 0.3);
+    box-shadow: 0 4px 12px rgba(152, 24, 105, 0.32);
+  }
+  .btn-escolher-foto:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(152, 24, 105, 0.2);
   }
   .btn-escolher-foto i {
     color: #ffffff !important;
@@ -204,22 +208,23 @@
     line-height: 1;
   }
 
-  /* BOTÃO REMOVER FOTO HARMONIOSO (LADO A LADO) */
+  /* BOTÃO REMOVER FOTO (HARMONIOSO E COESO) */
   .btn-remover-foto {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    height: 40px;
+    height: 38px;
     padding: 0 16px;
-    background: #f8fafc;
+    background: #ffffff;
     color: #475569;
     border: 1.5px solid #cbd5e1;
     border-radius: 50px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
     white-space: nowrap;
     margin: 0;
@@ -235,6 +240,8 @@
     background: #fef2f2;
     border-color: #fca5a5;
     color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.12);
   }
   .btn-remover-foto:hover i {
     color: #dc2626;
@@ -504,7 +511,7 @@
       </p>
     </div>
     <a href="{% url 'perfil_aluna' request.user.pk %}" class="btn-ver-perfil" title="Ver perfil público">
-      <i class="ti ti-eye"></i>
+      <i class="ti ti-external-link"></i>
       <span>Ver perfil público</span>
     </a>
   </div>
@@ -539,7 +546,7 @@
       <div class="foto-info-clean">
         <div class="foto-botoes-row">
           <label for="foto_perfil" class="btn-escolher-foto" id="btn-escolher-foto">
-            <i class="ti ti-camera"></i> Escolher foto
+            <i class="ti ti-upload"></i> Escolher foto
           </label>
           {% if user.foto_perfil %}
             <button type="button" class="btn-remover-foto" id="btn-remover-foto">
