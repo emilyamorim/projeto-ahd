@@ -171,7 +171,7 @@
     flex-wrap: nowrap;
   }
 
-  /* BOTÃO ESCOLHER FOTO (ELEGANTE E MODERNO) */
+  /* BOTÃO ESCOLHER FOTO (ESTILO OUTLINE ELEGANTE E LEVE) */
   .btn-escolher-foto {
     display: inline-flex;
     align-items: center;
@@ -179,33 +179,37 @@
     gap: 8px;
     height: 38px;
     padding: 0 18px;
-    background: linear-gradient(135deg, #a01a6f 0%, #821056 100%);
-    color: #ffffff !important;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    color: var(--rosa, #981869) !important;
+    border: 1.5px solid var(--rosa, #981869);
     border-radius: 50px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 6px rgba(152, 24, 105, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    box-shadow: 0 1px 3px rgba(152, 24, 105, 0.08);
     box-sizing: border-box;
     white-space: nowrap;
     margin: 0;
     flex-shrink: 0;
   }
   .btn-escolher-foto:hover {
-    background: linear-gradient(135deg, #b3217d 0%, #911562 100%);
+    background: var(--rosa, #981869);
+    color: #ffffff !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(152, 24, 105, 0.32);
+    box-shadow: 0 4px 10px rgba(152, 24, 105, 0.25);
+  }
+  .btn-escolher-foto:hover i {
+    color: #ffffff !important;
   }
   .btn-escolher-foto:active {
     transform: translateY(0);
-    box-shadow: 0 1px 3px rgba(152, 24, 105, 0.2);
   }
   .btn-escolher-foto i {
-    color: #ffffff !important;
-    font-size: 17px;
+    color: var(--rosa, #981869) !important;
+    font-size: 16px;
     line-height: 1;
+    transition: color 0.2s ease;
   }
 
   /* BOTÃO REMOVER FOTO (HARMONIOSO E COESO) */
