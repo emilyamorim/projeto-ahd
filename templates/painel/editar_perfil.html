@@ -175,6 +175,49 @@
       </div>
     </div>
 
+    <div class="form-row">
+      <div class="form-group">
+        <label for="cargo">Cargo / Função no Projeto</label>
+        <input type="text" name="cargo" id="cargo" value="{{ user.cargo }}" placeholder="Ex.: Professora Coordenadora, Coordenadora de Robótica">
+      </div>
+      <div class="form-group">
+        <label for="instituicao">Instituição</label>
+        <input type="text" name="instituicao" id="instituicao" value="{{ user.instituicao }}" placeholder="Ex.: IFRN - Campus Canguaretama">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 24px;">
+      <label for="bio">Biografia / Apresentação Pública</label>
+      <textarea name="bio" id="bio" rows="4" placeholder="Escreva um breve resumo sobre sua trajetória acadêmica, áreas de pesquisa e atuação no projeto Ampliando Horizontes Digitais...">{{ user.bio }}</textarea>
+      <p class="hint">Esse texto será exibido no seu perfil público e na página Sobre do projeto.</p>
+    </div>
+
+    <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 24px; margin-bottom: 24px;">
+      <h4 style="margin: 0 0 16px 0; font-size: 16px; color: #2c3e50; display: flex; align-items: center; gap: 8px;">
+        <i class="ti ti-link" style="color: var(--azul, #336699);"></i> Links e Redes Acadêmicas
+      </h4>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="link_lattes"><i class="ti ti-certificate"></i> Currículo Lattes (URL)</label>
+          <input type="url" name="link_lattes" id="link_lattes" value="{{ user.link_lattes }}" placeholder="http://lattes.cnpq.br/...">
+        </div>
+        <div class="form-group">
+          <label for="link_linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn (URL)</label>
+          <input type="url" name="link_linkedin" id="link_linkedin" value="{{ user.link_linkedin }}" placeholder="https://linkedin.com/in/...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="link_github"><i class="ti ti-brand-github"></i> GitHub (URL)</label>
+          <input type="url" name="link_github" id="link_github" value="{{ user.link_github }}" placeholder="https://github.com/...">
+        </div>
+        <div class="form-group">
+          <label for="link_instagram"><i class="ti ti-brand-instagram"></i> Instagram (URL)</label>
+          <input type="url" name="link_instagram" id="link_instagram" value="{{ user.link_instagram }}" placeholder="https://instagram.com/...">
+        </div>
+      </div>
+    </div>
+
     <div class="form-acoes">
       <a href="{% url 'painel' %}" class="btn-sm-outline">Cancelar</a>
       <button type="submit" class="btn-sm-primary" id="btn-salvar-perfil">

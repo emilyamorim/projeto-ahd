@@ -16,19 +16,25 @@
     
     <!-- Cabeçalho do Perfil -->
     <div class="sidebar-header">
-      <div class="sidebar-avatar">
-        EA
-      </div>
+      <a href="{% url 'meu_perfil' %}" class="sidebar-avatar" style="overflow:hidden; text-decoration:none; display:flex; align-items:center; justify-content:center;" title="Editar meu perfil">
+        {% if user.foto_perfil %}
+          <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+        {% else %}
+          {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+        {% endif %}
+      </a>
       <div class="sidebar-name">
-        Emily Amorim do Nascimento
+        {{ user.get_full_name|default:user.username }}
       </div>
       <div class="sidebar-info">
-        Goianinha, RN<br>
-        IFRN Campus Canguaretama
+        {% if user.cidade %}{{ user.cidade }}<br>{% endif %}
+        {{ user.perfil_aluna.escola|default:"IFRN - Campus Canguaretama" }}
       </div>
       <div class="sidebar-badges">
-        <span class="badge-pill">Bolsista</span>
-        <span class="badge-pill">2025</span>
+        <span class="badge-pill">{{ user.perfil_aluna.get_tipo_participacao_display|default:"Aluna" }}</span>
+        {% if user.perfil_aluna.ano_ingresso %}
+          <span class="badge-pill">{{ user.perfil_aluna.ano_ingresso }}</span>
+        {% endif %}
       </div>
     </div>
 
@@ -51,53 +57,33 @@
       </li>
     </ul>
 
+    {% if user.perfil_aluna.eixos.all %}
     <!-- Eixos de Atuação -->
     <div class="sidebar-section">
       <h4>Eixos de atuação</h4>
-      
-      <div class="eixo-tag principal">
-        <div class="eixo-tag-num">02</div>
+      {% for eixo in user.perfil_aluna.eixos.all %}
+      <div class="eixo-tag {% if forloop.first %}principal{% endif %}">
+        <div class="eixo-tag-num" {% if not forloop.first %}style="color:var(--rosa)"{% endif %}>{{ forloop.counter|stringformat:"02d" }}</div>
         <div>
-          <span class="eixo-tag-text">Robótica Educacional</span>
+          <span class="eixo-tag-text" {% if not forloop.first %}style="color:var(--rosa)"{% endif %}>{{ eixo.nome }}</span>
           <span class="eixo-tag-sub">Eixo temático do projeto</span>
         </div>
       </div>
-      
-      <div class="eixo-tag">
-        <div class="eixo-tag-num" style="color:var(--rosa)">06</div>
-        <div>
-          <span class="eixo-tag-text" style="color:var(--rosa)">Acomp. das Egressas</span>
-          <span class="eixo-tag-sub">Eixo temático do projeto</span>
-        </div>
-      </div>
+      {% endfor %}
     </div>
+    {% endif %}
 
-    <!-- Resumo Numérico 1 -->
+    <!-- Resumo Numérico -->
     <div class="sidebar-section">
-      <h4>Resumo</h4>
+      <h4>Meu progresso</h4>
       <div class="resumo-grid">
         <div class="resumo-card">
-          <div class="resumo-num" style="color:var(--rosa)">5</div>
-          <div class="resumo-label">Atividades</div>
-        </div>
-        <div class="resumo-card">
-          <div class="resumo-num" style="color:var(--azul)">2</div>
+          <div class="resumo-num" style="color:var(--azul)">{{ user.relatos.count }}</div>
           <div class="resumo-label">Relatos</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Resumo Numérico 2 (Fotos) -->
-    <div class="sidebar-section">
-      <h4>Resumo</h4>
-      <div class="resumo-grid">
         <div class="resumo-card">
-          <div class="resumo-num" style="color:var(--rosa)">3</div>
+          <div class="resumo-num" style="color:var(--rosa)">{{ user.fotos.count }}</div>
           <div class="resumo-label">Fotos</div>
-        </div>
-        <div class="resumo-card">
-          <div class="resumo-num" style="color:var(--azul)">2</div>
-          <div class="resumo-label">Álbuns</div>
         </div>
       </div>
     </div>

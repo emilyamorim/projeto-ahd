@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Perfil: Emily Amorim do Nascimento - Ampliando Horizontes Digitais{% endblock %}
+{% block title %}Perfil: {{ aluna.get_full_name|default:aluna.username }} - Ampliando Horizontes Digitais{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -494,74 +494,65 @@
       
       <!-- COLUNA PRINCIPAL -->
       <div class="profile-main">
-        
-        <!-- Histórico -->
-        <h2 class="section-title"><i class="ti ti-history"></i> Histórico de atividades</h2>
+
+        <!-- Sobre mim / Biografia -->
+        <h2 class="section-title"><i class="ti ti-sparkles"></i> Sobre mim</h2>
+        <div style="background: white; padding: 28px 32px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 48px; line-height: 1.8; color: #555; font-size: 16px;">
+          {% if aluna.bio %}
+            {{ aluna.bio|linebreaks }}
+          {% else %}
+            <p style="color: #777; font-style: italic; margin: 0;">
+              A aluna ainda não adicionou sua apresentação pessoal.
+              {% if user.is_authenticated and user.pk == aluna.pk %}
+                <br><a href="{% url 'meu_perfil' %}" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: underline; margin-top: 8px; display: inline-block;">
+                  <i class="ti ti-pencil"></i> Clique aqui para preencher sua apresentação
+                </a>
+              {% endif %}
+            </p>
+          {% endif %}
+        </div>
+
+        <!-- Relatos -->
+        <h2 class="section-title"><i class="ti ti-quote"></i> Relatos publicados ({{ relatos.count }})</h2>
+        {% for relato in relatos %}
+        <div class="relato-card {% cycle '' 'azul' %}">
+          <div class="relato-date">{{ relato.criado_em|date:"d \d\e F \d\e Y" }}</div>
+          <p class="relato-text">"{{ relato.conteudo }}"</p>
+        </div>
+        {% empty %}
+        <div style="background: white; padding: 36px 24px; border-radius: 12px; text-align: center; color: #888; margin-bottom: 48px; border: 1px dashed #e0e0e0;">
+          <i class="ti ti-message-circle-off" style="font-size: 40px; color: #ccc; margin-bottom: 8px; display: block;"></i>
+          Nenhum relato publicado no momento.
+          {% if user.is_authenticated and user.pk == aluna.pk %}
+            <br><a href="{% url 'meus_relatos' %}" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: underline; margin-top: 8px; display: inline-block;">
+              <i class="ti ti-plus"></i> Publicar meu primeiro relato
+            </a>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <!-- Histórico de atividades -->
+        <h2 class="section-title"><i class="ti ti-history"></i> Histórico de atividades no projeto</h2>
         <div class="timeline">
-          
           <div class="timeline-item">
             <div class="timeline-icon azul"><i class="ti ti-star"></i></div>
-            <div class="timeline-date">Abril 2025</div>
+            <div class="timeline-date">Ingresso no Projeto</div>
             <div class="timeline-content">
-              <h3>Ingresso no projeto como bolsista</h3>
-              <p>Selecionada na chamada CNPq 31/2023 para atuar no eixo de Robótica Educacional.</p>
-              <span class="timeline-badge azul">Robótica Educacional</span>
+              <h3>Participação no AHD</h3>
+              <p>Integração oficial ao projeto Ampliando Horizontes Digitais como {{ perfil.get_tipo_participacao_display|lower|default:"aluna participante" }}.</p>
+              <span class="timeline-badge azul">{{ perfil.get_tipo_participacao_display|default:"Aluna" }}</span>
             </div>
           </div>
 
           <div class="timeline-item">
             <div class="timeline-icon rosa"><i class="ti ti-settings"></i></div>
-            <div class="timeline-date">Maio 2025</div>
+            <div class="timeline-date">Capacitações & Workshops</div>
             <div class="timeline-content">
-              <h3>Capacitação em Arduino</h3>
-              <p>Início do treinamento técnico e aprofundamento em eletrônica e programação com Arduino para a preparação das oficinas prático-educacionais.</p>
-              <span class="timeline-badge rosa">Robótica Educacional</span>
+              <h3>Desenvolvimento de Habilidades</h3>
+              <p>Participação nas oficinas formativas e workshops práticos de tecnologia, robótica e desenvolvimento.</p>
+              <span class="timeline-badge rosa">Formação Técnica</span>
             </div>
           </div>
-
-          <div class="timeline-item">
-            <div class="timeline-icon azul"><i class="ti ti-users"></i></div>
-            <div class="timeline-date">Junho 2025</div>
-            <div class="timeline-content">
-              <h3>Aulas com a primeira turma</h3>
-              <p>Início da experiência em sala de aula, ministrando os primeiros conteúdos práticos e facilitando o aprendizado de robótica para as meninas da primeira turma.</p>
-              <span class="timeline-badge azul">Robótica Educacional</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-icon rosa"><i class="ti ti-certificate"></i></div>
-            <div class="timeline-date">Setembro 2025</div>
-            <div class="timeline-content">
-              <h3>Primeira entrega de certificados</h3>
-              <p>Celebração e encerramento do primeiro ciclo de oficinas, com a cerimônia oficial de entrega dos certificados para as alunas concluintes.</p>
-              <span class="timeline-badge rosa">Eventos para Formação Integral</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-icon azul"><i class="ti ti-bulb"></i></div>
-            <div class="timeline-date">Novembro 2025</div>
-            <div class="timeline-content">
-              <h3>Participação na SECITEX 2025</h3>
-              <p>Representação do projeto Ampliando Horizontes Digitais no evento, apresentando os trabalhos, o impacto e os resultados obtidos com foco na Robótica Educacional.</p>
-              <span class="timeline-badge azul">Eventos para Formação Integral</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Relatos -->
-        <h2 class="section-title"><i class="ti ti-quote"></i> Relatos</h2>
-        
-        <div class="relato-card">
-          <div class="relato-date">15 de maio de 2026</div>
-          <p class="relato-text">"Participei do meu primeiro workshop de robótica e foi incrível! Nunca imaginei que um dia ia programar um Arduino. Quando o LED piscou pela primeira vez, eu e minhas colegas comemoramos muito. Esse projeto está mudando completamente a minha visão sobre tecnologia e o que eu quero fazer no futuro."</p>
-        </div>
-
-        <div class="relato-card azul">
-          <div class="relato-date">2 de abril de 2026</div>
-          <p class="relato-text">"Quando me disseram que eu tinha sido selecionada como bolsista fiquei muito feliz e um pouco com medo ao mesmo tempo. Nunca tinha tido contato com robótica antes. Mas as professoras são incríveis e estou aprendendo muito desde o primeiro dia."</p>
         </div>
 
       </div>
@@ -572,97 +563,138 @@
         <!-- Ficha Técnica -->
         <div class="sidebar-block">
           <ul class="info-list">
+            {% if perfil.data_nascimento %}
             <li>
               <i class="ti ti-cake"></i>
               <div>
                 <p class="info-list-title">Data de nascimento</p>
-                <p class="info-list-value">05/05/2005</p>
+                <p class="info-list-value">{{ perfil.data_nascimento|date:"d/m/Y" }}</p>
               </div>
             </li>
+            {% endif %}
             <li>
               <i class="ti ti-map-pin"></i>
               <div>
-                <p class="info-list-title">Cidade de origem</p>
-                <p class="info-list-value">Goianinha, RN</p>
+                <p class="info-list-title">Cidade</p>
+                <p class="info-list-value">{{ perfil.cidade|default:aluna.cidade|default:"Litoral Sul Potiguar" }}</p>
               </div>
             </li>
+            {% if perfil.escola %}
+            <li>
+              <i class="ti ti-school"></i>
+              <div>
+                <p class="info-list-title">Escola / Instituição</p>
+                <p class="info-list-value">{{ perfil.escola }}</p>
+              </div>
+            </li>
+            {% endif %}
             <li>
               <i class="ti ti-user"></i>
               <div>
-                <p class="info-list-title">Tipo de participação</p>
-                <p class="info-list-value">Bolsista</p>
+                <p class="info-list-title">Modalidade</p>
+                <p class="info-list-value">{{ perfil.get_tipo_participacao_display|default:"Cursista" }}</p>
               </div>
             </li>
+            {% if perfil.ano_ingresso %}
             <li>
               <i class="ti ti-calendar-event"></i>
               <div>
                 <p class="info-list-title">Ano de ingresso</p>
-                <p class="info-list-value">2025</p>
+                <p class="info-list-value">{{ perfil.ano_ingresso }}</p>
               </div>
             </li>
+            {% endif %}
           </ul>
         </div>
 
+        {% if aluna.link_github or aluna.link_linkedin or aluna.link_instagram %}
+        <!-- Redes Sociais -->
+        <div class="sidebar-block">
+          <h2 class="section-title"><i class="ti ti-link"></i> Redes & Links</h2>
+          <ul class="info-list">
+            {% if aluna.link_github %}
+            <li>
+              <i class="ti ti-brand-github"></i>
+              <div>
+                <p class="info-list-title">GitHub</p>
+                <a href="{{ aluna.link_github }}" target="_blank" rel="noopener noreferrer" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: none;">Ver perfil no GitHub</a>
+              </div>
+            </li>
+            {% endif %}
+            {% if aluna.link_linkedin %}
+            <li>
+              <i class="ti ti-brand-linkedin"></i>
+              <div>
+                <p class="info-list-title">LinkedIn</p>
+                <a href="{{ aluna.link_linkedin }}" target="_blank" rel="noopener noreferrer" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: none;">Ver perfil no LinkedIn</a>
+              </div>
+            </li>
+            {% endif %}
+            {% if aluna.link_instagram %}
+            <li>
+              <i class="ti ti-brand-instagram"></i>
+              <div>
+                <p class="info-list-title">Instagram</p>
+                <a href="{{ aluna.link_instagram }}" target="_blank" rel="noopener noreferrer" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: none;">Seguir no Instagram</a>
+              </div>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% if perfil.eixos.all %}
         <!-- Eixos -->
         <div class="sidebar-block">
-          <div class="theme-box azul">
-            <div class="theme-num">02</div>
+          <h2 class="section-title"><i class="ti ti-compass"></i> Eixos de atuação</h2>
+          {% for eixo in perfil.eixos.all %}
+          <div class="theme-box {% cycle 'azul' 'rosa' %}">
+            <div class="theme-num">{{ forloop.counter|stringformat:"02d" }}</div>
             <div>
-              <p class="theme-title">Robótica Educacional</p>
+              <p class="theme-title">{{ eixo.nome }}</p>
               <p class="theme-subtitle">Eixo temático do projeto</p>
             </div>
           </div>
-          <div class="theme-box rosa">
-            <div class="theme-num">06</div>
-            <div>
-              <p class="theme-title">Acompanhamento das Egressas</p>
-              <p class="theme-subtitle">Eixo temático do projeto</p>
-            </div>
-          </div>
+          {% endfor %}
         </div>
+        {% endif %}
 
         <!-- Estatísticas -->
         <div class="sidebar-block">
           <div class="stats-grid">
             <div class="stat-card">
-              <div class="stat-num">5</div>
-              <div class="stat-label">Atividades</div>
+              <div class="stat-num">{{ relatos.count }}</div>
+              <div class="stat-label">Relatos</div>
             </div>
             <div class="stat-card">
-              <div class="stat-num">2</div>
-              <div class="stat-label">Relatos</div>
+              <div class="stat-num">{{ aluna.fotos.count }}</div>
+              <div class="stat-label">Fotos</div>
             </div>
           </div>
         </div>
 
         <!-- Outras bolsistas -->
         <div class="sidebar-block">
-          <h2 class="section-title"><i class="ti ti-users"></i> Outras bolsistas</h2>
-          
-          <div class="bolsista-card">
-            <div class="bolsista-avatar bg-rosa">GI</div>
-            <div class="bolsista-info">
-              <h4>Giseliane Lima</h4>
-              <p>Eixo 01 - Letramento<br>Eixo 06 - Egressas</p>
+          <h2 class="section-title"><i class="ti ti-users"></i> Outras alunas</h2>
+          {% for outra in outras_alunas %}
+          <a href="{% url 'perfil_aluna' outra.pk %}" style="text-decoration: none; color: inherit; display: block;">
+            <div class="bolsista-card">
+              <div class="bolsista-avatar {% cycle 'bg-rosa' 'bg-azul' %}">
+                {% if outra.foto_perfil %}
+                  <img src="{{ outra.foto_perfil.url }}" alt="{{ outra.get_full_name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                {% else %}
+                  {{ outra.first_name|first|upper }}{{ outra.last_name|first|upper }}
+                {% endif %}
+              </div>
+              <div class="bolsista-info">
+                <h4>{{ outra.get_full_name|default:outra.username }}</h4>
+                <p>{{ outra.perfil_aluna.get_tipo_participacao_display|default:"Cursista" }}{% if outra.cidade %} &bull; {{ outra.cidade }}{% endif %}</p>
+              </div>
             </div>
-          </div>
-
-          <div class="bolsista-card">
-            <div class="bolsista-avatar bg-azul">WE</div>
-            <div class="bolsista-info">
-              <h4>Welyda Evelly</h4>
-              <p>Eixo 01 - Letramento</p>
-            </div>
-          </div>
-
-          <div class="bolsista-card">
-            <div class="bolsista-avatar bg-rosa">AD</div>
-            <div class="bolsista-info">
-              <h4>Adriely Martins</h4>
-              <p>Eixo 02 - Robótica</p>
-            </div>
-          </div>
-
+          </a>
+          {% empty %}
+          <p style="color: #888; font-size: 14px;">Outras alunas cadastradas aparecerão aqui.</p>
+          {% endfor %}
         </div>
 
       </aside>

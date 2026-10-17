@@ -223,25 +223,94 @@ def gerenciar_usuarios_view(request):
     usuarios = Usuario.objects.filter(tipo__in=['professor', 'admin']).order_by('first_name')
     return render(request, 'painel/gerenciar_usuarios.html', {'usuarios': usuarios})
 
+def _atualizar_foto_usuario(request, user):
+    foto = request.FILES.get('foto_perfil')
+    if foto:
+        if not foto.content_type.startswith('image/'):
+            messages.error(request, 'Envie um arquivo de imagem (JPG, PNG ou WEBP).')
+            return False
+        if foto.size > 5 * 1024 * 1024:
+            messages.error(request, 'A foto deve ter no máximo 5 MB.')
+            return False
+        if user.foto_perfil:
+            user.foto_perfil.delete(save=False)
+        user.foto_perfil = foto
+    elif request.POST.get('remover_foto') == '1' and user.foto_perfil:
+        user.foto_perfil.delete(save=False)
+        user.foto_perfil = None
+    return True
+
+
 @login_required
 def meu_perfil_aluna_view(request):
     if request.user.tipo != 'aluna':
         messages.error(request, 'Página restrita para alunas.')
         return redirect('home')
-        
-    try:
-        perfil = request.user.perfil_aluna
-    except AlunaPerfil.DoesNotExist:
-        perfil = None
-        
+
+    user = request.user
+    perfil, _ = AlunaPerfil.objects.get_or_create(usuario=user)
+
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name', '').strip()
+        if not first_name:
+            messages.error(request, 'O nome não pode ficar vazio.')
+            return redirect('meu_perfil')
+
+        user.first_name = first_name
+        user.last_name = request.POST.get('last_name', '').strip()
+        cidade = request.POST.get('cidade', '').strip()
+        user.cidade = cidade
+        perfil.cidade = cidade
+        perfil.escola = request.POST.get('escola', '').strip()
+
+        data_nasc = request.POST.get('data_nascimento', '').strip()
+        perfil.data_nascimento = data_nasc if data_nasc else None
+
+        user.bio = request.POST.get('bio', '').strip()
+        user.link_github = request.POST.get('link_github', '').strip()
+        user.link_linkedin = request.POST.get('link_linkedin', '').strip()
+        user.link_instagram = request.POST.get('link_instagram', '').strip()
+
+        if not _atualizar_foto_usuario(request, user):
+            return redirect('meu_perfil')
+
+        user.save()
+        perfil.save()
+        messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+        return redirect('meu_perfil')
+
     context = {
         'perfil': perfil
     }
     return render(request, 'aluna/meu_perfil.html', context)
 
+
+def perfil_aluna_view(request, pk):
+    aluna = get_object_or_404(Usuario, pk=pk, tipo='aluna')
+    try:
+        perfil = aluna.perfil_aluna
+    except AlunaPerfil.DoesNotExist:
+        perfil = None
+
+    relatos = aluna.relatos.all().order_by('-criado_em')
+    outras_alunas = Usuario.objects.filter(tipo='aluna').exclude(pk=pk)[:3]
+
+    context = {
+        'aluna': aluna,
+        'perfil': perfil,
+        'relatos': relatos,
+        'outras_alunas': outras_alunas,
+    }
+    return render(request, 'publico/perfil_aluna.html', context)
+
+
 def perfil_professor_view(request, pk):
     professor = get_object_or_404(Usuario, pk=pk, tipo__in=['professor', 'admin'])
-    return render(request, 'publico/perfil_professor.html', {'professor': professor})
+    outros_professores = Usuario.objects.filter(tipo__in=['professor', 'admin']).exclude(pk=pk)[:3]
+    return render(request, 'publico/perfil_professor.html', {
+        'professor': professor,
+        'outros_professores': outros_professores,
+    })
 
 
 @login_required
@@ -260,24 +329,20 @@ def editar_perfil_professor_view(request):
         user.first_name = first_name
         user.last_name = request.POST.get('last_name', '').strip()
         user.cidade = request.POST.get('cidade', '').strip()
+        user.cargo = request.POST.get('cargo', '').strip()
+        user.instituicao = request.POST.get('instituicao', '').strip()
+        user.bio = request.POST.get('bio', '').strip()
+        user.link_lattes = request.POST.get('link_lattes', '').strip()
+        user.link_linkedin = request.POST.get('link_linkedin', '').strip()
+        user.link_github = request.POST.get('link_github', '').strip()
+        user.link_instagram = request.POST.get('link_instagram', '').strip()
 
-        foto = request.FILES.get('foto_perfil')
-        if foto:
-            if not foto.content_type.startswith('image/'):
-                messages.error(request, 'Envie um arquivo de imagem (JPG, PNG ou WEBP).')
-                return redirect('editar_perfil_professor')
-            if foto.size > 5 * 1024 * 1024:
-                messages.error(request, 'A foto deve ter no máximo 5 MB.')
-                return redirect('editar_perfil_professor')
-            if user.foto_perfil:
-                user.foto_perfil.delete(save=False)
-            user.foto_perfil = foto
-        elif request.POST.get('remover_foto') == '1' and user.foto_perfil:
-            user.foto_perfil.delete(save=False)
-            user.foto_perfil = None
+        if not _atualizar_foto_usuario(request, user):
+            return redirect('editar_perfil_professor')
 
         user.save()
         messages.success(request, 'Perfil atualizado com sucesso!')
         return redirect('editar_perfil_professor')
 
     return render(request, 'painel/editar_perfil.html')
+

@@ -10,6 +10,13 @@ class Usuario(AbstractUser):
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='aluna')
     foto_perfil = models.ImageField(upload_to='avatares/', blank=True, null=True)
     cidade = models.CharField(max_length=100, blank=True)
+    bio = models.TextField(blank=True, verbose_name="Biografia / Apresentação")
+    cargo = models.CharField(max_length=100, blank=True, default="Professor(a)")
+    instituicao = models.CharField(max_length=150, blank=True, default="IFRN - Campus Canguaretama")
+    link_lattes = models.URLField(max_length=255, blank=True, verbose_name="Currículo Lattes")
+    link_linkedin = models.URLField(max_length=255, blank=True, verbose_name="LinkedIn")
+    link_github = models.URLField(max_length=255, blank=True, verbose_name="GitHub")
+    link_instagram = models.URLField(max_length=255, blank=True, verbose_name="Instagram")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}".strip() or self.username

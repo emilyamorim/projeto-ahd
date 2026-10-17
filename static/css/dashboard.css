@@ -529,7 +529,10 @@
 }
 .dash-form input[type="text"],
 .dash-form input[type="email"],
-.dash-form input[type="date"] {
+.dash-form input[type="url"],
+.dash-form input[type="date"],
+.dash-form select,
+.dash-form textarea {
   width: 100%;
   box-sizing: border-box;
   height: 44px;
@@ -540,11 +543,21 @@
   font-size: 15px;
   outline: none;
   background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.dash-form textarea {
+  height: auto;
+  min-height: 100px;
+  resize: vertical;
 }
 .dash-form input[type="text"]:focus,
 .dash-form input[type="email"]:focus,
-.dash-form input[type="date"]:focus {
-  border-color: var(--rosa);
+.dash-form input[type="url"]:focus,
+.dash-form input[type="date"]:focus,
+.dash-form select:focus,
+.dash-form textarea:focus {
+  border-color: var(--rosa, #981869);
+  box-shadow: 0 0 0 3px rgba(152, 24, 105, 0.12);
 }
 
 .dash-form input[readonly] {

@@ -1,111 +1,350 @@
 {% extends "aluna/base_aluna.html" %}
+{% load static %}
 
 {% block nav_perfil %}active{% endblock %}
 
+{% block extra_css %}
+<style>
+  .perfil-foto-box {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px dashed #ddd;
+  }
+  .perfil-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fdf0f4, #f6dbe8);
+    color: var(--rosa, #981869);
+    border: 3px solid var(--rosa, #981869);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: 700;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(152, 24, 105, 0.15);
+    transition: transform 0.2s;
+  }
+  .perfil-avatar:hover { transform: scale(1.03); }
+  .perfil-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .perfil-avatar .avatar-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(152, 24, 105, 0.8);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .perfil-avatar .avatar-overlay i { font-size: 26px; }
+  .perfil-avatar:hover .avatar-overlay { opacity: 1; }
+  .perfil-foto-acoes { display: flex; gap: 10px; margin-top: 12px; flex-wrap: nowrap; max-width: 320px; }
+  .dash-form .perfil-foto-acoes .btn-sm-primary,
+  .dash-form .perfil-foto-acoes .btn-sm-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    height: 38px;
+    padding: 0 14px;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .dash-form .perfil-foto-acoes label.btn-sm-primary { color: #fff; }
+  .photo-info .foto-erro {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #c0392b;
+  }
+  .photo-info .foto-erro.visivel { display: flex; animation: fadeErro 0.2s ease; }
+  @keyframes fadeErro { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .perfil-foto-acoes .btn-sm-outline.danger { color: #c0392b; border-color: #e6b0aa; }
+  .perfil-foto-acoes .btn-sm-outline.danger:hover { background: #fdecea; }
+  .form-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .hint { font-size: 12px; color: #888; margin-top: 6px; }
+  .tag-item {
+    display: inline-block;
+    background: #fdf5f8;
+    color: var(--rosa, #981869);
+    border: 1px solid rgba(152, 24, 105, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  @media (max-width: 640px) {
+    .perfil-foto-box { flex-direction: column; text-align: center; }
+    .perfil-foto-acoes { justify-content: center; }
+    .dash-form .form-row { flex-direction: column; }
+  }
+</style>
+{% endblock %}
+
 {% block dashboard_content %}
-<!-- Cabeçalho -->
-<div class="content-header">
-  <h3>Dados pessoais</h3>
-  <button type="button" class="btn-sm-outline" id="btnEditarPerfil"><i class="ti ti-edit"></i> Editar</button>
+<div class="panel-card">
+  <!-- Cabeçalho -->
+  <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #eee;">
+    <div>
+      <h3 style="margin: 0 0 4px 0; font-size: 22px; font-weight: 800; color: #2c3e50;">Meu perfil</h3>
+      <p style="margin: 0; color: #666; font-size: 14px;">Gerencie suas informações pessoais e os dados exibidos no seu perfil público.</p>
+    </div>
+    <a href="{% url 'perfil_aluna' user.id %}" class="btn-sm-outline" style="text-decoration:none; display: inline-flex; align-items: center; gap: 6px;">
+      <i class="ti ti-eye"></i> Ver perfil público
+    </a>
+  </div>
+
+  <form class="dash-form" method="POST" enctype="multipart/form-data" id="form-editar-perfil-aluna">
+    {% csrf_token %}
+    <input type="hidden" name="remover_foto" id="remover_foto" value="0">
+
+    <!-- Upload de Foto de Perfil -->
+    <div class="perfil-foto-box">
+      <label class="perfil-avatar" for="foto_perfil" id="avatar-preview" title="Alterar foto">
+        {% if user.foto_perfil %}
+          <img src="{{ user.foto_perfil.url }}" alt="Foto de {{ user.get_full_name }}" id="avatar-img">
+        {% else %}
+          <span id="avatar-iniciais">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</span>
+        {% endif %}
+        <span class="avatar-overlay"><i class="ti ti-camera"></i>Alterar</span>
+      </label>
+      <input type="file" name="foto_perfil" id="foto_perfil" accept="image/jpeg,image/png,image/webp" hidden>
+
+      <div class="photo-info">
+        <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #2c3e50;">Foto de perfil</h4>
+        <p style="margin: 0; font-size: 14px; color: #666;">JPG, PNG ou WEBP, máx. 5 MB.<br>Exibida no seu perfil público e em suas participações.</p>
+        <div class="perfil-foto-acoes">
+          <label for="foto_perfil" class="btn-sm-primary" id="btn-escolher-foto" title="Escolher imagem">
+            <i class="ti ti-upload"></i> Escolher foto
+          </label>
+          {% if user.foto_perfil %}
+            <button type="button" class="btn-sm-outline danger" id="btn-remover-foto">
+              <i class="ti ti-trash"></i> Remover
+            </button>
+          {% endif %}
+        </div>
+        <p class="foto-erro" id="foto-erro" role="alert"><i class="ti ti-alert-circle"></i> <span></span></p>
+      </div>
+    </div>
+
+    <!-- Dados Pessoais -->
+    <h4 style="margin: 0 0 16px 0; font-size: 16px; color: #2c3e50; display: flex; align-items: center; gap: 8px;">
+      <i class="ti ti-user" style="color: var(--rosa, #981869);"></i> Dados Pessoais
+    </h4>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="first_name">Nome</label>
+        <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Sobrenome</label>
+        <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" value="{{ user.email }}" readonly>
+        <p class="hint">Usado para entrar na sua conta.</p>
+      </div>
+      <div class="form-group">
+        <label for="data_nascimento">Data de nascimento</label>
+        <input type="date" name="data_nascimento" id="data_nascimento" value="{% if perfil.data_nascimento %}{{ perfil.data_nascimento|date:'Y-m-d' }}{% endif %}">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="cidade">Cidade de residência</label>
+        <input type="text" name="cidade" id="cidade" value="{{ user.cidade|default:perfil.cidade }}" placeholder="Ex.: Canguaretama, Goianinha, Natal...">
+      </div>
+      <div class="form-group">
+        <label for="escola">Escola / Instituição de Ensino</label>
+        <input type="text" name="escola" id="escola" value="{{ perfil.escola }}" placeholder="Ex.: IFRN Campus Canguaretama, E.E. Almirante...">
+      </div>
+    </div>
+
+    <!-- Perfil Público & Apresentação -->
+    <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; margin-bottom: 24px;">
+      <h4 style="margin: 0 0 16px 0; font-size: 16px; color: #2c3e50; display: flex; align-items: center; gap: 8px;">
+        <i class="ti ti-sparkles" style="color: var(--rosa, #981869);"></i> Apresentação no Perfil Público
+      </h4>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="bio">Sobre você / Biografia</label>
+        <textarea name="bio" id="bio" rows="4" placeholder="Conte um pouco sobre você, o que estuda, quais áreas da tecnologia mais te fascinam e o que aprendeu no projeto Ampliando Horizontes Digitais...">{{ user.bio }}</textarea>
+        <p class="hint">Esse depoimento/apresentação será destacado na sua página de perfil público para todos verem.</p>
+      </div>
+
+      <h5 style="margin: 0 0 12px 0; font-size: 14px; color: #555; display: flex; align-items: center; gap: 6px;">
+        <i class="ti ti-link"></i> Redes sociais e portfólio (opcional)
+      </h5>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="link_github"><i class="ti ti-brand-github"></i> GitHub</label>
+          <input type="url" name="link_github" id="link_github" value="{{ user.link_github }}" placeholder="https://github.com/seuperfil">
+        </div>
+        <div class="form-group">
+          <label for="link_linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</label>
+          <input type="url" name="link_linkedin" id="link_linkedin" value="{{ user.link_linkedin }}" placeholder="https://linkedin.com/in/seuperfil">
+        </div>
+        <div class="form-group">
+          <label for="link_instagram"><i class="ti ti-brand-instagram"></i> Instagram</label>
+          <input type="url" name="link_instagram" id="link_instagram" value="{{ user.link_instagram }}" placeholder="https://instagram.com/seuperfil">
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações do Projeto (Gerenciadas pela Coordenação) -->
+    <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; margin-bottom: 24px; background: #fafafa; padding: 20px; border-radius: 8px;">
+      <h4 style="margin: 0 0 12px 0; font-size: 15px; color: #444; display: flex; align-items: center; gap: 8px;">
+        <i class="ti ti-school" style="color: var(--azul, #336699);"></i> Informações de Participação no AHD
+      </h4>
+      <p style="margin: 0 0 16px 0; font-size: 13px; color: #777;">Os dados abaixo são gerenciados pelos professores coordenadores do projeto.</p>
+
+      <div class="form-row" style="margin-bottom: 12px;">
+        <div class="form-group">
+          <label>Modalidade</label>
+          <div style="font-weight: 700; color: #2c3e50; font-size: 15px; padding: 8px 0;">
+            <span class="tag-item" style="background:#eaf2f8; color:var(--azul, #336699); border-color:#d4e6f1;">
+              {{ perfil.get_tipo_participacao_display|default:"Cursista" }}
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Ano de Ingresso</label>
+          <div style="font-weight: 700; color: #2c3e50; font-size: 15px; padding: 8px 0;">
+            {{ perfil.ano_ingresso|default:"2025" }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Status do Cadastro</label>
+          <div style="font-size: 14px; padding: 8px 0;">
+            {% if perfil.is_aprovada %}
+              <span style="color:#27ae60; font-weight:700;"><i class="ti ti-circle-check"></i> Ativa e Aprovada</span>
+            {% else %}
+              <span style="color:#e67e22; font-weight:700;"><i class="ti ti-clock"></i> Em Análise</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Eixos de Atuação Vinculados</label>
+        <div>
+          {% for eixo in perfil.eixos.all %}
+            <span class="tag-item">{{ eixo.nome }}</span>
+          {% empty %}
+            <span style="color: #888; font-size: 13px;">Nenhum eixo vinculado ainda pela coordenação.</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="form-acoes">
+      <a href="{% url 'meu_perfil' %}" class="btn-sm-outline">Descartar alterações</a>
+      <button type="submit" class="btn-sm-primary" id="btn-salvar-perfil">
+        <i class="ti ti-device-floppy"></i> Salvar alterações
+      </button>
+    </div>
+  </form>
 </div>
-
-<!-- Upload de Foto de Perfil -->
-<div class="profile-photo-upload">
-  <label for="fotoUpload" class="photo-circle clickable-avatar">
-    {% if request.user.foto_perfil %}
-      <img src="{{ request.user.foto_perfil.url }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-    {% else %}
-      {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
-    {% endif %}
-    <div class="avatar-overlay"><i class="ti ti-camera" style="font-size:24px"></i></div>
-  </label>
-  <input type="file" id="fotoUpload" accept="image/png, image/jpeg" style="display:none;">
-  <div class="photo-info">
-    <h4>Foto de perfil</h4>
-    <p>JPG ou PNG, máx. 2MB.<br>Aparece no seu perfil público.</p>
-  </div>
-  <button class="btn-sm-outline btn-upload">
-    <i class="ti ti-upload"></i> Enviar foto
-  </button>
-</div>
-
-<!-- Formulário de Dados Pessoais (Leitura) -->
-<form class="dash-form">
-  
-  <div class="form-group">
-    <label>Nome completo</label>
-    <input type="text" value="{{ request.user.get_full_name }}" readonly>
-  </div>
-  
-  <div class="form-row">
-    <div class="form-group">
-      <label>Data de nascimento</label>
-      <input type="text" value="{% if perfil and perfil.data_nascimento %}{{ perfil.data_nascimento|date:'d/m/Y' }}{% endif %}" readonly>
-    </div>
-    <div class="form-group">
-      <label>Cidade</label>
-      <input type="text" value="{% if perfil %}{{ perfil.cidade }}{% endif %}" readonly>
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label>Escola</label>
-    <input type="text" value="{% if perfil %}{{ perfil.escola }}{% endif %}" readonly>
-  </div>
-  
-  <div class="form-row">
-    <div class="form-group">
-      <label>Tipo de participação</label>
-      <input type="text" value="{% if perfil %}{{ perfil.get_tipo_participacao_display }}{% endif %}" readonly>
-      <div class="form-help">Definido pela coordenação</div>
-    </div>
-    <div class="form-group">
-      <label>E-mail</label>
-      <input type="email" value="{{ request.user.email }}" readonly>
-    </div>
-  </div>
-
-</form>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const btnEditar = document.getElementById('btnEditarPerfil');
-    const formInputs = document.querySelectorAll('.dash-form input');
-    let isEditing = false;
-    
-    btnEditar.addEventListener('click', function() {
-      isEditing = !isEditing;
-      
-      if(isEditing) {
-        // Entra no modo edição
-        btnEditar.innerHTML = '<i class="ti ti-check"></i> Salvar';
-        btnEditar.className = 'btn-sm-primary';
-        
-        formInputs.forEach(input => {
-          // Não destrava campos que são restritos por regra de negócio
-          if(input.value !== "Bolsista" && input.value !== "IFRN - Campus Canguaretama" && input.value !== "emily.amorim@gmail.com") {
-             input.removeAttribute('readonly');
-          }
-        });
-        
-        // Foca no primeiro campo (Nome)
-        formInputs[0].focus();
-        
-      } else {
-        // Salva e trava
-        btnEditar.innerHTML = '<i class="ti ti-edit"></i> Editar';
-        btnEditar.className = 'btn-sm-outline';
-        
-        formInputs.forEach(input => {
-           input.setAttribute('readonly', true);
-        });
-        
-        // Simular feedback visual para a aluna
-        alert('✨ Seus dados foram atualizados com sucesso!');
+  (function () {
+    const input = document.getElementById('foto_perfil');
+    const preview = document.getElementById('avatar-preview');
+    const remover = document.getElementById('remover_foto');
+    const btnRemover = document.getElementById('btn-remover-foto');
+    const erro = document.getElementById('foto-erro');
+    const tiposAceitos = ['image/jpeg', 'image/png', 'image/webp'];
+
+    function mostrarImagem(src) {
+      let img = document.getElementById('avatar-img');
+      const iniciais = document.getElementById('avatar-iniciais');
+      if (iniciais) iniciais.remove();
+      if (!img) {
+        img = document.createElement('img');
+        img.id = 'avatar-img';
+        preview.prepend(img);
       }
+      img.src = src;
+    }
+
+    function mostrarErro(msg) {
+      erro.querySelector('span').textContent = msg;
+      erro.classList.add('visivel');
+    }
+
+    input.addEventListener('change', function () {
+      const file = input.files[0];
+      erro.classList.remove('visivel');
+      if (!file) return;
+      if (!tiposAceitos.includes(file.type)) {
+        mostrarErro('Formato não suportado. Use JPG, PNG ou WEBP.');
+        input.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        mostrarErro('Imagem muito grande. O limite é 5 MB.');
+        input.value = '';
+        return;
+      }
+      remover.value = '0';
+      mostrarImagem(URL.createObjectURL(file));
+      if (btnRemover) btnRemover.style.display = 'inline-flex';
     });
-  });
+
+    if (btnRemover) {
+      btnRemover.addEventListener('click', function () {
+        remover.value = '1';
+        input.value = '';
+        const img = document.getElementById('avatar-img');
+        if (img) img.remove();
+        if (!document.getElementById('avatar-iniciais')) {
+          const span = document.createElement('span');
+          span.id = 'avatar-iniciais';
+          span.textContent = '{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}';
+          preview.prepend(span);
+        }
+        btnRemover.style.display = 'none';
+      });
+    }
+  })();
 </script>
 {% endblock %}

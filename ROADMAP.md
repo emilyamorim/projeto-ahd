@@ -26,6 +26,7 @@ A base visual do site, o sistema de autenticação, os modelos de banco de dados
 - [x] **A03 - Recuperar Senha:** Tela de redefinição de senha (`templates/auth/redefinir_senha.html`).
 - [x] **Modelagem do Banco de Dados:** Models criados (`Usuario`, `AlunaPerfil`, `Eixo`, `Noticia`, `Relato`, `Foto`, `Album`) com migrations aplicadas.
 - [x] **Área da Aluna Logada (L01, L02, L03):** Visualização de perfil, upload e moderação de fotos e envio de relatos.
+- [x] **Edição de Perfil Público (Professores e Cursistas):** Formulários completos para edição de biografia, foto com preview, dados pessoais, redes sociais e reflexo dinâmico nos perfis públicos.
 
 ### 🔄 A Fazer (Próximos Passos Imediatos)
 *Quem for pegar essas tarefas, lembre-se de criar uma branch (`feature/...`).*

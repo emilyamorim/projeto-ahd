@@ -203,7 +203,14 @@
         <div><i class="ti ti-mail"></i> {{ professor.email }}</div>
       </div>
       <div class="banner-tags">
-        <span class="badge-tag">{{ professor.get_tipo_display }}</span>
+        {% if professor.cargo %}
+          <span class="badge-tag">{{ professor.cargo }}</span>
+        {% else %}
+          <span class="badge-tag">{{ professor.get_tipo_display }}</span>
+        {% endif %}
+        {% if professor.instituicao %}
+          <span class="badge-tag">{{ professor.instituicao }}</span>
+        {% endif %}
       </div>
     </div>
     {% include "publico/_botao_editar_perfil.html" with dono=professor url_editar="editar_perfil_professor" %}
@@ -215,8 +222,18 @@
   <div class="profile-main">
     <h2 class="section-title"><i class="ti ti-book"></i> Biografia</h2>
     <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 48px; line-height: 1.8; color: #555; font-size: 16px;">
-      <p>Tatiana Amaral Sorrentino é professora efetiva do IFRN Campus Canguaretama. É coordenadora do projeto Ampliando Horizontes Digitais, focada em promover a inclusão de meninas nas áreas de Tecnologia da Informação.</p>
-      <p>Com vasta experiência em gestão educacional e projetos de extensão, lidera as equipes responsáveis pela Robótica Educacional e Letramento Digital na região, integrando alunas do ensino médio e fundamental.</p>
+      {% if professor.bio %}
+        {{ professor.bio|linebreaks }}
+      {% else %}
+        <p style="color: #777; font-style: italic; margin: 0;">
+          O(a) professor(a) ainda não adicionou uma biografia pública.
+          {% if user.is_authenticated and user.pk == professor.pk %}
+            <br><a href="{% url 'editar_perfil_professor' %}" style="color: var(--azul, #336699); font-weight: 600; text-decoration: underline; margin-top: 8px; display: inline-block;">
+              <i class="ti ti-pencil"></i> Clique aqui para preencher sua biografia
+            </a>
+          {% endif %}
+        </p>
+      {% endif %}
     </div>
 
     <h2 class="section-title"><i class="ti ti-history"></i> Ações no Projeto</h2>
@@ -234,8 +251,8 @@
         <div class="timeline-icon rosa"><i class="ti ti-users"></i></div>
         <div class="timeline-date">Atuação Contínua</div>
         <div class="timeline-content">
-          <h3>Formação de Bolsistas</h3>
-          <p>Supervisão e orientação das bolsistas nas atividades de campo e na organização dos eixos temáticos.</p>
+          <h3>Formação de Bolsistas e Cursistas</h3>
+          <p>Supervisão e orientação nas atividades de campo e na organização dos eixos temáticos.</p>
           <span class="timeline-badge rosa">Educação</span>
         </div>
       </div>
@@ -248,37 +265,85 @@
         <li>
           <i class="ti ti-id-badge"></i>
           <div>
-            <p class="info-list-title">Cargo</p>
-            <p class="info-list-value">Professora EBTT</p>
+            <p class="info-list-title">Cargo / Função</p>
+            <p class="info-list-value">{{ professor.cargo|default:"Professor(a)" }}</p>
           </div>
         </li>
         <li>
           <i class="ti ti-building-bank"></i>
           <div>
             <p class="info-list-title">Instituição</p>
-            <p class="info-list-value">IFRN</p>
+            <p class="info-list-value">{{ professor.instituicao|default:"IFRN - Campus Canguaretama" }}</p>
           </div>
         </li>
       </ul>
     </div>
 
+    {% if professor.link_lattes or professor.link_linkedin or professor.link_github or professor.link_instagram %}
+    <div class="sidebar-block">
+      <h2 class="section-title"><i class="ti ti-link"></i> Redes & Links</h2>
+      <ul class="info-list">
+        {% if professor.link_lattes %}
+        <li>
+          <i class="ti ti-certificate"></i>
+          <div>
+            <p class="info-list-title">Currículo Lattes</p>
+            <a href="{{ professor.link_lattes }}" target="_blank" rel="noopener noreferrer" style="color: var(--azul, #336699); font-weight: 600; text-decoration: none; word-break: break-all;">Acessar Lattes <i class="ti ti-external-link" style="font-size:14px; padding:0; background:none; box-shadow:none;"></i></a>
+          </div>
+        </li>
+        {% endif %}
+        {% if professor.link_linkedin %}
+        <li>
+          <i class="ti ti-brand-linkedin"></i>
+          <div>
+            <p class="info-list-title">LinkedIn</p>
+            <a href="{{ professor.link_linkedin }}" target="_blank" rel="noopener noreferrer" style="color: var(--azul, #336699); font-weight: 600; text-decoration: none;">Ver perfil</a>
+          </div>
+        </li>
+        {% endif %}
+        {% if professor.link_github %}
+        <li>
+          <i class="ti ti-brand-github"></i>
+          <div>
+            <p class="info-list-title">GitHub</p>
+            <a href="{{ professor.link_github }}" target="_blank" rel="noopener noreferrer" style="color: var(--azul, #336699); font-weight: 600; text-decoration: none;">Ver repositórios</a>
+          </div>
+        </li>
+        {% endif %}
+        {% if professor.link_instagram %}
+        <li>
+          <i class="ti ti-brand-instagram"></i>
+          <div>
+            <p class="info-list-title">Instagram</p>
+            <a href="{{ professor.link_instagram }}" target="_blank" rel="noopener noreferrer" style="color: var(--azul, #336699); font-weight: 600; text-decoration: none;">Seguir perfil</a>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endif %}
+
     <div class="sidebar-block">
       <h2 class="section-title"><i class="ti ti-users"></i> Equipe Docente</h2>
-      
-      <div class="bolsista-card">
-        <div class="bolsista-avatar bg-azul">HW</div>
-        <div class="bolsista-info">
-          <h4>Helber Wagner</h4>
-          <p>Professor Pesquisador</p>
+      {% for outro in outros_professores %}
+      <a href="{% url 'perfil_professor' outro.pk %}" style="text-decoration: none; color: inherit; display: block;">
+        <div class="bolsista-card">
+          <div class="bolsista-avatar {% cycle 'bg-azul' 'bg-rosa' %}">
+            {% if outro.foto_perfil %}
+              <img src="{{ outro.foto_perfil.url }}" alt="{{ outro.get_full_name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+            {% else %}
+              {{ outro.first_name|first|upper }}{{ outro.last_name|first|upper }}
+            {% endif %}
+          </div>
+          <div class="bolsista-info">
+            <h4>{{ outro.get_full_name|default:outro.username }}</h4>
+            <p>{{ outro.cargo|default:"Professor(a)" }}</p>
+          </div>
         </div>
-      </div>
-      <div class="bolsista-card">
-        <div class="bolsista-avatar bg-rosa">CR</div>
-        <div class="bolsista-info">
-          <h4>Creusa Ribeiro</h4>
-          <p>Professora Colaboradora</p>
-        </div>
-      </div>
+      </a>
+      {% empty %}
+      <p style="color: #888; font-size: 14px;">Outros membros da equipe aparecerão aqui.</p>
+      {% endfor %}
     </div>
   </aside>
 </div>
