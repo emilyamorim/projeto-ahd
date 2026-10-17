@@ -82,7 +82,7 @@
     font-size: 20px;
   }
 
-  /* SEÇÃO DE FOTO DE PERFIL (LIMPA E DIRETA) */
+  /* SEÇÃO DE FOTO DE PERFIL (LIMPA E HARMONIOSA) */
   .foto-perfil-section {
     display: flex;
     align-items: center;
@@ -126,6 +126,8 @@
     font-size: 36px;
     font-weight: 700;
   }
+
+  /* ÍCONE DA CÂMERA BRANCO NO BADGE */
   .avatar-badge-btn {
     position: absolute;
     bottom: 2px;
@@ -134,23 +136,33 @@
     height: 32px;
     border-radius: 50%;
     background: var(--rosa, #981869);
-    color: #fff;
+    color: #ffffff !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #fff;
+    border: 2px solid #ffffff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    font-size: 16px;
     transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .avatar-badge-btn i {
+    color: #ffffff !important;
+    font-size: 16px;
+    line-height: 1;
   }
   .avatar-wrapper:hover .avatar-badge-btn {
     background: #7a1254;
     transform: scale(1.08);
   }
+  .avatar-wrapper:hover .avatar-badge-btn i {
+    color: #ffffff !important;
+  }
+
+  /* COLUNA DE INFORMAÇÕES DA FOTO */
   .foto-info-clean {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    flex: 1;
   }
   .foto-botoes-row {
     display: flex;
@@ -158,13 +170,17 @@
     gap: 12px;
     flex-wrap: wrap;
   }
+
+  /* BOTÃO ESCOLHER FOTO (COM ÍCONE BRANCO) */
   .btn-escolher-foto {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 10px 20px;
+    height: 44px;
+    padding: 0 22px;
     background: var(--rosa, #981869);
-    color: #fff !important;
+    color: #ffffff !important;
     border: none;
     border-radius: 50px;
     font-size: 15px;
@@ -172,35 +188,94 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(152, 24, 105, 0.2);
+    box-sizing: border-box;
+    white-space: nowrap;
+    margin: 0;
   }
   .btn-escolher-foto:hover {
     background: #7e1357;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(152, 24, 105, 0.3);
   }
+  .btn-escolher-foto i {
+    color: #ffffff !important;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* BOTÃO REMOVER FOTO HARMONIOSO (SECUNDÁRIO SUAVE) */
   .btn-remover-foto {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 9px 18px;
-    background: #fff;
-    color: #dc2626;
-    border: 1.5px solid #fecaca;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    background: #f8fafc;
+    color: #475569;
+    border: 1.5px solid #cbd5e1;
     border-radius: 50px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-sizing: border-box;
+    white-space: nowrap;
+    margin: 0;
+  }
+  .btn-remover-foto i {
+    color: #64748b;
+    font-size: 16px;
+    transition: color 0.2s ease;
+    line-height: 1;
   }
   .btn-remover-foto:hover {
-    background: #fee2e2;
+    background: #fef2f2;
     border-color: #fca5a5;
+    color: #dc2626;
   }
-  .foto-dica {
-    margin: 0;
+  .btn-remover-foto:hover i {
+    color: #dc2626;
+  }
+
+  /* AVISO DE VISIBILIDADE PÚBLICA */
+  .foto-aviso-publico {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 0 0;
     font-size: 14px;
-    color: #64748b;
+    color: #475569;
+    line-height: 1.4;
   }
+  .foto-aviso-publico i {
+    color: var(--rosa, #981869) !important;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  /* INFORMAÇÃO DINÂMICA DA IMAGEM SELECIONADA (SÓ MOSTRA AO SELECIONAR) */
+  .foto-info-dinamica {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 6px 14px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #15803d;
+    font-weight: 500;
+    width: fit-content;
+  }
+  .foto-info-dinamica i {
+    color: #16a34a !important;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* CAIXA DE ERRO */
   .foto-erro-box {
     display: none;
     align-items: center;
@@ -214,7 +289,7 @@
     display: flex;
   }
 
-  /* SEÇÕES E TIPOGRAFIA ACESSÍVEL (FONTES MAIORES) */
+  /* SEÇÕES E TIPOGRAFIA ACESSÍVEL */
   .secao-titulo {
     margin: 28px 0 18px 0;
     font-size: 19px;
@@ -231,11 +306,32 @@
     font-size: 22px;
   }
 
-  /* CAMPOS DO FORMULÁRIO COM ACESSIBILIDADE */
-  .dash-form .form-group {
+  /* CAMPOS DO FORMULÁRIO COM ACESSIBILIDADE E LAYOUT RESPONSIVO */
+  .dash-form .form-row {
+    display: flex;
+    gap: 20px;
     margin-bottom: 22px;
   }
-  .dash-form label {
+  .dash-form .form-group {
+    flex: 1 1 0;
+    margin-bottom: 22px;
+    min-width: 0;
+  }
+  .dash-form .form-row .form-group {
+    margin-bottom: 0;
+  }
+  .dash-form .form-group.full-width {
+    width: 100%;
+    margin-bottom: 22px;
+  }
+
+  @media (min-width: 769px) {
+    .dash-form .form-group.half-width {
+      max-width: calc(50% - 10px);
+    }
+  }
+
+  .dash-form .form-group > label {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -243,11 +339,13 @@
     font-weight: 600;
     color: #1e293b;
     margin-bottom: 8px;
+    line-height: 1.3;
   }
-  .dash-form label i {
+  .dash-form .form-group > label i {
     font-size: 18px;
     color: #64748b;
   }
+
   .dash-form input[type="text"],
   .dash-form input[type="email"],
   .dash-form input[type="url"],
@@ -342,7 +440,7 @@
   }
 
   /* RESPONSIVIDADE */
-  @media (max-width: 680px) {
+  @media (max-width: 768px) {
     .perfil-header-bar {
       flex-direction: column;
       align-items: stretch;
@@ -358,9 +456,19 @@
     .foto-botoes-row {
       justify-content: center;
     }
+    .foto-aviso-publico {
+      justify-content: center;
+      text-align: center;
+    }
+    .foto-info-dinamica {
+      margin: 6px auto 0 auto;
+    }
     .dash-form .form-row {
       flex-direction: column;
-      gap: 0;
+      gap: 20px;
+    }
+    .dash-form .form-group.half-width {
+      max-width: 100% !important;
     }
     .form-acoes-footer {
       flex-direction: column-reverse;
@@ -405,7 +513,7 @@
     {% csrf_token %}
     <input type="hidden" name="remover_foto" id="remover_foto" value="0">
 
-    <!-- UPLOAD DE FOTO DE PERFIL (LIMPO E DIRETO) -->
+    <!-- UPLOAD DE FOTO DE PERFIL (LIMPO E HARMONIOSO) -->
     <div class="foto-perfil-section">
       <label class="avatar-wrapper" for="foto_perfil" id="avatar-preview" title="Clique para escolher uma nova foto">
         {% if user.foto_perfil %}
@@ -415,7 +523,7 @@
             {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
           </div>
         {% endif %}
-        <span class="avatar-badge-btn" aria-hidden="true">
+        <span class="avatar-badge-btn" aria-hidden="true" title="Alterar foto">
           <i class="ti ti-camera"></i>
         </span>
       </label>
@@ -424,7 +532,7 @@
       <div class="foto-info-clean">
         <div class="foto-botoes-row">
           <label for="foto_perfil" class="btn-escolher-foto" id="btn-escolher-foto">
-            <i class="ti ti-upload"></i> Escolher foto
+            <i class="ti ti-camera"></i> Escolher foto
           </label>
           {% if user.foto_perfil %}
             <button type="button" class="btn-remover-foto" id="btn-remover-foto">
@@ -432,10 +540,23 @@
             </button>
           {% endif %}
         </div>
-        <p class="foto-dica">Formatos: JPG, PNG ou WEBP &middot; Máximo: 5 MB</p>
+
+        <!-- Aviso de que a foto ficará pública -->
+        <p class="foto-aviso-publico">
+          <i class="ti ti-world"></i>
+          <span>Esta foto ficará visível publicamente no seu perfil para toda a comunidade.</span>
+        </p>
+
+        <!-- Informação do tamanho mostrada dinamicamente apenas após seleção -->
+        <div class="foto-info-dinamica" id="foto-info-dinamica">
+          <i class="ti ti-circle-check"></i>
+          <span id="foto-info-texto"></span>
+        </div>
+
+        <!-- Mensagem de erro caso arquivo seja inválido ou > 5MB -->
         <div class="foto-erro-box" id="foto-erro" role="alert">
           <i class="ti ti-alert-circle"></i>
-          <span></span>
+          <span id="foto-erro-texto"></span>
         </div>
       </div>
     </div>
@@ -458,25 +579,25 @@
 
     <div class="form-row">
       <div class="form-group">
-        <label for="email">E-mail de acesso</label>
-        <input type="email" id="email" value="{{ user.email }}" readonly>
-        <p class="campo-ajuda">Usado para entrar na sua conta.</p>
-      </div>
-      <div class="form-group">
         <label for="data_nascimento">Data de nascimento</label>
         <input type="date" name="data_nascimento" id="data_nascimento" value="{% if perfil.data_nascimento %}{{ perfil.data_nascimento|date:'Y-m-d' }}{% endif %}">
       </div>
-    </div>
-
-    <div class="form-row">
       <div class="form-group">
         <label for="cidade">Cidade onde mora</label>
         <input type="text" name="cidade" id="cidade" value="{{ user.cidade|default:perfil.cidade }}" placeholder="Ex.: Canguaretama, Goianinha, Natal...">
       </div>
-      <div class="form-group">
-        <label for="escola">Escola / Instituição de Ensino</label>
-        <input type="text" name="escola" id="escola" value="{{ perfil.escola }}" placeholder="Ex.: IFRN Campus Canguaretama">
-      </div>
+    </div>
+
+    <!-- Campo Escola/Instituição em largura total para não quebrar em telas médias -->
+    <div class="form-group full-width">
+      <label for="escola">Escola / Instituição de Ensino</label>
+      <input type="text" name="escola" id="escola" value="{{ perfil.escola }}" placeholder="Ex.: IFRN Campus Canguaretama, E.E. Almirante...">
+    </div>
+
+    <div class="form-group full-width">
+      <label for="email">E-mail de acesso</label>
+      <input type="email" id="email" value="{{ user.email }}" readonly>
+      <p class="campo-ajuda">E-mail utilizado para entrar na plataforma (gerenciado pelo cadastro inicial).</p>
     </div>
 
     <!-- SEÇÃO: BIOGRAFIA / APRESENTAÇÃO PÚBLICA -->
@@ -484,7 +605,7 @@
       <i class="ti ti-sparkles"></i> Apresentação no Perfil Público
     </h3>
 
-    <div class="form-group">
+    <div class="form-group full-width">
       <label for="bio">Sobre você / Biografia</label>
       <textarea name="bio" id="bio" rows="4" placeholder="Conte um pouco sobre você, o que está aprendendo e o que mais te inspira na tecnologia...">{{ user.bio }}</textarea>
       <p class="campo-ajuda">Esse texto será exibido com destaque na sua página de perfil público.</p>
@@ -506,14 +627,9 @@
       </div>
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="link_instagram"><i class="ti ti-brand-instagram"></i> Instagram</label>
-        <input type="url" name="link_instagram" id="link_instagram" value="{{ user.link_instagram }}" placeholder="https://instagram.com/seuperfil">
-      </div>
-      <div class="form-group">
-        <!-- Espaço em branco para manter alinhamento em grid -->
-      </div>
+    <div class="form-group half-width">
+      <label for="link_instagram"><i class="ti ti-brand-instagram"></i> Instagram</label>
+      <input type="url" name="link_instagram" id="link_instagram" value="{{ user.link_instagram }}" placeholder="https://instagram.com/seuperfil">
     </div>
 
     <!-- BOTÕES DE AÇÃO -->
@@ -535,8 +651,18 @@
     const preview = document.getElementById('avatar-preview');
     const remover = document.getElementById('remover_foto');
     const btnRemover = document.getElementById('btn-remover-foto');
-    const erro = document.getElementById('foto-erro');
+    const erroBox = document.getElementById('foto-erro');
+    const erroTexto = document.getElementById('foto-erro-texto');
+    const infoDinamica = document.getElementById('foto-info-dinamica');
+    const infoTexto = document.getElementById('foto-info-texto');
     const tiposAceitos = ['image/jpeg', 'image/png', 'image/webp'];
+
+    function formatarTamanho(bytes) {
+      if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(0) + ' KB';
+      }
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
 
     function mostrarImagem(src) {
       let img = document.getElementById('avatar-img');
@@ -554,33 +680,50 @@
     }
 
     function mostrarErro(msg) {
-      erro.querySelector('span').textContent = msg;
-      erro.classList.add('visivel');
+      if (infoDinamica) infoDinamica.style.display = 'none';
+      erroTexto.textContent = msg;
+      erroBox.classList.add('visivel');
+    }
+
+    function limparErro() {
+      erroBox.classList.remove('visivel');
+      erroTexto.textContent = '';
     }
 
     input.addEventListener('change', function () {
+      limparErro();
       const file = input.files[0];
-      erro.classList.remove('visivel');
-      if (!file) return;
+      if (!file) {
+        if (infoDinamica) infoDinamica.style.display = 'none';
+        return;
+      }
 
       if (!tiposAceitos.includes(file.type)) {
-        mostrarErro('Formato não suportado. Use JPG, PNG ou WEBP.');
-        input.value = '';
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        mostrarErro('Imagem muito grande. O limite máximo é 5 MB.');
+        mostrarErro('Formato inválido. Por favor, use uma imagem JPG, PNG ou WEBP.');
         input.value = '';
         return;
       }
 
+      if (file.size > 5 * 1024 * 1024) {
+        mostrarErro('A imagem selecionada tem ' + formatarTamanho(file.size) + '. O limite máximo é 5 MB.');
+        input.value = '';
+        return;
+      }
+
+      // Válido: Mostra imagem e detalhe dinâmico apenas após seleção
       remover.value = '0';
       mostrarImagem(URL.createObjectURL(file));
 
-      if (btnRemover) {
-        btnRemover.style.display = 'inline-flex';
+      if (infoDinamica && infoTexto) {
+        infoTexto.textContent = file.name + ' (' + formatarTamanho(file.size) + ')';
+        infoDinamica.style.display = 'inline-flex';
+      }
+
+      // Garante botão remover visível e funcional
+      let btn = document.getElementById('btn-remover-foto');
+      if (btn) {
+        btn.style.display = 'inline-flex';
       } else {
-        // Cria botão remover se ainda não existia
         const botoesRow = document.querySelector('.foto-botoes-row');
         if (botoesRow) {
           const novoBtn = document.createElement('button');
@@ -597,6 +740,9 @@
     function removerFotoAcao() {
       remover.value = '1';
       input.value = '';
+      limparErro();
+      if (infoDinamica) infoDinamica.style.display = 'none';
+
       const img = document.getElementById('avatar-img');
       if (img) img.style.display = 'none';
 
