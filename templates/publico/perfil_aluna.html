@@ -607,7 +607,7 @@
           </ul>
         </div>
 
-        {% if aluna.link_github or aluna.link_linkedin or aluna.link_instagram %}
+        {% if aluna.link_github or aluna.link_lattes or aluna.link_instagram %}
         <!-- Redes Sociais -->
         <div class="sidebar-block">
           <h2 class="section-title"><i class="ti ti-link"></i> Redes & Links</h2>
@@ -621,12 +621,12 @@
               </div>
             </li>
             {% endif %}
-            {% if aluna.link_linkedin %}
+            {% if aluna.link_lattes %}
             <li>
-              <i class="ti ti-brand-linkedin"></i>
+              <i class="ti ti-file-certificate"></i>
               <div>
-                <p class="info-list-title">LinkedIn</p>
-                <a href="{{ aluna.link_linkedin }}" target="_blank" rel="noopener noreferrer" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: none;">Ver perfil no LinkedIn</a>
+                <p class="info-list-title">Currículo Lattes</p>
+                <a href="{{ aluna.link_lattes }}" target="_blank" rel="noopener noreferrer" style="color: var(--rosa, #981869); font-weight: 600; text-decoration: none;">Ver Currículo Lattes</a>
               </div>
             </li>
             {% endif %}

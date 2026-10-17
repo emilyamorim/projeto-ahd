@@ -5,17 +5,117 @@
 
 {% block extra_aluna_css %}
 <style>
-  .perfil-foto-box {
+  /* CABEÇALHO DO PERFIL */
+  .perfil-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .perfil-header-info {
+    flex: 1 1 280px;
+  }
+  .perfil-titulo {
+    margin: 0 0 6px 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.02em;
     display: flex;
     align-items: center;
-    gap: 28px;
-    padding-bottom: 28px;
-    margin-bottom: 28px;
-    border-bottom: 1px dashed #ddd;
+    gap: 10px;
   }
-  .perfil-avatar {
-    width: 120px;
-    height: 120px;
+  .perfil-subtitulo {
+    margin: 0;
+    font-size: 16px;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  /* BOTÃO VER PERFIL PÚBLICO */
+  .btn-ver-perfil {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 22px;
+    background: #ffffff;
+    color: var(--rosa, #981869);
+    border: 2px solid var(--rosa, #981869);
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(152, 24, 105, 0.08);
+  }
+  .btn-ver-perfil:hover {
+    background: var(--rosa, #981869);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(152, 24, 105, 0.25);
+  }
+  .btn-ver-perfil i {
+    font-size: 18px;
+  }
+
+  /* AVISO SUTIL DE CONTA PENDENTE */
+  .aviso-pendente {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  .aviso-pendente i {
+    font-size: 20px;
+  }
+
+  /* SEÇÃO DE FOTO DE PERFIL (LIMPA E DIRETA) */
+  .foto-perfil-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 8px 0 24px 0;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .avatar-wrapper {
+    position: relative;
+    width: 104px;
+    height: 104px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(152, 24, 105, 0.16);
+    transition: transform 0.2s ease;
+  }
+  .avatar-wrapper:hover {
+    transform: scale(1.03);
+  }
+  .avatar-img-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--rosa, #981869);
+    background: #fff;
+    display: block;
+  }
+  .avatar-fallback {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     background: linear-gradient(135deg, #fdf0f4, #f6dbe8);
     color: var(--rosa, #981869);
@@ -23,161 +123,344 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 40px;
+    font-size: 36px;
     font-weight: 700;
-    flex-shrink: 0;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(152, 24, 105, 0.15);
-    transition: transform 0.2s;
   }
-  .perfil-avatar:hover { transform: scale(1.03); }
-  .perfil-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .perfil-avatar .avatar-overlay {
+  .avatar-badge-btn {
     position: absolute;
-    inset: 0;
-    background: rgba(152, 24, 105, 0.8);
+    bottom: 2px;
+    right: 2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--rosa, #981869);
     color: #fff;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    gap: 4px;
-    opacity: 0;
-    transition: opacity 0.2s;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    font-size: 16px;
+    transition: transform 0.2s ease, background 0.2s ease;
   }
-  .perfil-avatar .avatar-overlay i { font-size: 26px; }
-  .perfil-avatar:hover .avatar-overlay { opacity: 1; }
-  .perfil-foto-acoes { display: flex; gap: 10px; margin-top: 12px; flex-wrap: nowrap; max-width: 320px; }
-  .dash-form .perfil-foto-acoes .btn-sm-primary,
-  .dash-form .perfil-foto-acoes .btn-sm-outline {
+  .avatar-wrapper:hover .avatar-badge-btn {
+    background: #7a1254;
+    transform: scale(1.08);
+  }
+  .foto-info-clean {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .foto-botoes-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-escolher-foto {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    flex: 1 1 0;
-    height: 38px;
-    padding: 0 14px;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
-    white-space: nowrap;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--rosa, #981869);
+    color: #fff !important;
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(152, 24, 105, 0.2);
   }
-  .dash-form .perfil-foto-acoes label.btn-sm-primary { color: #fff; }
-  .photo-info .foto-erro {
+  .btn-escolher-foto:hover {
+    background: #7e1357;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(152, 24, 105, 0.3);
+  }
+  .btn-remover-foto {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: #fff;
+    color: #dc2626;
+    border: 1.5px solid #fecaca;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-remover-foto:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+  }
+  .foto-dica {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+  }
+  .foto-erro-box {
     display: none;
     align-items: center;
     gap: 6px;
-    margin-top: 10px;
-    font-size: 13px;
-    color: #c0392b;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #dc2626;
+    font-weight: 500;
   }
-  .photo-info .foto-erro.visivel { display: flex; animation: fadeErro 0.2s ease; }
-  @keyframes fadeErro { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  .perfil-foto-acoes .btn-sm-outline.danger { color: #c0392b; border-color: #e6b0aa; }
-  .perfil-foto-acoes .btn-sm-outline.danger:hover { background: #fdecea; }
-  .form-acoes {
+  .foto-erro-box.visivel {
+    display: flex;
+  }
+
+  /* SEÇÕES E TIPOGRAFIA ACESSÍVEL (FONTES MAIORES) */
+  .secao-titulo {
+    margin: 28px 0 18px 0;
+    font-size: 19px;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+  }
+  .secao-titulo i {
+    color: var(--rosa, #981869);
+    font-size: 22px;
+  }
+
+  /* CAMPOS DO FORMULÁRIO COM ACESSIBILIDADE */
+  .dash-form .form-group {
+    margin-bottom: 22px;
+  }
+  .dash-form label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+  }
+  .dash-form label i {
+    font-size: 18px;
+    color: #64748b;
+  }
+  .dash-form input[type="text"],
+  .dash-form input[type="email"],
+  .dash-form input[type="url"],
+  .dash-form input[type="date"],
+  .dash-form textarea {
+    font-size: 16px !important;
+    min-height: 48px;
+    padding: 12px 16px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    color: #0f172a;
+    background-color: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .dash-form textarea {
+    min-height: 120px;
+    line-height: 1.6;
+    resize: vertical;
+  }
+  .dash-form input:focus,
+  .dash-form textarea:focus {
+    border-color: var(--rosa, #981869);
+    box-shadow: 0 0 0 4px rgba(152, 24, 105, 0.15);
+    outline: none;
+  }
+  .dash-form input[readonly] {
+    background: #f8fafc;
+    color: #64748b;
+    border-color: #e2e8f0;
+    cursor: default;
+  }
+  .campo-ajuda {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  /* BOTÕES DE AÇÃO INFERIORES */
+  .form-acoes-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
+    align-items: center;
+    gap: 14px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+    flex-wrap: wrap;
   }
-  .hint { font-size: 12px; color: #888; margin-top: 6px; }
-  .tag-item {
-    display: inline-block;
-    background: #fdf5f8;
-    color: var(--rosa, #981869);
-    border: 1px solid rgba(152, 24, 105, 0.2);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 13px;
+  .btn-acao-salvar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 28px;
+    background: var(--rosa, #981869);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(152, 24, 105, 0.25);
+  }
+  .btn-acao-salvar:hover {
+    background: #7a1254;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(152, 24, 105, 0.35);
+  }
+  .btn-acao-salvar i {
+    font-size: 20px;
+  }
+  .btn-acao-descartar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    background: #fff;
+    color: #64748b;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 50px;
+    font-size: 15px;
     font-weight: 600;
-    margin-right: 6px;
-    margin-bottom: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
   }
-  @media (max-width: 640px) {
-    .perfil-foto-box { flex-direction: column; text-align: center; }
-    .perfil-foto-acoes { justify-content: center; }
-    .dash-form .form-row { flex-direction: column; }
+  .btn-acao-descartar:hover {
+    background: #f1f5f9;
+    color: #334155;
+    border-color: #94a3b8;
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 680px) {
+    .perfil-header-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .btn-ver-perfil {
+      width: 100%;
+    }
+    .foto-perfil-section {
+      flex-direction: column;
+      text-align: center;
+    }
+    .foto-botoes-row {
+      justify-content: center;
+    }
+    .dash-form .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+    .form-acoes-footer {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+    .btn-acao-salvar,
+    .btn-acao-descartar {
+      width: 100%;
+    }
   }
 </style>
 {% endblock %}
 
 {% block dashboard_content %}
-<div class="panel-card">
-  <!-- Cabeçalho -->
-  <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #eee;">
-    <div>
-      <h3 style="margin: 0 0 4px 0; font-size: 22px; font-weight: 800; color: #2c3e50;">Meu perfil</h3>
-      <p style="margin: 0; color: #666; font-size: 14px;">Gerencie suas informações pessoais e os dados exibidos no seu perfil público.</p>
+<div class="panel-card" style="padding: 32px;">
+
+  <!-- CABEÇALHO DA PÁGINA -->
+  <div class="perfil-header-bar">
+    <div class="perfil-header-info">
+      <h2 class="perfil-titulo">
+        <i class="ti ti-user-circle" style="color: var(--rosa, #981869);"></i>
+        Meu perfil
+      </h2>
+      <p class="perfil-subtitulo">
+        Atualize suas informações pessoais e os dados exibidos no seu perfil público.
+      </p>
     </div>
-    <a href="{% url 'perfil_aluna' user.id %}" class="btn-sm-outline" style="text-decoration:none; display: inline-flex; align-items: center; gap: 6px;">
-      <i class="ti ti-eye"></i> Ver perfil público
+    <a href="{% url 'perfil_aluna' request.user.pk %}" target="_blank" rel="noopener noreferrer" class="btn-ver-perfil" title="Abrir perfil público em uma nova aba">
+      <i class="ti ti-external-link"></i>
+      <span>Ver perfil público</span>
     </a>
   </div>
+
+  {% if not perfil.is_aprovada %}
+  <div class="aviso-pendente">
+    <i class="ti ti-clock"></i>
+    <span>Seu cadastro está em análise pela coordenação do projeto. Você já pode personalizar suas informações e foto abaixo.</span>
+  </div>
+  {% endif %}
 
   <form class="dash-form" method="POST" enctype="multipart/form-data" id="form-editar-perfil-aluna">
     {% csrf_token %}
     <input type="hidden" name="remover_foto" id="remover_foto" value="0">
 
-    <!-- Upload de Foto de Perfil -->
-    <div class="perfil-foto-box">
-      <label class="perfil-avatar" for="foto_perfil" id="avatar-preview" title="Alterar foto">
+    <!-- UPLOAD DE FOTO DE PERFIL (LIMPO E DIRETO) -->
+    <div class="foto-perfil-section">
+      <label class="avatar-wrapper" for="foto_perfil" id="avatar-preview" title="Clique para escolher uma nova foto">
         {% if user.foto_perfil %}
-          <img src="{{ user.foto_perfil.url }}" alt="Foto de {{ user.get_full_name }}" id="avatar-img">
+          <img src="{{ user.foto_perfil.url }}" alt="Foto de {{ user.get_full_name }}" class="avatar-img-circle" id="avatar-img">
         {% else %}
-          <span id="avatar-iniciais">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</span>
+          <div class="avatar-fallback" id="avatar-iniciais">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+          </div>
         {% endif %}
-        <span class="avatar-overlay"><i class="ti ti-camera"></i>Alterar</span>
+        <span class="avatar-badge-btn" aria-hidden="true">
+          <i class="ti ti-camera"></i>
+        </span>
       </label>
-      <input type="file" name="foto_perfil" id="foto_perfil" accept="image/jpeg,image/png,image/webp" hidden>
+      <input type="file" name="foto_perfil" id="foto_perfil" accept="image/jpeg,image/png,image/webp" style="display: none;">
 
-      <div class="photo-info">
-        <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #2c3e50;">Foto de perfil</h4>
-        <p style="margin: 0; font-size: 14px; color: #666;">JPG, PNG ou WEBP, máx. 5 MB.<br>Exibida no seu perfil público e em suas participações.</p>
-        <div class="perfil-foto-acoes">
-          <label for="foto_perfil" class="btn-sm-primary" id="btn-escolher-foto" title="Escolher imagem">
+      <div class="foto-info-clean">
+        <div class="foto-botoes-row">
+          <label for="foto_perfil" class="btn-escolher-foto" id="btn-escolher-foto">
             <i class="ti ti-upload"></i> Escolher foto
           </label>
           {% if user.foto_perfil %}
-            <button type="button" class="btn-sm-outline danger" id="btn-remover-foto">
-              <i class="ti ti-trash"></i> Remover
+            <button type="button" class="btn-remover-foto" id="btn-remover-foto">
+              <i class="ti ti-trash"></i> Remover foto
             </button>
           {% endif %}
         </div>
-        <p class="foto-erro" id="foto-erro" role="alert"><i class="ti ti-alert-circle"></i> <span></span></p>
+        <p class="foto-dica">Formatos: JPG, PNG ou WEBP &middot; Máximo: 5 MB</p>
+        <div class="foto-erro-box" id="foto-erro" role="alert">
+          <i class="ti ti-alert-circle"></i>
+          <span></span>
+        </div>
       </div>
     </div>
 
-    <!-- Dados Pessoais -->
-    <h4 style="margin: 0 0 16px 0; font-size: 16px; color: #2c3e50; display: flex; align-items: center; gap: 8px;">
-      <i class="ti ti-user" style="color: var(--rosa, #981869);"></i> Dados Pessoais
-    </h4>
+    <!-- SEÇÃO: DADOS PESSOAIS -->
+    <h3 class="secao-titulo">
+      <i class="ti ti-id"></i> Dados Pessoais
+    </h3>
 
     <div class="form-row">
       <div class="form-group">
         <label for="first_name">Nome</label>
-        <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
+        <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required placeholder="Seu primeiro nome">
       </div>
       <div class="form-group">
         <label for="last_name">Sobrenome</label>
-        <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+        <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" placeholder="Seu sobrenome">
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label for="email">E-mail</label>
+        <label for="email">E-mail de acesso</label>
         <input type="email" id="email" value="{{ user.email }}" readonly>
-        <p class="hint">Usado para entrar na sua conta.</p>
+        <p class="campo-ajuda">Usado para entrar na sua conta.</p>
       </div>
       <div class="form-group">
         <label for="data_nascimento">Data de nascimento</label>
@@ -187,97 +470,58 @@
 
     <div class="form-row">
       <div class="form-group">
-        <label for="cidade">Cidade de residência</label>
+        <label for="cidade">Cidade onde mora</label>
         <input type="text" name="cidade" id="cidade" value="{{ user.cidade|default:perfil.cidade }}" placeholder="Ex.: Canguaretama, Goianinha, Natal...">
       </div>
       <div class="form-group">
         <label for="escola">Escola / Instituição de Ensino</label>
-        <input type="text" name="escola" id="escola" value="{{ perfil.escola }}" placeholder="Ex.: IFRN Campus Canguaretama, E.E. Almirante...">
+        <input type="text" name="escola" id="escola" value="{{ perfil.escola }}" placeholder="Ex.: IFRN Campus Canguaretama">
       </div>
     </div>
 
-    <!-- Perfil Público & Apresentação -->
-    <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; margin-bottom: 24px;">
-      <h4 style="margin: 0 0 16px 0; font-size: 16px; color: #2c3e50; display: flex; align-items: center; gap: 8px;">
-        <i class="ti ti-sparkles" style="color: var(--rosa, #981869);"></i> Apresentação no Perfil Público
-      </h4>
+    <!-- SEÇÃO: BIOGRAFIA / APRESENTAÇÃO PÚBLICA -->
+    <h3 class="secao-titulo">
+      <i class="ti ti-sparkles"></i> Apresentação no Perfil Público
+    </h3>
 
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="bio">Sobre você / Biografia</label>
-        <textarea name="bio" id="bio" rows="4" placeholder="Conte um pouco sobre você, o que estuda, quais áreas da tecnologia mais te fascinam e o que aprendeu no projeto Ampliando Horizontes Digitais...">{{ user.bio }}</textarea>
-        <p class="hint">Esse depoimento/apresentação será destacado na sua página de perfil público para todos verem.</p>
-      </div>
-
-      <h5 style="margin: 0 0 12px 0; font-size: 14px; color: #555; display: flex; align-items: center; gap: 6px;">
-        <i class="ti ti-link"></i> Redes sociais e portfólio (opcional)
-      </h5>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="link_github"><i class="ti ti-brand-github"></i> GitHub</label>
-          <input type="url" name="link_github" id="link_github" value="{{ user.link_github }}" placeholder="https://github.com/seuperfil">
-        </div>
-        <div class="form-group">
-          <label for="link_linkedin"><i class="ti ti-brand-linkedin"></i> LinkedIn</label>
-          <input type="url" name="link_linkedin" id="link_linkedin" value="{{ user.link_linkedin }}" placeholder="https://linkedin.com/in/seuperfil">
-        </div>
-        <div class="form-group">
-          <label for="link_instagram"><i class="ti ti-brand-instagram"></i> Instagram</label>
-          <input type="url" name="link_instagram" id="link_instagram" value="{{ user.link_instagram }}" placeholder="https://instagram.com/seuperfil">
-        </div>
-      </div>
+    <div class="form-group">
+      <label for="bio">Sobre você / Biografia</label>
+      <textarea name="bio" id="bio" rows="4" placeholder="Conte um pouco sobre você, o que está aprendendo e o que mais te inspira na tecnologia...">{{ user.bio }}</textarea>
+      <p class="campo-ajuda">Esse texto será exibido com destaque na sua página de perfil público.</p>
     </div>
 
-    <!-- Informações do Projeto (Gerenciadas pela Coordenação) -->
-    <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; margin-bottom: 24px; background: #fafafa; padding: 20px; border-radius: 8px;">
-      <h4 style="margin: 0 0 12px 0; font-size: 15px; color: #444; display: flex; align-items: center; gap: 8px;">
-        <i class="ti ti-school" style="color: var(--azul, #336699);"></i> Informações de Participação no AHD
-      </h4>
-      <p style="margin: 0 0 16px 0; font-size: 13px; color: #777;">Os dados abaixo são gerenciados pelos professores coordenadores do projeto.</p>
+    <!-- SEÇÃO: REDES SOCIAIS & LINKS -->
+    <h3 class="secao-titulo">
+      <i class="ti ti-link"></i> Redes Sociais e Portfólio
+    </h3>
 
-      <div class="form-row" style="margin-bottom: 12px;">
-        <div class="form-group">
-          <label>Modalidade</label>
-          <div style="font-weight: 700; color: #2c3e50; font-size: 15px; padding: 8px 0;">
-            <span class="tag-item" style="background:#eaf2f8; color:var(--azul, #336699); border-color:#d4e6f1;">
-              {{ perfil.get_tipo_participacao_display|default:"Cursista" }}
-            </span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Ano de Ingresso</label>
-          <div style="font-weight: 700; color: #2c3e50; font-size: 15px; padding: 8px 0;">
-            {{ perfil.ano_ingresso|default:"2025" }}
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Status do Cadastro</label>
-          <div style="font-size: 14px; padding: 8px 0;">
-            {% if perfil.is_aprovada %}
-              <span style="color:#27ae60; font-weight:700;"><i class="ti ti-circle-check"></i> Ativa e Aprovada</span>
-            {% else %}
-              <span style="color:#e67e22; font-weight:700;"><i class="ti ti-clock"></i> Em Análise</span>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
+    <div class="form-row">
       <div class="form-group">
-        <label>Eixos de Atuação Vinculados</label>
-        <div>
-          {% for eixo in perfil.eixos.all %}
-            <span class="tag-item">{{ eixo.nome }}</span>
-          {% empty %}
-            <span style="color: #888; font-size: 13px;">Nenhum eixo vinculado ainda pela coordenação.</span>
-          {% endfor %}
-        </div>
+        <label for="link_github"><i class="ti ti-brand-github"></i> GitHub</label>
+        <input type="url" name="link_github" id="link_github" value="{{ user.link_github }}" placeholder="https://github.com/seuperfil">
+      </div>
+      <div class="form-group">
+        <label for="link_lattes"><i class="ti ti-file-certificate"></i> Currículo Lattes</label>
+        <input type="url" name="link_lattes" id="link_lattes" value="{{ user.link_lattes }}" placeholder="http://lattes.cnpq.br/...">
       </div>
     </div>
 
-    <!-- Botões de Ação -->
-    <div class="form-acoes">
-      <a href="{% url 'meu_perfil' %}" class="btn-sm-outline">Descartar alterações</a>
-      <button type="submit" class="btn-sm-primary" id="btn-salvar-perfil">
-        <i class="ti ti-device-floppy"></i> Salvar alterações
+    <div class="form-row">
+      <div class="form-group">
+        <label for="link_instagram"><i class="ti ti-brand-instagram"></i> Instagram</label>
+        <input type="url" name="link_instagram" id="link_instagram" value="{{ user.link_instagram }}" placeholder="https://instagram.com/seuperfil">
+      </div>
+      <div class="form-group">
+        <!-- Espaço em branco para manter alinhamento em grid -->
+      </div>
+    </div>
+
+    <!-- BOTÕES DE AÇÃO -->
+    <div class="form-acoes-footer">
+      <a href="{% url 'meu_perfil' %}" class="btn-acao-descartar">Descartar alterações</a>
+      <button type="submit" class="btn-acao-salvar" id="btn-salvar-perfil">
+        <i class="ti ti-device-floppy"></i>
+        <span>Salvar alterações</span>
       </button>
     </div>
   </form>
@@ -297,11 +541,14 @@
     function mostrarImagem(src) {
       let img = document.getElementById('avatar-img');
       const iniciais = document.getElementById('avatar-iniciais');
-      if (iniciais) iniciais.remove();
+      if (iniciais) iniciais.style.display = 'none';
       if (!img) {
         img = document.createElement('img');
         img.id = 'avatar-img';
+        img.className = 'avatar-img-circle';
         preview.prepend(img);
+      } else {
+        img.style.display = 'block';
       }
       img.src = src;
     }
@@ -315,35 +562,61 @@
       const file = input.files[0];
       erro.classList.remove('visivel');
       if (!file) return;
+
       if (!tiposAceitos.includes(file.type)) {
         mostrarErro('Formato não suportado. Use JPG, PNG ou WEBP.');
         input.value = '';
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        mostrarErro('Imagem muito grande. O limite é 5 MB.');
+        mostrarErro('Imagem muito grande. O limite máximo é 5 MB.');
         input.value = '';
         return;
       }
+
       remover.value = '0';
       mostrarImagem(URL.createObjectURL(file));
-      if (btnRemover) btnRemover.style.display = 'inline-flex';
+
+      if (btnRemover) {
+        btnRemover.style.display = 'inline-flex';
+      } else {
+        // Cria botão remover se ainda não existia
+        const botoesRow = document.querySelector('.foto-botoes-row');
+        if (botoesRow) {
+          const novoBtn = document.createElement('button');
+          novoBtn.type = 'button';
+          novoBtn.className = 'btn-remover-foto';
+          novoBtn.id = 'btn-remover-foto';
+          novoBtn.innerHTML = '<i class="ti ti-trash"></i> Remover foto';
+          novoBtn.addEventListener('click', removerFotoAcao);
+          botoesRow.appendChild(novoBtn);
+        }
+      }
     });
 
+    function removerFotoAcao() {
+      remover.value = '1';
+      input.value = '';
+      const img = document.getElementById('avatar-img');
+      if (img) img.style.display = 'none';
+
+      let iniciais = document.getElementById('avatar-iniciais');
+      if (iniciais) {
+        iniciais.style.display = 'flex';
+      } else {
+        iniciais = document.createElement('div');
+        iniciais.id = 'avatar-iniciais';
+        iniciais.className = 'avatar-fallback';
+        iniciais.textContent = '{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}';
+        preview.prepend(iniciais);
+      }
+
+      const btn = document.getElementById('btn-remover-foto');
+      if (btn) btn.style.display = 'none';
+    }
+
     if (btnRemover) {
-      btnRemover.addEventListener('click', function () {
-        remover.value = '1';
-        input.value = '';
-        const img = document.getElementById('avatar-img');
-        if (img) img.remove();
-        if (!document.getElementById('avatar-iniciais')) {
-          const span = document.createElement('span');
-          span.id = 'avatar-iniciais';
-          span.textContent = '{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}';
-          preview.prepend(span);
-        }
-        btnRemover.style.display = 'none';
-      });
+      btnRemover.addEventListener('click', removerFotoAcao);
     }
   })();
 </script>

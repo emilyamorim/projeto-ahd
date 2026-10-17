@@ -279,7 +279,7 @@
       </ul>
     </div>
 
-    {% if professor.link_lattes or professor.link_linkedin or professor.link_github or professor.link_instagram %}
+    {% if professor.link_lattes or professor.link_github or professor.link_instagram %}
     <div class="sidebar-block">
       <h2 class="section-title"><i class="ti ti-link"></i> Redes & Links</h2>
       <ul class="info-list">
@@ -289,15 +289,6 @@
           <div>
             <p class="info-list-title">Currículo Lattes</p>
             <a href="{{ professor.link_lattes }}" target="_blank" rel="noopener noreferrer" style="color: var(--azul, #336699); font-weight: 600; text-decoration: none; word-break: break-all;">Acessar Lattes <i class="ti ti-external-link" style="font-size:14px; padding:0; background:none; box-shadow:none;"></i></a>
-          </div>
-        </li>
-        {% endif %}
-        {% if professor.link_linkedin %}
-        <li>
-          <i class="ti ti-brand-linkedin"></i>
-          <div>
-            <p class="info-list-title">LinkedIn</p>
-            <a href="{{ professor.link_linkedin }}" target="_blank" rel="noopener noreferrer" style="color: var(--azul, #336699); font-weight: 600; text-decoration: none;">Ver perfil</a>
           </div>
         </li>
         {% endif %}

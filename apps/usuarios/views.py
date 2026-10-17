@@ -268,7 +268,7 @@ def meu_perfil_aluna_view(request):
 
         user.bio = request.POST.get('bio', '').strip()
         user.link_github = request.POST.get('link_github', '').strip()
-        user.link_linkedin = request.POST.get('link_linkedin', '').strip()
+        user.link_lattes = request.POST.get('link_lattes', '').strip()
         user.link_instagram = request.POST.get('link_instagram', '').strip()
 
         if not _atualizar_foto_usuario(request, user):
@@ -280,13 +280,14 @@ def meu_perfil_aluna_view(request):
         return redirect('meu_perfil')
 
     context = {
-        'perfil': perfil
+        'user': user,
+        'perfil': perfil,
     }
     return render(request, 'aluna/meu_perfil.html', context)
 
 
 def perfil_aluna_view(request, pk):
-    aluna = get_object_or_404(Usuario, pk=pk, tipo='aluna')
+    aluna = get_object_or_404(Usuario, pk=pk)
     try:
         perfil = aluna.perfil_aluna
     except AlunaPerfil.DoesNotExist:
@@ -333,7 +334,6 @@ def editar_perfil_professor_view(request):
         user.instituicao = request.POST.get('instituicao', '').strip()
         user.bio = request.POST.get('bio', '').strip()
         user.link_lattes = request.POST.get('link_lattes', '').strip()
-        user.link_linkedin = request.POST.get('link_linkedin', '').strip()
         user.link_github = request.POST.get('link_github', '').strip()
         user.link_instagram = request.POST.get('link_instagram', '').strip()
 
