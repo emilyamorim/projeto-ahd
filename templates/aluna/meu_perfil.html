@@ -167,8 +167,8 @@
   .foto-botoes-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 10px;
+    flex-wrap: nowrap;
   }
 
   /* BOTÃO ESCOLHER FOTO (COM ÍCONE BRANCO) */
@@ -177,13 +177,13 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 44px;
-    padding: 0 22px;
+    height: 40px;
+    padding: 0 18px;
     background: var(--rosa, #981869);
     color: #ffffff !important;
     border: none;
     border-radius: 50px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -191,6 +191,7 @@
     box-sizing: border-box;
     white-space: nowrap;
     margin: 0;
+    flex-shrink: 0;
   }
   .btn-escolher-foto:hover {
     background: #7e1357;
@@ -199,18 +200,18 @@
   }
   .btn-escolher-foto i {
     color: #ffffff !important;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1;
   }
 
-  /* BOTÃO REMOVER FOTO HARMONIOSO (SECUNDÁRIO SUAVE) */
+  /* BOTÃO REMOVER FOTO HARMONIOSO (LADO A LADO) */
   .btn-remover-foto {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    height: 44px;
-    padding: 0 18px;
+    gap: 6px;
+    height: 40px;
+    padding: 0 16px;
     background: #f8fafc;
     color: #475569;
     border: 1.5px solid #cbd5e1;
@@ -222,6 +223,7 @@
     box-sizing: border-box;
     white-space: nowrap;
     margin: 0;
+    flex-shrink: 0;
   }
   .btn-remover-foto i {
     color: #64748b;
@@ -238,20 +240,25 @@
     color: #dc2626;
   }
 
-  /* AVISO DE VISIBILIDADE PÚBLICA */
+  /* AVISO DE VISIBILIDADE PÚBLICA (ÍCONE PERFEITAMENTE ALINHADO COM A PRIMEIRA LINHA) */
   .foto-aviso-publico {
     display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 4px 0 0 0;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 8px 0 0 0;
     font-size: 14px;
     color: #475569;
-    line-height: 1.4;
+    line-height: 1.45;
   }
   .foto-aviso-publico i {
     color: var(--rosa, #981869) !important;
-    font-size: 17px;
+    font-size: 18px;
+    line-height: 1.45;
+    margin-top: 1px;
     flex-shrink: 0;
+  }
+  .foto-aviso-publico span {
+    flex: 1;
   }
 
   /* INFORMAÇÃO DINÂMICA DA IMAGEM SELECIONADA (SÓ MOSTRA AO SELECIONAR) */
@@ -496,8 +503,8 @@
         Atualize suas informações pessoais e os dados exibidos no seu perfil público.
       </p>
     </div>
-    <a href="{% url 'perfil_aluna' request.user.pk %}" target="_blank" rel="noopener noreferrer" class="btn-ver-perfil" title="Abrir perfil público em uma nova aba">
-      <i class="ti ti-external-link"></i>
+    <a href="{% url 'perfil_aluna' request.user.pk %}" class="btn-ver-perfil" title="Ver perfil público">
+      <i class="ti ti-eye"></i>
       <span>Ver perfil público</span>
     </a>
   </div>
