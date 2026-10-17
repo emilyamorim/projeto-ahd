@@ -4,8 +4,9 @@
 {% block title %}Dashboard da Aluna - Ampliando Horizontes Digitais{% endblock %}
 
 {% block extra_css %}
-<!-- CSS Específico do Dashboard -->
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=9">
+  <!-- CSS Específico do Dashboard -->
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=18">
+  {% block extra_aluna_css %}{% endblock %}
 {% endblock %}
 
 {% block content %}
