@@ -171,45 +171,60 @@
     flex-wrap: nowrap;
   }
 
-  /* BOTÃO ESCOLHER FOTO (ESTILO OUTLINE ELEGANTE E LEVE) */
+  /* BOTÃO ESCOLHER FOTO (FUNDO ROSA, LETRAS BRANCAS E CENTRALIZADAS) */
   .btn-escolher-foto {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 38px;
-    padding: 0 18px;
-    background: #ffffff;
-    color: var(--rosa, #981869) !important;
-    border: 1.5px solid var(--rosa, #981869);
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 3px rgba(152, 24, 105, 0.08);
-    box-sizing: border-box;
-    white-space: nowrap;
-    margin: 0;
-    flex-shrink: 0;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 8px !important;
+    height: 40px !important;
+    padding: 0 20px !important;
+    background: var(--rosa, #981869) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 50px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 6px rgba(152, 24, 105, 0.25) !important;
+    flex-shrink: 0 !important;
   }
   .btn-escolher-foto:hover {
-    background: var(--rosa, #981869);
+    background: #7a1254 !important;
     color: #ffffff !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(152, 24, 105, 0.25);
-  }
-  .btn-escolher-foto:hover i {
-    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(152, 24, 105, 0.35) !important;
   }
   .btn-escolher-foto:active {
     transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(152, 24, 105, 0.2) !important;
   }
   .btn-escolher-foto i {
-    color: var(--rosa, #981869) !important;
-    font-size: 16px;
-    line-height: 1;
-    transition: color 0.2s ease;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+  }
+  .btn-escolher-foto span {
+    color: #ffffff !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* BOTÃO REMOVER FOTO (HARMONIOSO E COESO) */
@@ -550,7 +565,8 @@
       <div class="foto-info-clean">
         <div class="foto-botoes-row">
           <label for="foto_perfil" class="btn-escolher-foto" id="btn-escolher-foto">
-            <i class="ti ti-upload"></i> Escolher foto
+            <i class="ti ti-upload"></i>
+            <span>Escolher foto</span>
           </label>
           {% if user.foto_perfil %}
             <button type="button" class="btn-remover-foto" id="btn-remover-foto">
