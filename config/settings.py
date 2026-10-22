@@ -38,13 +38,19 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-# Origens confiáveis para CSRF em produção (ex: https://seunome.pythonanywhere.com)
+# Origens confiáveis para CSRF em produção (ex: https://seunome.pythonanywhere.com ou Render)
 csrf_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in csrf_origins.split(",")
     if origin.strip()
 ]
+
+# Suporte automático ao domínio do Render.com
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
 
 
 # Application definition
@@ -65,6 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -150,6 +157,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Pasta onde o Django reúne todos os estáticos em produção
 # (gerado com: python manage.py collectstatic)
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Compressão e otimização de arquivos estáticos em produção com WhiteNoise
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 # URL para acessar os arquivos enviados pelos usuários
