@@ -29,7 +29,7 @@ A base visual do site, o sistema de autenticação, os modelos de banco de dados
 - [x] **Edição de Perfil Público (Professores e Cursistas):** Formulários completos para edição de biografia, foto com preview, dados pessoais, redes sociais e reflexo dinâmico nos perfis públicos.
 
 ### 🔄 A Fazer (Próximos Passos Imediatos)
-*Quem for pegar essas tarefas, lembre-se de criar uma branch (`feature/...`).*
+*Quem for pegar essas tarefas, lembre-se de criar uma branch (`feature/...`). Passo a passo detalhado em **[TAREFAS_EQUIPE.md](TAREFAS_EQUIPE.md)**.*
 - [ ] **Páginas Públicas Dinâmicas:** Conectar as páginas de Notícias, Fotos e Histórico para puxar dados diretamente do banco via views.
 - [ ] **Ações em Relatos da Aluna:** Permitir editar e excluir relatos publicados pela aluna.
 - [ ] **Envio de E-mail de Recuperação de Senha:** Configurar backend de envio de e-mails para o fluxo de reset de senha.
