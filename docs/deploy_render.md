@@ -60,12 +60,15 @@ Role até a seção **Advanced** -> **Add Environment Variable** e adicione as s
 
 ---
 
-## 6. (Opcional) Criar um Usuário Administrador no Render
+## 6. Acesso do Administrador / Coordenador em Produção
 
-Para acessar o painel administrativo (`/admin/` ou `/painel/`) pela primeira vez em produção:
-1. No menu lateral do seu Web Service no Render, clique em **Shell**.
-2. No terminal interativo que abrir, digite:
-   ```bash
-   python manage.py createsuperuser
-   ```
-3. Digite o nome de usuário, e-mail e senha desejados. Pronto!
+Como o terminal interativo (**Shell**) do Render é restrito aos planos pagos, o arquivo `build.sh` já foi configurado para **criar o superusuário administrador automaticamente** no primeiro deploy!
+
+### Credenciais padrão geradas:
+* **E-mail / Usuário:** `admin@ahd.com`
+* **Senha:** `admin123`
+
+*(Opcional)* Se quiser definir outro e-mail ou senha diretamente nas variáveis de ambiente do Render, basta adicionar:
+* `DJANGO_SUPERUSER_EMAIL`: seu e-mail
+* `DJANGO_SUPERUSER_PASSWORD`: sua senha secreta
+
