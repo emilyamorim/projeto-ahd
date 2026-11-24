@@ -220,7 +220,7 @@
 <!-- Fotos aguardando organização -->
 <div class="panel-card">
   <div class="panel-header">
-    <h3>Fotos enviadas por alunas &mdash; aguardando organização</h3>
+    <h3>Fotos enviadas por alunas &mdash; aguardando aprovação</h3>
   </div>
   {% for foto in fotos_pendentes %}
   <div class="pending-item" style="margin-bottom: 16px; border-bottom: 1px solid #eee; padding-bottom: 16px;">
@@ -234,15 +234,20 @@
       </div>
       <div class="pending-text">
         <h4>{{ foto.nome_original|default:"Foto" }} &mdash; enviada por {{ foto.usuario.first_name }}</h4>
-        <p>Sem álbum definido &middot; enviada em {{ foto.enviado_em|date:"d/m/Y" }}</p>
+        <p>{% if foto.album %}Álbum: {{ foto.album.nome }}{% else %}Sem álbum{% endif %} &middot; enviada em {{ foto.enviado_em|date:"d/m/Y" }}</p>
       </div>
     </div>
-    <button class="btn-outline-action">
-      <i class="ti ti-folder"></i> Organizar
-    </button>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="{{ foto.imagem.url }}" target="_blank" rel="noopener"><img src="{{ foto.imagem.url }}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;"></a>
+      <form method="post" action="{% url 'moderar_foto' foto.id %}" style="display:flex; gap:8px; margin:0;">
+        {% csrf_token %}
+        <button type="submit" name="acao" value="aprovar" class="btn-outline-action"><i class="ti ti-check"></i> Aprovar</button>
+        <button type="submit" name="acao" value="recusar" class="btn-outline-action" style="color:#c0392b;" onclick="return confirm('Recusar e excluir esta foto?');"><i class="ti ti-x"></i> Recusar</button>
+      </form>
+    </div>
   </div>
   {% empty %}
-  <p style="text-align: center; color: #666; padding: 24px;">Nenhuma foto aguardando organização.</p>
+  <p style="text-align: center; color: #666; padding: 24px;">Nenhuma foto aguardando aprovação.</p>
   {% endfor %}
 </div>
 

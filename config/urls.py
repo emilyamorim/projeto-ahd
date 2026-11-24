@@ -33,7 +33,10 @@ urlpatterns = [
     path("", include("apps.galeria.urls")),
 ]
 
-# Servir arquivos de mídia (fotos enviadas)
-urlpatterns += [
-    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-]
+# Servir arquivos de mídia (fotos enviadas) pelo próprio Django.
+# Só é usado com armazenamento local; com armazenamento externo (S3) as fotos
+# são servidas direto pelo provedor.
+if not getattr(settings, "USA_ARMAZENAMENTO_EXTERNO", False):
+    urlpatterns += [
+        re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
+    ]

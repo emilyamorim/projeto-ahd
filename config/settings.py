@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
 # Carrega as variáveis do arquivo .env
@@ -27,6 +28,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError(
+        "Defina SECRET_KEY no arquivo .env (desenvolvimento) ou nas variáveis de ambiente (produção)."
+    )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
@@ -105,11 +110,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Em produção, defina DATABASE_URL (ex: PostgreSQL do Neon/Supabase).
+# Sem ela, usa SQLite local.
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600,
+    )
 }
 
 
@@ -158,15 +165,36 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # (gerado com: python manage.py collectstatic)
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Compressão e otimização de arquivos estáticos em produção com WhiteNoise
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-
 # URL para acessar os arquivos enviados pelos usuários
 MEDIA_URL = "/media/"
- 
-# Pasta onde os arquivos enviados pelos usuários são salvos
+
+# Pasta onde os arquivos enviados pelos usuários são salvos (armazenamento local)
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Armazenamento: estáticos via WhiteNoise; uploads em disco local por padrão.
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+}
+
+# Uploads permanentes em produção: o disco do Render (plano gratuito) é apagado a
+# cada deploy, então fotos precisam ficar num armazenamento externo compatível com
+# S3 (Cloudflare R2, Backblaze B2, Supabase Storage, AWS S3...).
+# Para ativar, defina AWS_STORAGE_BUCKET_NAME e as demais variáveis AWS_* no ambiente.
+USA_ARMAZENAMENTO_EXTERNO = bool(os.getenv("AWS_STORAGE_BUCKET_NAME"))
+if USA_ARMAZENAMENTO_EXTERNO:
+    STORAGES["default"] = {"BACKEND": "storages.backends.s3.S3Storage"}
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL") or None
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME") or None
+    AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN") or None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    if AWS_S3_CUSTOM_DOMAIN:
+        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
 
 # Default primary key field type
@@ -182,6 +210,33 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Em desenvolvimento, os e-mails aparecem no terminal
-# Em vez de serem enviados de verdade
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# E-mail: se EMAIL_HOST estiver definido no .env, envia por SMTP de verdade.
+# Sem EMAIL_HOST (desenvolvimento), os e-mails aparecem no terminal.
+EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+if EMAIL_HOST:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+    EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Ampliando Horizontes Digitais <nao-responda@ahd.local>")
+
+# O link de redefinição de senha vale por 3 horas
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 3
+
+
+# ----------------------------------------------------------
+# Segurança em produção (só vale quando DEBUG=False)
+# ----------------------------------------------------------
+if not DEBUG:
+    # O Render encerra o HTTPS no proxy e repassa este cabeçalho
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "True") == "True"
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # HSTS começa com 1 hora; depois de confirmar que o HTTPS está ok, aumente
+    # (ex.: 31536000 = 1 ano) pela variável SECURE_HSTS_SECONDS.
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "3600"))
+    SECURE_CONTENT_TYPE_NOSNIFF = True

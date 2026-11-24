@@ -62,13 +62,41 @@ Role até a seção **Advanced** -> **Add Environment Variable** e adicione as s
 
 ## 6. Acesso do Administrador / Coordenador em Produção
 
-Como o terminal interativo (**Shell**) do Render é restrito aos planos pagos, o arquivo `build.sh` já foi configurado para **criar o superusuário administrador automaticamente** no primeiro deploy!
+O `build.sh` cria o superusuário automaticamente no deploy, **mas só se você definir a senha**
+nas variáveis de ambiente (não existe mais senha padrão, por segurança):
 
-### Credenciais padrão geradas:
-* **E-mail / Usuário:** `admin@ahd.com`
-* **Senha:** `admin123`
+* `DJANGO_SUPERUSER_EMAIL`: e-mail de acesso da coordenação
+* `DJANGO_SUPERUSER_PASSWORD`: uma senha forte e secreta
 
-*(Opcional)* Se quiser definir outro e-mail ou senha diretamente nas variáveis de ambiente do Render, basta adicionar:
-* `DJANGO_SUPERUSER_EMAIL`: seu e-mail
-* `DJANGO_SUPERUSER_PASSWORD`: sua senha secreta
+> ⚠️ Depois do primeiro acesso, troque a senha pelo fluxo "Esqueci minha senha" e remova `DJANGO_SUPERUSER_PASSWORD` do painel do Render.
 
+---
+
+## 7. Fotos permanentes (obrigatório em produção)
+
+O disco do plano gratuito do Render **é apagado a cada deploy**: todas as fotos de perfil e da galeria seriam perdidas.
+Use um armazenamento externo compatível com S3 (recomendado: **Cloudflare R2**, **Backblaze B2** ou **Supabase Storage**, todos com plano gratuito):
+
+1. Crie um *bucket* público para leitura e gere uma chave de acesso.
+2. No Render, adicione: `AWS_STORAGE_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
+   `AWS_S3_ENDPOINT_URL` e, se tiver, `AWS_S3_CUSTOM_DOMAIN`.
+3. Faça um novo deploy. Os uploads passam a ser gravados no bucket automaticamente.
+
+## 8. Banco de dados (PostgreSQL)
+
+O SQLite também é apagado a cada deploy. Crie um banco PostgreSQL gratuito (Neon ou Supabase) e coloque a
+*connection string* em `DATABASE_URL` (ex.: `postgresql://usuario:senha@host/banco?sslmode=require`).
+
+## 9. E-mail (recuperação de senha)
+
+Defina `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` e `DEFAULT_FROM_EMAIL`
+(ex.: Gmail com *senha de app*: `smtp.gmail.com`, porta 587). Sem isso ninguém recebe o link de redefinição.
+
+## 10. Checklist antes de divulgar
+
+- [ ] `DEBUG=False` e `SECRET_KEY` gerada pelo Render
+- [ ] `DATABASE_URL` apontando para PostgreSQL
+- [ ] Armazenamento de fotos configurado (seção 7)
+- [ ] E-mail configurado e testado (seção 9)
+- [ ] Senha do superusuário trocada
+- [ ] Depois de confirmar que o HTTPS funciona, aumente `SECURE_HSTS_SECONDS` (ex.: `31536000`)

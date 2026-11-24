@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Nova senha - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    {% if validlink %}
+    <div class="auth-header">
+      <h2><i class="ti ti-lock"></i> Criar nova senha</h2>
+      <p>Escolha uma senha segura para a sua conta.</p>
+    </div>
+    <div class="auth-body">
+      <form class="auth-form" method="POST">
+        {% csrf_token %}
+        {% if form.errors %}
+          <div style="background-color:#fdf5f8;border:1px solid var(--rosa);color:var(--rosa);padding:12px;border-radius:8px;margin-bottom:20px;font-size:14px;">
+            {% for campo in form %}{% for erro in campo.errors %}<div>{{ erro }}</div>{% endfor %}{% endfor %}
+            {% for erro in form.non_field_errors %}<div>{{ erro }}</div>{% endfor %}
+          </div>
+        {% endif %}
+        <div class="form-group">
+          <label for="id_new_password1">Nova senha <span class="required">*</span></label>
+          <input type="password" id="id_new_password1" name="new_password1" autocomplete="new-password" required>
+        </div>
+        <div class="form-group">
+          <label for="id_new_password2">Confirmar nova senha <span class="required">*</span></label>
+          <input type="password" id="id_new_password2" name="new_password2" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="btn-auth-outline"><i class="ti ti-device-floppy"></i> Salvar nova senha</button>
+      </form>
+    </div>
+    {% else %}
+    <div class="auth-header">
+      <h2><i class="ti ti-alert-circle"></i> Link inválido ou expirado</h2>
+      <p>Este link de redefinição não funciona mais. Peça um novo para continuar.</p>
+    </div>
+    <div class="auth-body">
+      <a href="{% url 'redefinir_senha' %}" class="btn-auth-outline" style="text-align:center;text-decoration:none;display:block;">Pedir novo link</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -51,11 +51,16 @@ def enviar_foto(request):
             album=album,
             imagem=arquivo,
             nome_original=arquivo.name,
+            # Fotos da coordenação já entram publicadas; as das alunas esperam aprovação
+            aprovada=request.user.is_superuser or request.user.tipo in ("professor", "admin"),
         )
         enviados += 1
 
     if enviados:
-        messages.success(request, f"{enviados} foto(s) enviada(s) com sucesso.")
+        if request.user.is_superuser or request.user.tipo in ("professor", "admin"):
+            messages.success(request, f"{enviados} foto(s) publicada(s) com sucesso.")
+        else:
+            messages.success(request, f"{enviados} foto(s) enviada(s)! Elas aparecerão na galeria após a aprovação da coordenação.")
     return redirect("minhas_fotos")
 
 
@@ -69,17 +74,63 @@ def excluir_foto(request, foto_id):
     messages.success(request, "Foto excluída.")
     return redirect("minhas_fotos")
 
+def _coordenacao(user):
+    return user.is_superuser or user.tipo in ('professor', 'admin')
+
+
 @login_required
 def gerenciar_fotos_view(request):
-    if request.user.tipo not in ['professor', 'admin']:
+    if not _coordenacao(request.user):
         messages.error(request, 'Acesso restrito à coordenação.')
         return redirect('home')
 
     albuns = Album.objects.all().prefetch_related('fotos')
-    fotos_pendentes = Foto.objects.filter(album__isnull=True).order_by('-enviado_em')
+    fotos_pendentes = Foto.objects.filter(aprovada=False).select_related('usuario', 'album').order_by('-enviado_em')
 
     context = {
         'albuns': albuns,
         'fotos_pendentes': fotos_pendentes,
     }
     return render(request, 'painel/gerenciar_fotos.html', context)
+
+
+@login_required
+@require_POST
+def moderar_foto(request, foto_id):
+    """Aprova (publica) ou recusa (exclui) uma foto enviada por aluna."""
+    if not _coordenacao(request.user):
+        messages.error(request, 'Acesso restrito à coordenação.')
+        return redirect('home')
+    foto = get_object_or_404(Foto, id=foto_id)
+    if request.POST.get('acao') == 'aprovar':
+        foto.aprovada = True
+        foto.save(update_fields=['aprovada'])
+        messages.success(request, 'Foto aprovada e publicada na galeria.')
+    elif request.POST.get('acao') == 'recusar':
+        foto.imagem.delete(save=False)
+        foto.delete()
+        messages.success(request, 'Foto recusada e removida.')
+    return redirect('gerenciar_fotos')
+
+
+def fotos_publicas_view(request):
+    """Galeria pública: somente fotos aprovadas, agrupadas por álbum. Aceita busca ?q= e ordem ?ordem=antigas."""
+    busca = request.GET.get('q', '').strip()
+    ordem = request.GET.get('ordem', 'recentes')
+    fotos = Foto.objects.filter(aprovada=True)
+    if busca:
+        from django.db.models import Q
+        fotos = fotos.filter(Q(nome_original__icontains=busca) | Q(album__nome__icontains=busca))
+    fotos = fotos.order_by('enviado_em' if ordem == 'antigas' else '-enviado_em')
+
+    grupos = {}
+    soltas = []
+    for f in fotos.select_related('album', 'usuario'):
+        if f.album_id:
+            grupos.setdefault(f.album, []).append(f)
+        else:
+            soltas.append(f)
+    albuns = [{'album': a, 'fotos': fs} for a, fs in grupos.items()]
+    return render(request, 'publico/fotos.html', {
+        'albuns': albuns, 'soltas': soltas, 'busca': busca, 'ordem': ordem,
+    })

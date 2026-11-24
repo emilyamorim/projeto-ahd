@@ -5,7 +5,7 @@ Define as rotas para todas as 19 páginas do site,
 organizadas por nível de acesso.
 """
 
-from django.urls import path
+from django.urls import path, reverse_lazy
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from . import views
@@ -28,24 +28,14 @@ urlpatterns = [
     # P02 — Lista de todas as alunas do projeto
     path(
         "historico/",
-        TemplateView.as_view(template_name="publico/historico.html"),
+        views.historico_view,
         name="historico",
     ),
 
       # P03 — Galeria de fotos do projeto
-    path(
-        "fotos/",
-        TemplateView.as_view(template_name="publico/fotos.html"),
-        name="fotos",
-    ),
 
 
     # P04 — Notícias e novidades do projeto
-    path(
-        "noticias/",
-        TemplateView.as_view(template_name="publico/noticias.html"),
-        name="noticias",
-    ),
 
     # P05 — Informações sobre o projeto
     path(
@@ -95,11 +85,34 @@ urlpatterns = [
         name="logout",
     ),
 
-    # A03 — Página para redefinir a senha por e-mail
+    # A03 — Recuperação de senha por e-mail (4 etapas)
     path(
         "redefinir-senha/",
-        TemplateView.as_view(template_name="auth/redefinir_senha.html"),
+        auth_views.PasswordResetView.as_view(
+            template_name="auth/redefinir_senha.html",
+            email_template_name="auth/email_redefinir_senha.txt",
+            subject_template_name="auth/email_redefinir_senha_assunto.txt",
+            success_url=reverse_lazy("redefinir_senha_enviado"),
+        ),
         name="redefinir_senha",
+    ),
+    path(
+        "redefinir-senha/enviado/",
+        TemplateView.as_view(template_name="auth/redefinir_senha_enviado.html"),
+        name="redefinir_senha_enviado",
+    ),
+    path(
+        "redefinir-senha/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="auth/redefinir_senha_confirmar.html",
+            success_url=reverse_lazy("redefinir_senha_concluido"),
+        ),
+        name="redefinir_senha_confirmar",
+    ),
+    path(
+        "redefinir-senha/concluido/",
+        TemplateView.as_view(template_name="auth/redefinir_senha_concluido.html"),
+        name="redefinir_senha_concluido",
     ),
 
     # ----------------------------------------------------------

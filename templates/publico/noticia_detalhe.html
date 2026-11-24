@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ noticia.titulo }} - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/noticias.css' %}">
+<style>
+  .noticia-artigo { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+  .noticia-artigo .voltar { color: var(--azul, #336699); text-decoration: none; font-size: 14px; display: inline-flex; gap: 6px; align-items: center; margin-bottom: 24px; }
+  .noticia-artigo h1 { font-size: 34px; line-height: 1.2; margin: 12px 0; }
+  .noticia-artigo .meta { color: #777; font-size: 14px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
+  .noticia-artigo .capa { width: 100%; max-height: 420px; object-fit: cover; border-radius: 12px; margin-bottom: 28px; }
+  .noticia-artigo .corpo { font-size: 17px; line-height: 1.75; color: #333; white-space: pre-line; }
+</style>
+{% endblock %}
+
+{% block content %}
+<article class="noticia-artigo">
+  <a href="{% url 'noticias' %}" class="voltar"><i class="ti ti-arrow-left"></i> Todas as notícias</a>
+  <span class="card-tag tag-rosa">{{ noticia.get_categoria_display }}</span>
+  <h1>{{ noticia.titulo }}</h1>
+  <div class="meta">
+    <span><i class="ti ti-calendar"></i> {{ noticia.data|date:"d \d\e F \d\e Y" }}</span>
+    {% if noticia.autor %}<span><i class="ti ti-user"></i> {{ noticia.autor }}</span>{% endif %}
+  </div>
+  {% if noticia.imagem_capa %}
+    <img class="capa" src="{{ noticia.imagem_capa.url }}" alt="{{ noticia.titulo }}">
+  {% endif %}
+  <div class="corpo">{{ noticia.conteudo }}</div>
+</article>
+{% endblock %}

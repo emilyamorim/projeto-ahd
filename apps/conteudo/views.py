@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from .models import Noticia, Relato
 
 @login_required
@@ -51,3 +52,23 @@ def meus_relatos_view(request):
         'relatos': relatos
     }
     return render(request, 'aluna/meus_relatos.html', context)
+
+
+
+def noticias_publicas_view(request):
+    """Lista pública de notícias (mais recentes primeiro), com paginação."""
+    categoria = request.GET.get('categoria', '')
+    qs = Noticia.objects.select_related('autor').order_by('-data', '-criado_em')
+    if categoria in dict(Noticia.CATEGORIAS):
+        qs = qs.filter(categoria=categoria)
+    page = Paginator(qs, 9).get_page(request.GET.get('pagina'))
+    return render(request, 'publico/noticias.html', {
+        'page': page,
+        'categorias': Noticia.CATEGORIAS,
+        'categoria_atual': categoria,
+    })
+
+
+def noticia_detalhe_view(request, pk):
+    noticia = get_object_or_404(Noticia, pk=pk)
+    return render(request, 'publico/noticia_detalhe.html', {'noticia': noticia})

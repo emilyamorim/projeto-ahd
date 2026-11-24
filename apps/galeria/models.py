@@ -28,6 +28,7 @@ class Foto(models.Model):
     imagem =models.ImageField(upload_to="fotos/%y/%m/")
     nome_original = models.CharField(max_length=255, blank=True)
     enviado_em = models.DateTimeField(auto_now_add=True)
+    aprovada = models.BooleanField(default=False, help_text="Só fotos aprovadas aparecem na galeria pública.")
 
     class Meta:
         ordering =["-enviado_em"]

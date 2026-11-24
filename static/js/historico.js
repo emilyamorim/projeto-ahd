@@ -1,14 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Lógica para alternar (toggle) o tipo (Bolsistas/Cursistas) apenas visualmente por enquanto
-  const toggleBtns = document.querySelectorAll('.type-toggle button');
-  toggleBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      toggleBtns.forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-});
-
 // Função para abrir e fechar os detalhes do card da aluna
 function toggleCard(btn) {
   // Encontra o container principal do card subindo na árvore do DOM

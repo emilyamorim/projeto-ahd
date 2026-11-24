@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- HEADER ROXO -->
 <div class="fotos-header">
   <div class="fotos-header-inner">
     <div>
@@ -22,233 +21,89 @@
         das meninas ao longo do projeto.
       </p>
     </div>
-    <a href="#" class="btn-upload">
-      <i class="ti ti-upload"></i> Enviar foto
-    </a>
+    {% if user.is_authenticated and user.tipo == 'aluna' %}
+      <a href="{% url 'minhas_fotos' %}" class="btn-upload"><i class="ti ti-upload"></i> Enviar foto</a>
+    {% elif not user.is_authenticated %}
+      <a href="{% url 'login' %}?next={% url 'minhas_fotos' %}" class="btn-upload"><i class="ti ti-upload"></i> Enviar foto</a>
+    {% endif %}
   </div>
 </div>
 
 <div class="fotos-container">
-  
-  <!-- BARRA DE FERRAMENTAS -->
-  <div class="fotos-toolbar">
+  <form method="get" class="fotos-toolbar" style="margin-bottom:16px;">
     <div class="toolbar-top">
       <div class="search-input-wrapper">
         <i class="ti ti-search search-icon"></i>
-        <input type="text" placeholder="Busca por álbum, foto ou tag (ex: robótica, SECITEX...)">
+        <input type="text" name="q" value="{{ busca }}" placeholder="Buscar por álbum ou foto...">
       </div>
-      <select class="filter-select">
-        <option>Mais recentes</option>
-        <option>Mais antigas</option>
-        <option>Mais comentadas</option>
+      <select class="filter-select" name="ordem" onchange="this.form.submit()">
+        <option value="recentes" {% if ordem != 'antigas' %}selected{% endif %}>Mais recentes</option>
+        <option value="antigas" {% if ordem == 'antigas' %}selected{% endif %}>Mais antigas</option>
       </select>
     </div>
-    
-    <div class="toolbar-bottom">
-      <div class="categories-list">
-        <span class="cat-label">CATEGORIA</span>
-        <button class="cat-pill active">Todas</button>
-        <button class="cat-pill">Eventos</button>
-        <button class="cat-pill">Robótica</button>
-        <button class="cat-pill">Letramento</button>
-        <button class="cat-pill">Olimpíadas</button>
-      </div>
-      <div class="year-filter">
-        <span class="cat-label">ANO</span>
-        <select class="filter-select" style="min-width: 120px; padding: 10px 32px 10px 16px;">
-          <option>Todos</option>
-          <option>2026</option>
-          <option>2025</option>
-        </select>
-      </div>
-    </div>
-    <div class="album-count">3 álbuns encontrados</div>
-  </div>
+  </form>
+  <div class="album-count">{{ albuns|length }} álbum{{ albuns|length|pluralize:",ns" }}{% if soltas %} · {{ soltas|length }} foto{{ soltas|length|pluralize }} avulsa{{ soltas|length|pluralize }}{% endif %}</div>
 
-  <!-- ÁLBUM 1: Mosaico Destaque -->
+  {% for item in albuns %}{% with album=item.album fotos=item.fotos %}
   <div class="album-card">
     <div class="album-header">
       <div class="album-info-wrapper">
-        <div class="album-icon">
-          <i class="ti ti-users"></i>
-        </div>
+        <div class="album-icon"><i class="ti ti-photo"></i></div>
         <div class="album-details">
-          <h2>Nosso Time — Encontro Inicial 2025</h2>
+          <h2>{{ album.nome }}</h2>
           <div class="album-meta">
-            <span>8 fotos &middot; Março 2026</span>
-            <div class="album-tags">
-              <span class="tag-pill">Eventos</span>
-              <span class="tag-pill">2025</span>
-            </div>
+            <span>{{ fotos|length }} foto{{ fotos|length|pluralize }} &middot; por {{ album.usuario }}</span>
           </div>
         </div>
       </div>
-      <a href="#" class="btn-ver-album"><i class="ti ti-eye"></i> Ver álbum</a>
     </div>
-
-    <!-- Mosaico de Fotos 1 -->
-    <div class="album-grid grid-destaque">
-      <a href="#" class="foto-item bg-grad-1">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Nosso time reunido</div>
-          <div class="foto-data">Mar 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item bg-grad-2">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Apresentação</div>
-          <div class="foto-data">Mar 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item bg-grad-4">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Boas-vindas</div>
-          <div class="foto-data">Mar 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item bg-grad-3">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Credenciais</div>
-          <div class="foto-data">Mar 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item more-photos" style="display: none;">
-        <!-- Se tivéssemos 5 divs, a 5ª poderia ser o +X fotos. 
-             Como no design o +4 fotos está no último bloco,
-             vamos transformar a 4ª div no mockup pra corresponder visualmente. -->
-      </a>
-    </div>
-  </div>
-  
-  <!-- RE-FAZENDO ÁLBUM 1 PARA MATCH EXATO DO MOCKUP -->
-  <!-- Oops, o mockup tem 1 grande esq, 2 médias meio (cima/baixo), e 1 média/alta direita (Credenciais), mas a de baixo da Credenciais é o +4. 
-       Na verdade, o mockup mostra: Coluna 1 (Gigante), Coluna 2 (Apresentação, Boas vindas), Coluna 3 (Credenciais, +4 fotos). 
-       Então é um Grid de 3 colunas e 2 linhas! Vou ajustar o HTML para refletir isso perfeitamente. -->
-  <script>
-    // Correção rápida via DOM para o Grid 1 bater 100% com o mockup
-    // A classe grid-destaque atual tem 3 colunas, vamos só preencher 5 itens no HTML e o CSS que já fiz (3 colunas, 2 linhas) cuida disso!
-  </script>
-  
-  <!-- ÁLBUM 2: Grid Uniforme -->
-  <div class="album-card">
-    <div class="album-header">
-      <div class="album-info-wrapper">
-        <div class="album-icon blue">
-          <i class="ti ti-robot"></i>
-        </div>
-        <div class="album-details">
-          <h2>Robótica Educacional 2026</h2>
-          <div class="album-meta">
-            <span>6 fotos &middot; Abril &mdash; Maio 2026</span>
-            <div class="album-tags">
-              <span class="tag-pill">Robótica</span>
-              <span class="tag-pill">2025</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <a href="#" class="btn-ver-album"><i class="ti ti-eye"></i> Ver álbum</a>
-    </div>
-
-    <!-- Mosaico Uniforme (4 colunas) -->
     <div class="album-grid grid-uniforme">
-      <a href="#" class="foto-item bg-grad-5">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Montagem Arduino</div>
-          <div class="foto-data">Abr 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item bg-grad-6">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Programação</div>
-          <div class="foto-data">Abr 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item bg-grad-1">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Teste de projeto</div>
-          <div class="foto-data">Mai 2026</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item more-photos">
-        <div class="foto-item-content">
-          <div class="foto-titulo">+3 fotos</div>
-        </div>
-      </a>
+      {% for foto in fotos|slice:":4" %}
+        {% if forloop.last and fotos|length > 4 %}
+          <a href="#" class="foto-item more-photos" data-src="{{ foto.imagem.url }}" style="background-image:url('{{ foto.imagem.url }}');">
+            <div class="foto-item-content"><div class="foto-titulo">+{{ fotos|length|add:"-3" }} fotos</div></div>
+          </a>
+        {% else %}
+          <a href="#" class="foto-item bg-grad-{% cycle 1 2 3 4 5 6 %}" data-src="{{ foto.imagem.url }}" style="background-image:url('{{ foto.imagem.url }}');">
+            <div class="foto-item-content">
+              <div class="foto-titulo">{{ foto.nome_original|default:album.nome|truncatechars:28 }}</div>
+              <div class="foto-data">{{ foto.enviado_em|date:"M Y" }}</div>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
+  {% endwith %}{% endfor %}
 
-  <!-- ÁLBUM 3: Grid Uniforme -->
+  {% if soltas %}
   <div class="album-card">
     <div class="album-header">
       <div class="album-info-wrapper">
-        <div class="album-icon" style="background: #fdf0f4; color: #d81b60;">
-          <i class="ti ti-trophy"></i>
-        </div>
-        <div class="album-details">
-          <h2>SECITEX 2025 — Apresentações</h2>
-          <div class="album-meta">
-            <span>5 fotos &middot; Novembro 2026</span>
-            <div class="album-tags">
-              <span class="tag-pill">Eventos</span>
-              <span class="tag-pill">2025</span>
-            </div>
-          </div>
-        </div>
+        <div class="album-icon blue"><i class="ti ti-photo"></i></div>
+        <div class="album-details"><h2>Outras fotos</h2></div>
       </div>
-      <a href="#" class="btn-ver-album"><i class="ti ti-eye"></i> Ver álbum</a>
     </div>
-
-    <!-- Mosaico Uniforme -->
-    <div class="album-grid grid-uniforme">
-      <a href="#" class="foto-item bg-grad-4">
+    <div class="album-grid grid-uniforme" style="grid-auto-rows: 1fr;">
+      {% for foto in soltas %}
+      <a href="#" class="foto-item bg-grad-{% cycle 1 2 3 4 5 6 %}" data-src="{{ foto.imagem.url }}" style="background-image:url('{{ foto.imagem.url }}');">
         <div class="foto-item-content">
-          <div class="foto-titulo">Abertura SECITEX</div>
-          <div class="foto-data">Nov 2025</div>
+          <div class="foto-titulo">{{ foto.nome_original|default:"Foto"|truncatechars:28 }}</div>
+          <div class="foto-data">{{ foto.enviado_em|date:"M Y" }}</div>
         </div>
       </a>
-      <a href="#" class="foto-item bg-grad-2">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Apresentação oral</div>
-          <div class="foto-data">Nov 2025</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item bg-grad-3">
-        <div class="foto-item-content">
-          <div class="foto-titulo">Entrega de prêmio</div>
-          <div class="foto-data">Nov 2025</div>
-        </div>
-      </a>
-      <a href="#" class="foto-item more-photos">
-        <div class="foto-item-content">
-          <div class="foto-titulo">+2 fotos</div>
-        </div>
-      </a>
+      {% endfor %}
     </div>
   </div>
+  {% endif %}
 
-  <!-- CAIXA DE RELATO -->
-  <div class="relato-box">
-    <div class="relato-box-header">
-      <div class="relato-icon">
-        <i class="ti ti-message-circle"></i>
-      </div>
-      <div class="relato-title">
-        <h3>Deixe um relato sobre as fotos</h3>
-        <p>Compartilhe uma memória, conte onde você está hoje, o que o projeto significou para você.</p>
-      </div>
-    </div>
-    
-    <textarea class="relato-textarea" id="relatoInput" placeholder="Escreva seu relato aqui..." maxlength="500"></textarea>
-    
-    <div class="relato-footer">
-      <div class="char-count"><span id="charCount">0</span>/500 caracteres</div>
-      <button class="btn-publicar">
-        <i class="ti ti-send"></i> Publicar relato
-      </button>
-    </div>
-  </div>
-
+  {% if not albuns and not soltas %}{% if busca %}<div style="text-align:center;padding:60px 24px;color:#777;"><h3>Nada encontrado para "{{ busca }}"</h3></div>{% else %}
+  <div style="text-align:center; padding:80px 24px; color:#777;">
+    <i class="ti ti-photo-off" style="font-size:56px; display:block; margin-bottom:12px; color:#ccc;"></i>
+    <h3>Ainda não há fotos publicadas</h3>
+    <p>As fotos enviadas pelas alunas e pela coordenação aparecerão aqui.</p>
+  </div>{% endif %}
+  {% endif %}
 
   <!-- LIGHTBOX MODAL -->
   <div class="lightbox-modal" id="lightboxModal">

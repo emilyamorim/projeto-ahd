@@ -346,3 +346,29 @@ def editar_perfil_professor_view(request):
 
     return render(request, 'painel/editar_perfil.html')
 
+
+
+
+def historico_view(request):
+    """Histórico público das alunas aprovadas (filtros por tipo, eixo e nome)."""
+    tipo = request.GET.get('tipo', 'bolsista')
+    if tipo not in ('bolsista', 'cursista'):
+        tipo = 'bolsista'
+    eixo = request.GET.get('eixo', '')
+    busca = request.GET.get('q', '').strip()
+
+    qs = (AlunaPerfil.objects
+          .filter(is_aprovada=True, tipo_participacao=tipo)
+          .select_related('usuario').prefetch_related('eixos')
+          .order_by('usuario__first_name', 'usuario__last_name'))
+    if eixo.isdigit():
+        qs = qs.filter(eixos__id=int(eixo))
+    if busca:
+        from django.db.models import Q
+        qs = qs.filter(Q(usuario__first_name__icontains=busca) | Q(usuario__last_name__icontains=busca))
+
+    return render(request, 'publico/historico.html', {
+        'perfis': qs.distinct(),
+        'eixos': Eixo.objects.order_by('id'),
+        'tipo': tipo, 'eixo': eixo, 'busca': busca,
+    })

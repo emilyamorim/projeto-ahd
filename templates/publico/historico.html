@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- HEADER ROXO -->
 <div class="historico-header">
   <div class="historico-header-inner">
     <h1 class="historico-title">
@@ -17,109 +16,48 @@
       Histórico das alunas
     </h1>
 
-    <div class="historico-controls">
+    <form method="get" class="historico-controls" id="form-filtros">
+      <input type="hidden" name="tipo" value="{{ tipo }}" id="campo-tipo">
       <div class="search-input-wrapper">
         <i class="ti ti-search search-icon"></i>
-        <input type="text" placeholder="Buscar aluna...">
+        <input type="text" name="q" value="{{ busca }}" placeholder="Buscar aluna...">
       </div>
       <div class="filter-wrapper">
-        <select class="eixo-filter">
+        <select class="eixo-filter" name="eixo" onchange="this.form.submit()">
           <option value="">Todos os Eixos</option>
-          <option value="1">Eixo 1 - Letramento Digital</option>
-          <option value="2">Eixo 2 - Robótica Educacional</option>
-          <option value="3">Eixo 3 - Olimpíadas do Conhecimento</option>
-          <option value="4">Eixo 4 - Eventos para Formação Integral</option>
-          <option value="5">Eixo 5 - Pesquisa Científica</option>
-          <option value="6">Eixo 6 - Acompanhamento das Egressas</option>
-          <option value="7">Eixo 7 - Divulgação das Atividades</option>
+          {% for e in eixos %}
+            <option value="{{ e.id }}" {% if eixo == e.id|stringformat:"s" %}selected{% endif %}>{{ e.nome }}</option>
+          {% endfor %}
         </select>
       </div>
       <div class="type-toggle">
-        <button class="active">Bolsistas</button>
-        <button>Cursistas</button>
+        <button type="submit" onclick="document.getElementById('campo-tipo').value='bolsista'" class="{% if tipo == 'bolsista' %}active{% endif %}">Bolsistas</button>
+        <button type="submit" onclick="document.getElementById('campo-tipo').value='cursista'" class="{% if tipo == 'cursista' %}active{% endif %}">Cursistas</button>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 
 <div class="historico-container">
-  
-  <!-- CARD 1 (Expandido inicialmente para mostrar o design) -->
-  <div class="aluna-card-wrap expanded">
-    <div class="aluna-card-header">
-      <div class="aluna-avatar-large">AH</div>
-      <div class="aluna-info-main">
-        <div class="aluna-name-row">
-          <h2 class="aluna-name">Adi Hillary Soares de Oliveira</h2>
-          <span class="aluna-eixo-badge">Eixo 2 - Robótica</span>
-        </div>
-        <div class="aluna-meta-row">
-          <div class="aluna-meta-item">
-            <i class="ti ti-map-pin"></i> Goianinha, RN
-          </div>
-          <div class="aluna-meta-item">
-            <i class="ti ti-school"></i> IFRN - Campus Canguaretama
-          </div>
-          <div class="aluna-meta-item">
-            <i class="ti ti-calendar"></i> Ingressa em 2025
-          </div>
-        </div>
-      </div>
-      <button class="btn-toggle-details" onclick="toggleCard(this)">
-        <span class="btn-text">Recolher</span>
-        <i class="ti ti-chevron-down"></i>
-      </button>
-    </div>
-    
-    <div class="aluna-card-body">
-      <div class="aluna-details-grid">
-        <div class="aluna-detail-item">
-          <span class="aluna-detail-label">Data de nascimento</span>
-          <span class="aluna-detail-value">• a preencher</span>
-        </div>
-        <div class="aluna-detail-item">
-          <span class="aluna-detail-label">Escola</span>
-          <span class="aluna-detail-value">IFRN - Campus Canguaretama</span>
-        </div>
-        <div class="aluna-detail-item">
-          <span class="aluna-detail-label">Ano de ingresso</span>
-          <span class="aluna-detail-value">2025</span>
-        </div>
-      </div>
-
-      <div class="timeline-section-title">Atividades registradas</div>
-      <div class="timeline-list">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">Abril 2025</span>
-            <span class="timeline-text">Ingresso no projeto como bolsista — Robótica Educacional</span>
-          </div>
-        </div>
-      </div>
-      <a href="#" class="btn btn-outline btn-sm ver-relatos-btn" style="margin-top: 16px; display: inline-flex; align-items: center; gap: 8px;"><i class="ti ti-message-circle"></i> Ver relatos desta aluna</a>
-    </div>
-  </div>
-
-  <!-- CARD 2 (Recolhido) -->
+  {% for p in perfis %}
   <div class="aluna-card-wrap">
     <div class="aluna-card-header">
-      <div class="aluna-avatar-large">CA</div>
+      <div class="aluna-avatar-large" style="overflow:hidden;">
+        {% if p.usuario.foto_perfil %}
+          <img src="{{ p.usuario.foto_perfil.url }}" alt="" style="width:100%;height:100%;object-fit:cover;">
+        {% else %}
+          {{ p.usuario.first_name|first|upper }}{{ p.usuario.last_name|first|upper }}
+        {% endif %}
+      </div>
       <div class="aluna-info-main">
         <div class="aluna-name-row">
-          <h2 class="aluna-name">Cassiane do Nascimento Silva</h2>
-          <span class="aluna-eixo-badge">Eixo 2 - Robótica</span>
+          <h2 class="aluna-name"><a href="{% url 'perfil_aluna' p.usuario.pk %}" style="color:inherit; text-decoration:none;">{{ p.usuario.get_full_name|default:p.usuario.username }}</a></h2>
+          {% for e in p.eixos.all %}<span class="aluna-eixo-badge">{{ e.nome }}</span>{% endfor %}
         </div>
         <div class="aluna-meta-row">
-          <div class="aluna-meta-item">
-            <i class="ti ti-map-pin"></i> Goianinha, RN
-          </div>
-          <div class="aluna-meta-item">
-            <i class="ti ti-school"></i> IFRN - Campus Canguaretama
-          </div>
-          <div class="aluna-meta-item">
-            <i class="ti ti-calendar"></i> Ingressa em 2025
-          </div>
+          {% if p.cidade %}<div class="aluna-meta-item"><i class="ti ti-map-pin"></i> {{ p.cidade }}</div>{% endif %}
+          {% if p.escola %}<div class="aluna-meta-item"><i class="ti ti-school"></i> {{ p.escola }}</div>{% endif %}
+          {% if p.ano_ingresso %}<div class="aluna-meta-item"><i class="ti ti-calendar"></i> Ingressou em {{ p.ano_ingresso }}</div>{% endif %}
         </div>
       </div>
       <button class="btn-toggle-details" onclick="toggleCard(this)">
@@ -127,49 +65,32 @@
         <i class="ti ti-chevron-down"></i>
       </button>
     </div>
-    
+
     <div class="aluna-card-body">
       <div class="aluna-details-grid">
         <div class="aluna-detail-item">
-          <span class="aluna-detail-label">Data de nascimento</span>
-          <span class="aluna-detail-value">• a preencher</span>
+          <span class="aluna-detail-label">Participação</span>
+          <span class="aluna-detail-value">{{ p.get_tipo_participacao_display }}</span>
         </div>
         <div class="aluna-detail-item">
           <span class="aluna-detail-label">Escola</span>
-          <span class="aluna-detail-value">IFRN - Campus Canguaretama</span>
+          <span class="aluna-detail-value">{{ p.escola|default:"—" }}</span>
         </div>
         <div class="aluna-detail-item">
           <span class="aluna-detail-label">Ano de ingresso</span>
-          <span class="aluna-detail-value">2025</span>
+          <span class="aluna-detail-value">{{ p.ano_ingresso|default:"—" }}</span>
         </div>
       </div>
-
-      <div class="timeline-section-title">Atividades registradas</div>
-      <div class="timeline-list">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">Abril 2025</span>
-            <span class="timeline-text">Ingresso no projeto como bolsista — Robótica Educacional</span>
-          </div>
-        </div>
-      </div>
-      <a href="#" class="btn btn-outline btn-sm ver-relatos-btn" style="margin-top: 16px; display: inline-flex; align-items: center; gap: 8px;"><i class="ti ti-message-circle"></i> Ver relatos desta aluna</a>
+      <a href="{% url 'perfil_aluna' p.usuario.pk %}" class="btn btn-outline btn-sm" style="margin-top: 16px; display: inline-flex; align-items: center; gap: 8px;"><i class="ti ti-user"></i> Ver perfil</a>
     </div>
   </div>
-
-  <!-- EMPTY STATE (Oculto por padrão) -->
-  <div class="empty-state" style="display: none; text-align: center; padding: 60px 24px; background: var(--branco); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.15);">
+  {% empty %}
+  <div style="text-align: center; padding: 60px 24px; background: var(--branco); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.15);">
     <i class="ti ti-mood-empty" style="font-size: 56px; color: #ccc; margin-bottom: 16px; display: block;"></i>
     <h3 style="font-size: 20px; color: var(--preto); margin-bottom: 8px;">Nenhuma aluna encontrada</h3>
     <p style="color: #666; font-size: 15px;">Tente buscar por outro nome ou limpar os filtros atuais.</p>
   </div>
-
-  <!-- LOAD MORE -->
-  <button class="btn-load-more">
-    + 41 bolsistas cadastradas na lista completa · <span>Ver todas</span>
-  </button>
-
+  {% endfor %}
 </div>
 {% endblock %}
 

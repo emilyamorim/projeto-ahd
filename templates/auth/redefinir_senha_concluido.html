@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Senha alterada - Ampliando Horizontes Digitais{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2><i class="ti ti-circle-check"></i> Senha alterada!</h2>
+      <p>Sua nova senha já está valendo. Agora é só entrar.</p>
+    </div>
+    <div class="auth-body">
+      <a href="{% url 'login' %}" class="btn-auth-outline" style="text-align:center;text-decoration:none;display:block;">Ir para o Login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

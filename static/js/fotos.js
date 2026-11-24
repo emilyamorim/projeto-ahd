@@ -59,6 +59,15 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Configurar Modal
       lightboxContent.className = 'lightbox-content ' + (bgClass || 'bg-grad-1');
+      const src = this.dataset.src;
+      if (src) {
+        lightboxContent.style.backgroundImage = "url('" + src + "')";
+        lightboxContent.style.backgroundSize = 'contain';
+        lightboxContent.style.backgroundRepeat = 'no-repeat';
+        lightboxContent.style.backgroundPosition = 'center';
+      } else {
+        lightboxContent.style.backgroundImage = '';
+      }
       lightboxTitulo.textContent = titulo;
       lightboxData.textContent = data;
       
@@ -159,6 +168,15 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Configurar Modal
       lightboxContent.className = 'lightbox-content ' + (bgClass || 'bg-grad-1');
+      const src = this.dataset.src;
+      if (src) {
+        lightboxContent.style.backgroundImage = "url('" + src + "')";
+        lightboxContent.style.backgroundSize = 'contain';
+        lightboxContent.style.backgroundRepeat = 'no-repeat';
+        lightboxContent.style.backgroundPosition = 'center';
+      } else {
+        lightboxContent.style.backgroundImage = '';
+      }
       lightboxTitulo.textContent = titulo;
       lightboxData.textContent = data;
       
@@ -275,6 +293,15 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Configurar Modal
       lightboxContent.className = 'lightbox-content ' + (bgClass || 'bg-grad-1');
+      const src = this.dataset.src;
+      if (src) {
+        lightboxContent.style.backgroundImage = "url('" + src + "')";
+        lightboxContent.style.backgroundSize = 'contain';
+        lightboxContent.style.backgroundRepeat = 'no-repeat';
+        lightboxContent.style.backgroundPosition = 'center';
+      } else {
+        lightboxContent.style.backgroundImage = '';
+      }
       lightboxTitulo.textContent = titulo;
       lightboxData.textContent = data;
       
@@ -377,6 +404,15 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Configurar Modal
       lightboxContent.className = 'lightbox-content ' + (bgClass || 'bg-grad-1');
+      const src = this.dataset.src;
+      if (src) {
+        lightboxContent.style.backgroundImage = "url('" + src + "')";
+        lightboxContent.style.backgroundSize = 'contain';
+        lightboxContent.style.backgroundRepeat = 'no-repeat';
+        lightboxContent.style.backgroundPosition = 'center';
+      } else {
+        lightboxContent.style.backgroundImage = '';
+      }
       lightboxTitulo.textContent = titulo;
       lightboxData.textContent = data;
       
