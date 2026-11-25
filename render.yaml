@@ -32,7 +32,7 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
-      # Armazenamento permanente das fotos (S3 / Cloudflare R2 / Backblaze)
+      # Armazenamento permanente das fotos (Supabase Storage / Cloudflare R2 / S3)
       - key: AWS_STORAGE_BUCKET_NAME
         sync: false
       - key: AWS_ACCESS_KEY_ID
@@ -40,6 +40,8 @@ services:
       - key: AWS_SECRET_ACCESS_KEY
         sync: false
       - key: AWS_S3_ENDPOINT_URL
+        sync: false
+      - key: AWS_S3_REGION_NAME
         sync: false
       - key: AWS_S3_CUSTOM_DOMAIN
         sync: false

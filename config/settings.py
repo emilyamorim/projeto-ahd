@@ -116,6 +116,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
         conn_max_age=600,
+        ssl_require=os.getenv("DATABASE_URL", "").startswith(("postgres://", "postgresql://")),
     )
 }
 
@@ -193,6 +194,8 @@ if USA_ARMAZENAMENTO_EXTERNO:
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = None
     AWS_S3_FILE_OVERWRITE = False
+    AWS_S3_ADDRESSING_STYLE = os.getenv("AWS_S3_ADDRESSING_STYLE", "path")
+    AWS_S3_SIGNATURE_VERSION = "s3v4"
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
