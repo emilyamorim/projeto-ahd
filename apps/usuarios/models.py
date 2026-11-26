@@ -21,6 +21,15 @@ class Usuario(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name}".strip() or self.username
 
+    def esta_aguardando_aprovacao(self):
+        """Retorna True se a aluna ainda não foi aprovada pela coordenação."""
+        if self.is_superuser or self.tipo != 'aluna':
+            return False
+        try:
+            return not self.perfil_aluna.is_aprovada
+        except AlunaPerfil.DoesNotExist:
+            return True
+
 
 class Eixo(models.Model):
     nome = models.CharField(max_length=100)

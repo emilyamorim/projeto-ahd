@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from .models import Noticia, Relato
@@ -36,6 +37,10 @@ def meus_relatos_view(request):
     if request.user.tipo != 'aluna':
         messages.error(request, 'Página restrita para alunas.')
         return redirect('home')
+    if request.user.esta_aguardando_aprovacao():
+        logout(request)
+        messages.warning(request, 'Seu cadastro ainda está em análise pela coordenação. Aguarde a aprovação para acessar sua conta.')
+        return redirect('login')
 
     if request.method == 'POST':
         conteudo = request.POST.get('conteudo')

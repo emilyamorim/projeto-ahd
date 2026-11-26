@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -12,7 +13,11 @@ TIPOS_PERMITIDOS = ("image/jpeg", "image/png", "image/webp")
 
 @login_required
 def minhas_fotos(request):
-    
+    if request.user.esta_aguardando_aprovacao():
+        logout(request)
+        messages.warning(request, 'Seu cadastro ainda está em análise pela coordenação. Aguarde a aprovação para acessar sua conta.')
+        return redirect('login')
+
     fotos = Foto.objects.filter(usuario=request.user)
     form = UploadFotoForm(usuario=request.user)
     contexto = {
@@ -26,7 +31,11 @@ def minhas_fotos(request):
 @login_required
 @require_POST
 def enviar_foto(request):
-    
+    if request.user.esta_aguardando_aprovacao():
+        logout(request)
+        messages.warning(request, 'Seu cadastro ainda está em análise pela coordenação. Aguarde a aprovação para acessar sua conta.')
+        return redirect('login')
+
     album = None
     album_id = request.POST.get("album")
     if album_id:

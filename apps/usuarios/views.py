@@ -3,7 +3,7 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.db import transaction
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
@@ -48,6 +48,16 @@ class CustomLoginView(LoginView):
     """Login que redireciona cada usuário para a sua área conforme o tipo."""
     template_name = "auth/login.html"
     redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if user.esta_aguardando_aprovacao():
+            form.add_error(
+                None,
+                "Seu cadastro ainda está em análise pela coordenação. Aguarde a aprovação para acessar sua conta.",
+            )
+            return self.form_invalid(form)
+        return super().form_valid(form)
 
     def get_success_url(self):
         # Respeita o ?next= quando a pessoa tentou acessar uma página protegida
@@ -255,6 +265,10 @@ def meu_perfil_aluna_view(request):
     if request.user.tipo != 'aluna':
         messages.error(request, 'Página restrita para alunas.')
         return redirect('home')
+    if request.user.esta_aguardando_aprovacao():
+        logout(request)
+        messages.warning(request, 'Seu cadastro ainda está em análise pela coordenação. Aguarde a aprovação para acessar sua conta.')
+        return redirect('login')
 
     user = request.user
     perfil, _ = AlunaPerfil.objects.get_or_create(usuario=user)

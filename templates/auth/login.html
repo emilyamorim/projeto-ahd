@@ -25,7 +25,15 @@
         
         {% if form.errors %}
           <div style="background-color: #fdf5f8; border: 1px solid var(--rosa); color: var(--rosa); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
-            E-mail ou senha incorretos. Tente novamente.
+            {% for error in form.non_field_errors %}
+              {% if "análise" in error %}
+                <div>{{ error }}</div>
+              {% else %}
+                <div>E-mail ou senha incorretos. Tente novamente.</div>
+              {% endif %}
+            {% empty %}
+              E-mail ou senha incorretos. Tente novamente.
+            {% endfor %}
           </div>
         {% endif %}
 
