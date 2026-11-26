@@ -222,18 +222,27 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# E-mail: se EMAIL_HOST estiver definido no .env, envia por SMTP de verdade.
-# Sem EMAIL_HOST (desenvolvimento), os e-mails aparecem no terminal.
-EMAIL_HOST = os.getenv("EMAIL_HOST", "")
-if EMAIL_HOST:
+# E-mail:
+# 1) Se BREVO_API_KEY estiver definida, envia via API HTTPS do Brevo (porta 443 — funciona no Render Free)
+# 2) Senão, se EMAIL_HOST estiver definido, envia por SMTP
+# 3) Senão (desenvolvimento), os e-mails aparecem no terminal
+BREVO_API_KEY = os.getenv("BREVO_API_KEY", "").strip()
+EMAIL_HOST = os.getenv("EMAIL_HOST", "").strip()
+if BREVO_API_KEY:
+    EMAIL_BACKEND = "config.email_backend.BrevoEmailBackend"
+elif EMAIL_HOST:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
     EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
-    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "").strip()
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "").strip()
+    EMAIL_TIMEOUT = 15
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Ampliando Horizontes Digitais <nao-responda@ahd.local>")
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "Ampliando Horizontes Digitais <nao-responda@ahd.local>",
+)
 
 # O link de redefinição de senha vale por 3 horas
 PASSWORD_RESET_TIMEOUT = 60 * 60 * 3
@@ -270,6 +279,11 @@ LOGGING = {
             "propagate": False,
         },
         "apps": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "config": {
             "handlers": ["console"],
             "level": "WARNING",
             "propagate": False,

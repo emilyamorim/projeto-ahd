@@ -24,6 +24,8 @@ services:
       - key: DJANGO_SUPERUSER_PASSWORD
         sync: false
       # E-mail (recuperação de senha)
+      - key: BREVO_API_KEY
+        sync: false
       - key: EMAIL_HOST
         sync: false
       - key: EMAIL_HOST_USER
