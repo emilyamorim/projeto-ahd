@@ -26,11 +26,21 @@
         {% endif %}
         <div class="form-group">
           <label for="id_new_password1">Nova senha <span class="required">*</span></label>
-          <input type="password" id="id_new_password1" name="new_password1" autocomplete="new-password" required>
+          <div class="password-wrapper">
+            <input type="password" id="id_new_password1" name="new_password1" autocomplete="new-password" required>
+            <button type="button" class="btn-toggle-password" data-target="id_new_password1" aria-label="Mostrar senha">
+              <i class="ti ti-eye"></i>
+            </button>
+          </div>
         </div>
         <div class="form-group">
           <label for="id_new_password2">Confirmar nova senha <span class="required">*</span></label>
-          <input type="password" id="id_new_password2" name="new_password2" autocomplete="new-password" required>
+          <div class="password-wrapper">
+            <input type="password" id="id_new_password2" name="new_password2" autocomplete="new-password" required>
+            <button type="button" class="btn-toggle-password" data-target="id_new_password2" aria-label="Mostrar senha">
+              <i class="ti ti-eye"></i>
+            </button>
+          </div>
         </div>
         <button type="submit" class="btn-auth-outline"><i class="ti ti-device-floppy"></i> Salvar nova senha</button>
       </form>
@@ -46,4 +56,23 @@
     {% endif %}
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btn-toggle-password[data-target]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var input = document.getElementById(btn.getAttribute("data-target"));
+        var icon = btn.querySelector("i");
+        if (!input || !icon) return;
+        var mostrar = input.getAttribute("type") === "password";
+        input.setAttribute("type", mostrar ? "text" : "password");
+        icon.classList.toggle("ti-eye", !mostrar);
+        icon.classList.toggle("ti-eye-off", mostrar);
+        btn.setAttribute("aria-label", mostrar ? "Ocultar senha" : "Mostrar senha");
+      });
+    });
+  });
+</script>
 {% endblock %}

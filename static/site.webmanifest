@@ -1,0 +1,21 @@
+{
+  "name": "Ampliando Horizontes Digitais",
+  "short_name": "Projeto AHD",
+  "description": "Projeto do IFRN Campus Canguaretama voltado ao protagonismo feminino na tecnologia, robótica e ciência.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#981869",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/static/img/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/img/logo_simbolo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

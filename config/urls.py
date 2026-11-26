@@ -15,6 +15,7 @@ from django.db import connection
 from django.http import HttpResponse
 from django.urls import include, path, re_path
 from django.conf import settings
+from django.views.generic.base import RedirectView
 from django.views.static import serve
 
 
@@ -31,6 +32,7 @@ def health_check(request):
 urlpatterns = [
     # Verificação de saúde / keep-alive
     path("health/", health_check, name="health"),
+    path("favicon.ico", RedirectView.as_view(url="/static/img/favicon.ico", permanent=True)),
 
     # Painel de administração padrão do Django
     # Acesso: http://127.0.0.1:8000/admin/
