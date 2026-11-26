@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -7,6 +9,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from .models import AlunaPerfil, Eixo
 
+logger = logging.getLogger(__name__)
 Usuario = get_user_model()
 
 
@@ -233,10 +236,16 @@ def _atualizar_foto_usuario(request, user):
             messages.error(request, 'A foto deve ter no máximo 5 MB.')
             return False
         if user.foto_perfil:
-            user.foto_perfil.delete(save=False)
+            try:
+                user.foto_perfil.delete(save=False)
+            except Exception:
+                logger.warning("Não foi possível remover a foto anterior do storage.", exc_info=True)
         user.foto_perfil = foto
     elif request.POST.get('remover_foto') == '1' and user.foto_perfil:
-        user.foto_perfil.delete(save=False)
+        try:
+            user.foto_perfil.delete(save=False)
+        except Exception:
+            logger.warning("Não foi possível remover a foto anterior do storage.", exc_info=True)
         user.foto_perfil = None
     return True
 

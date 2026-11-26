@@ -11,11 +11,27 @@ Como funciona:
 """
 
 from django.contrib import admin
+from django.db import connection
+from django.http import HttpResponse
 from django.urls import include, path, re_path
 from django.conf import settings
 from django.views.static import serve
 
+
+def health_check(request):
+    """Rota leve para monitores de uptime (ex.: UptimeRobot) manterem o Render e o Supabase ativos."""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+    except Exception:
+        pass
+    return HttpResponse("ok", content_type="text/plain")
+
+
 urlpatterns = [
+    # Verificação de saúde / keep-alive
+    path("health/", health_check, name="health"),
+
     # Painel de administração padrão do Django
     # Acesso: http://127.0.0.1:8000/admin/
     path("admin/", admin.site.urls),

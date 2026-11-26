@@ -182,19 +182,28 @@ STORAGES = {
 # cada deploy, então fotos precisam ficar num armazenamento externo compatível com
 # S3 (Cloudflare R2, Backblaze B2, Supabase Storage, AWS S3...).
 # Para ativar, defina AWS_STORAGE_BUCKET_NAME e as demais variáveis AWS_* no ambiente.
-USA_ARMAZENAMENTO_EXTERNO = bool(os.getenv("AWS_STORAGE_BUCKET_NAME"))
+USA_ARMAZENAMENTO_EXTERNO = bool(os.getenv("AWS_STORAGE_BUCKET_NAME", "").strip())
 if USA_ARMAZENAMENTO_EXTERNO:
+    # Compatibilidade do boto3 >= 1.36 com provedores S3 como Supabase Storage e Cloudflare R2
+    # (sem isso, o boto3 envia checksum CRC32 em chunked encoding e o Supabase retorna erro 500/501)
+    os.environ.setdefault("AWS_REQUEST_CHECKSUM_CALCULATION", "when_required")
+    os.environ.setdefault("AWS_RESPONSE_CHECKSUM_VALIDATION", "when_required")
+
     STORAGES["default"] = {"BACKEND": "storages.backends.s3.S3Storage"}
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL") or None
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME") or None
-    AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN") or None
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "").strip()
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "").strip()
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "").strip()
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "").strip().rstrip("/") or None
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "").strip() or None
+    _custom_domain = os.getenv("AWS_S3_CUSTOM_DOMAIN", "").strip().rstrip("/")
+    for _prefix in ("https://", "http://"):
+        if _custom_domain.startswith(_prefix):
+            _custom_domain = _custom_domain[len(_prefix):]
+    AWS_S3_CUSTOM_DOMAIN = _custom_domain or None
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = None
     AWS_S3_FILE_OVERWRITE = False
-    AWS_S3_ADDRESSING_STYLE = os.getenv("AWS_S3_ADDRESSING_STYLE", "path")
+    AWS_S3_ADDRESSING_STYLE = os.getenv("AWS_S3_ADDRESSING_STYLE", "path").strip()
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
@@ -243,3 +252,27 @@ if not DEBUG:
     # (ex.: 31536000 = 1 ano) pela variável SECURE_HSTS_SECONDS.
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "3600"))
     SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+# Logs no console (essencial para ver erros 500 na aba Logs do Render com DEBUG=False)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "apps": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+    },
+}
