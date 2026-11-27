@@ -708,3 +708,26 @@
     justify-content: center;
   }
 }
+
+@media (max-width: 600px) {
+  .dashboard-container {
+    padding: 0 12px;
+    margin: 16px auto;
+    gap: 16px;
+  }
+  .dashboard-content {
+    padding: 16px;
+  }
+  .panel-card {
+    padding: 16px;
+  }
+  .panel-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+}

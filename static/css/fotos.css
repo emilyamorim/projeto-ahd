@@ -301,10 +301,12 @@
   grid-row: 1 / 3;
 }
 
-/* Variação 2: Grid Uniforme (4 colunas iguais) */
+/* Variação 2: Grid Uniforme (4 colunas iguais, cresce automaticamente) */
 .grid-uniforme {
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 1fr;
+  grid-template-rows: auto;
+  grid-auto-rows: 220px;
+  height: auto;
 }
 
 /* Estilo individual de cada foto no Grid */
@@ -318,18 +320,29 @@
   align-items: flex-end;
   color: var(--branco);
   text-decoration: none;
+  min-height: 200px;
+}
+.foto-item-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
 }
 .foto-item::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  height: 55%;
+  background: linear-gradient(to top, rgba(0,0,0,0.78), transparent);
   pointer-events: none;
+  z-index: 1;
 }
 .foto-item-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding: 16px;
 }
 .foto-titulo {
@@ -483,10 +496,24 @@
   }
 }
 @media (max-width: 600px) {
+  .fotos-container {
+    padding: 0 14px 48px;
+  }
+  .album-card {
+    padding: 16px;
+  }
+  .toolbar-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
   .grid-destaque, .grid-uniforme {
     grid-template-columns: 1fr;
+    grid-auto-rows: 230px;
   }
   .grid-destaque .foto-item:nth-child(n) { grid-column: 1 / 2; }
+  .grid-uniforme .foto-item {
+    height: 230px;
+  }
 }
 
 /* Efeito Hover nas Fotos */
@@ -494,14 +521,6 @@
   position: relative;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.foto-item::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0);
-  transition: background 0.3s ease;
-  z-index: 0;
 }
 .foto-item:hover {
   transform: translateY(-4px);

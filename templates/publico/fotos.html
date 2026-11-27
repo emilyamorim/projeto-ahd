@@ -5,7 +5,7 @@
 
 {% block extra_css %}
 <!-- CSS Específico desta página -->
-<link rel="stylesheet" href="{% static 'css/fotos.css' %}">
+<link rel="stylesheet" href="{% static 'css/fotos.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -60,11 +60,13 @@
     <div class="album-grid grid-uniforme">
       {% for foto in fotos|slice:":4" %}
         {% if forloop.last and fotos|length > 4 %}
-          <a href="#" class="foto-item more-photos" data-src="{{ foto.imagem.url }}" style="background-image:url('{{ foto.imagem.url }}');">
+          <a href="#" class="foto-item more-photos" data-src="{{ foto.imagem.url }}">
+            <img class="foto-item-img" src="{{ foto.imagem.url }}" alt="{{ foto.nome_original|default:album.nome }}" loading="lazy">
             <div class="foto-item-content"><div class="foto-titulo">+{{ fotos|length|add:"-3" }} fotos</div></div>
           </a>
         {% else %}
-          <a href="#" class="foto-item bg-grad-{% cycle 1 2 3 4 5 6 %}" data-src="{{ foto.imagem.url }}" style="background-image:url('{{ foto.imagem.url }}');">
+          <a href="#" class="foto-item bg-grad-{% cycle 1 2 3 4 5 6 %}" data-src="{{ foto.imagem.url }}">
+            <img class="foto-item-img" src="{{ foto.imagem.url }}" alt="{{ foto.nome_original|default:album.nome }}" loading="lazy">
             <div class="foto-item-content">
               <div class="foto-titulo">{{ foto.nome_original|default:album.nome|truncatechars:28 }}</div>
               <div class="foto-data">{{ foto.enviado_em|date:"M Y" }}</div>
@@ -84,9 +86,10 @@
         <div class="album-details"><h2>Outras fotos</h2></div>
       </div>
     </div>
-    <div class="album-grid grid-uniforme" style="grid-auto-rows: 1fr;">
+    <div class="album-grid grid-uniforme">
       {% for foto in soltas %}
-      <a href="#" class="foto-item bg-grad-{% cycle 1 2 3 4 5 6 %}" data-src="{{ foto.imagem.url }}" style="background-image:url('{{ foto.imagem.url }}');">
+      <a href="#" class="foto-item bg-grad-{% cycle 1 2 3 4 5 6 %}" data-src="{{ foto.imagem.url }}">
+        <img class="foto-item-img" src="{{ foto.imagem.url }}" alt="{{ foto.nome_original|default:'Foto do projeto' }}" loading="lazy">
         <div class="foto-item-content">
           <div class="foto-titulo">{{ foto.nome_original|default:"Foto"|truncatechars:28 }}</div>
           <div class="foto-data">{{ foto.enviado_em|date:"M Y" }}</div>
