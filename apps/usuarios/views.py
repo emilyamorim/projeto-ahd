@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model, logout
 from django.db import transaction
 from django.contrib.auth.views import LoginView
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.urls import reverse
 from .models import AlunaPerfil, Eixo
 
@@ -180,7 +182,34 @@ def aprovar_cadastros_view(request):
             if acao == 'aprovar':
                 perfil.is_aprovada = True
                 perfil.save()
-                messages.success(request, f'Cadastro de {perfil.usuario.first_name} aprovado com sucesso!')
+                if perfil.usuario.email:
+                    login_url = request.build_absolute_uri(reverse('login'))
+                    corpo = render_to_string('auth/email_cadastro_aprovado.txt', {
+                        'nome': perfil.usuario.first_name or perfil.usuario.username,
+                        'login_url': login_url,
+                    })
+                    try:
+                        send_mail(
+                            subject='Cadastro aprovado! Bem-vinda ao Ampliando Horizontes Digitais',
+                            message=corpo,
+                            from_email=None,
+                            recipient_list=[perfil.usuario.email],
+                            fail_silently=False,
+                        )
+                        messages.success(
+                            request,
+                            f'Cadastro de {perfil.usuario.first_name} aprovado com sucesso! E-mail de confirmação enviado.',
+                        )
+                    except Exception:
+                        logger.error(
+                            'Erro ao enviar e-mail de aprovação para %s',
+                            perfil.usuario.email,
+                            exc_info=True,
+                        )
+                        messages.success(request, f'Cadastro de {perfil.usuario.first_name} aprovado com sucesso!')
+                        messages.warning(request, 'Não foi possível enviar o e-mail de aviso automático.')
+                else:
+                    messages.success(request, f'Cadastro de {perfil.usuario.first_name} aprovado com sucesso!')
             elif acao == 'recusar':
                 user = perfil.usuario
                 user.delete()

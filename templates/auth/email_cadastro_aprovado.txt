@@ -1,0 +1,12 @@
+Olá, {{ nome }}!
+
+Temos uma ótima notícia: o seu cadastro no projeto Ampliando Horizontes Digitais foi aprovado pela coordenação!
+
+Agora você já pode acessar a sua área restrita usando o e-mail e a senha que criou no cadastro:
+
+{{ login_url }}
+
+Por lá você poderá completar o seu perfil, adicionar uma foto, enviar fotos das atividades e publicar os seus relatos no projeto.
+
+Seja muito bem-vinda!
+Equipe Ampliando Horizontes Digitais — IFRN Campus Canguaretama
