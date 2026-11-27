@@ -52,12 +52,23 @@
       </div>
       <div class="photo-card-footer">
         <div class="photo-card-title" title="{{ foto.nome_original }}">{{ foto.nome_original|truncatechars:18 }}</div>
-        {% if foto.aprovada %}<span title="Publicada na galeria" style="font-size:11px;color:#1e7a46;"><i class="ti ti-circle-check"></i> Publicada</span>{% else %}<span title="Aguardando aprovação da coordenação" style="font-size:11px;color:#b9770e;"><i class="ti ti-clock"></i> Em análise</span>{% endif %}
+        {% if foto.aprovada %}
+          <span title="Publicada na galeria" style="font-size:11px;color:#1e7a46;"><i class="ti ti-circle-check"></i> Publicada</span>
+        {% elif foto.recusada %}
+          <span title="Foto recusada pela coordenação" style="font-size:11px;color:#c0392b;"><i class="ti ti-circle-x"></i> Recusada</span>
+        {% else %}
+          <span title="Aguardando aprovação da coordenação" style="font-size:11px;color:#b9770e;"><i class="ti ti-clock"></i> Em análise</span>
+        {% endif %}
         <form action="{% url 'excluir_foto' foto.id %}" method="POST" style="display: inline;">
           {% csrf_token %}
           <button type="submit" class="photo-card-btn" aria-label="Excluir" onclick="return confirm('Tem certeza que deseja apagar esta foto?');"><i class="ti ti-trash"></i></button>
         </form>
       </div>
+      {% if foto.recusada and foto.motivo_recusa %}
+      <div style="padding: 8px 10px; background: #fdecea; border-top: 1px solid #f5c6c0; font-size: 12px; color: #922b21; line-height: 1.4;">
+        <strong>Motivo:</strong> {{ foto.motivo_recusa }}
+      </div>
+      {% endif %}
     </div>
     {% empty %}
     <div style="grid-column: 1 / -1; text-align: center; padding: 32px 0; color: #666;">

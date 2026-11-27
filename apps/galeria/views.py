@@ -1,11 +1,18 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from .forms import UploadFotoForm
 from .models import Album, Foto
+
+logger = logging.getLogger(__name__)
 
 TAMANHO_MAXIMO = 5 * 1024 * 1024  
 TIPOS_PERMITIDOS = ("image/jpeg", "image/png", "image/webp")
@@ -94,7 +101,7 @@ def gerenciar_fotos_view(request):
         return redirect('home')
 
     albuns = Album.objects.all().prefetch_related('fotos')
-    fotos_pendentes = Foto.objects.filter(aprovada=False).select_related('usuario', 'album').order_by('-enviado_em')
+    fotos_pendentes = Foto.objects.filter(aprovada=False, recusada=False).select_related('usuario', 'album').order_by('-enviado_em')
 
     context = {
         'albuns': albuns,
@@ -106,19 +113,46 @@ def gerenciar_fotos_view(request):
 @login_required
 @require_POST
 def moderar_foto(request, foto_id):
-    """Aprova (publica) ou recusa (exclui) uma foto enviada por aluna."""
+    """Aprova (publica) ou recusa (com justificativa e e-mail) uma foto enviada por aluna."""
     if not _coordenacao(request.user):
         messages.error(request, 'Acesso restrito à coordenação.')
         return redirect('home')
     foto = get_object_or_404(Foto, id=foto_id)
     if request.POST.get('acao') == 'aprovar':
         foto.aprovada = True
-        foto.save(update_fields=['aprovada'])
+        foto.recusada = False
+        foto.motivo_recusa = ''
+        foto.save(update_fields=['aprovada', 'recusada', 'motivo_recusa'])
         messages.success(request, 'Foto aprovada e publicada na galeria.')
     elif request.POST.get('acao') == 'recusar':
-        foto.imagem.delete(save=False)
-        foto.delete()
-        messages.success(request, 'Foto recusada e removida.')
+        motivo = request.POST.get('motivo', '').strip()
+        foto.aprovada = False
+        foto.recusada = True
+        foto.motivo_recusa = motivo
+        foto.save(update_fields=['aprovada', 'recusada', 'motivo_recusa'])
+        if foto.usuario.email:
+            fotos_url = request.build_absolute_uri(reverse('minhas_fotos'))
+            corpo = render_to_string('auth/email_foto_recusada.txt', {
+                'nome': foto.usuario.first_name or foto.usuario.username,
+                'nome_foto': foto.nome_original or 'Foto enviada',
+                'motivo': motivo,
+                'fotos_url': fotos_url,
+            })
+            try:
+                send_mail(
+                    subject='Aviso sobre a foto enviada — Ampliando Horizontes Digitais',
+                    message=corpo,
+                    from_email=None,
+                    recipient_list=[foto.usuario.email],
+                    fail_silently=False,
+                )
+                messages.success(request, 'Foto recusada e aluna notificada por e-mail.')
+            except Exception:
+                logger.error('Erro ao enviar e-mail de recusa de foto para %s', foto.usuario.email, exc_info=True)
+                messages.success(request, 'Foto recusada com justificativa registrada.')
+                messages.warning(request, 'Não foi possível enviar o e-mail de aviso automático.')
+        else:
+            messages.success(request, 'Foto recusada com justificativa registrada.')
     return redirect('gerenciar_fotos')
 
 

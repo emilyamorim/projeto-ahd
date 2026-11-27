@@ -1,0 +1,12 @@
+Olá, {{ nome }}!
+
+A foto "{{ nome_foto }}" que você enviou para a galeria do projeto Ampliando Horizontes Digitais não pôde ser publicada desta vez.
+
+{% if motivo %}Motivo informado pela coordenação:
+{{ motivo }}
+
+{% endif %}Você pode ver suas fotos e enviar outra imagem pela sua área restrita:
+
+{{ fotos_url }}
+
+Equipe Ampliando Horizontes Digitais — IFRN Campus Canguaretama

@@ -29,6 +29,8 @@ class Foto(models.Model):
     nome_original = models.CharField(max_length=255, blank=True)
     enviado_em = models.DateTimeField(auto_now_add=True)
     aprovada = models.BooleanField(default=False, help_text="Só fotos aprovadas aparecem na galeria pública.")
+    recusada = models.BooleanField(default=False, help_text="Foto recusada pela coordenação.")
+    motivo_recusa = models.TextField(blank=True, default="", help_text="Justificativa exibida para a aluna quando a foto é recusada.")
 
     class Meta:
         ordering =["-enviado_em"]
