@@ -8,7 +8,7 @@
     <h3>Enviar nova foto</h3>
   </div>
 
-  <form action="{% url 'enviar_foto' %}" method="POST" enctype="multipart/form-data">
+  <form action="{% url 'enviar_foto' %}" method="POST" enctype="multipart/form-data" id="formUploadFoto">
     {% csrf_token %}
     <div class="dash-form" style="margin-bottom: 24px;">
       <label>Álbum de destino (opcional)</label>
@@ -29,6 +29,10 @@
         <i class="ti ti-plus"></i> Selecionar fotos
       </button>
     </div>
+    <div id="selectedPreview" style="display: none; margin-top: 14px; gap: 10px; flex-wrap: wrap; align-items: center;"></div>
+    <p id="uploadErro" role="alert" style="display: none; margin-top: 10px; font-size: 13px; color: #c0392b; align-items: center; gap: 6px;">
+      <i class="ti ti-alert-circle"></i> <span></span>
+    </p>
     <div style="margin-top: 16px; text-align: right;">
       <button type="submit" class="btn-sm-primary" id="btnSubmitForm"><i class="ti ti-send"></i> Enviar Arquivos</button>
     </div>
@@ -38,7 +42,7 @@
 <div class="panel-card">
   <div class="panel-header">
     <h3>Fotos enviadas por mim</h3>
-    <span style="color: #666; font-size: 14px;">3 fotos</span>
+    <span style="color: #666; font-size: 14px;">{{ total_fotos }} foto{{ total_fotos|pluralize }}</span>
   </div>
 
   <div class="photo-grid">
@@ -68,64 +72,122 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('formUploadFoto');
   const uploadZone = document.getElementById('uploadZone');
   const fileInput = document.getElementById('fileInput');
   const btnSelect = document.getElementById('btnSelect');
+  const btnSubmit = document.getElementById('btnSubmitForm');
   const uploadTitle = document.getElementById('uploadTitle');
   const uploadSubtitle = document.getElementById('uploadSubtitle');
   const uploadIcon = document.getElementById('uploadIcon');
+  const preview = document.getElementById('selectedPreview');
+  const uploadErro = document.getElementById('uploadErro');
+  const tiposAceitos = ['image/jpeg', 'image/png', 'image/webp'];
+  const maxBytes = 5 * 1024 * 1024;
 
-  // Abrir o seletor de arquivos ao clicar na zona ou no botão
-  uploadZone.addEventListener('click', function(e) {
-    if (e.target !== btnSelect) {
-      fileInput.click();
+  function mostrarErro(msg) {
+    if (!msg) {
+      uploadErro.style.display = 'none';
+      return;
     }
+    uploadErro.querySelector('span').textContent = msg;
+    uploadErro.style.display = 'flex';
+  }
+
+  function atualizarPreview(files) {
+    preview.innerHTML = '';
+    if (!files || files.length === 0) {
+      preview.style.display = 'none';
+      uploadIcon.className = 'ti ti-cloud-upload';
+      uploadIcon.style.color = '';
+      uploadTitle.textContent = 'Arraste fotos aqui ou clique para selecionar';
+      uploadTitle.style.color = '';
+      uploadSubtitle.textContent = 'JPG, PNG ou WEBP · Máx. 5MB por foto';
+      return;
+    }
+
+    preview.style.display = 'flex';
+    uploadIcon.className = 'ti ti-photo-check';
+    uploadIcon.style.color = 'var(--rosa, #981869)';
+    const n = files.length;
+    uploadTitle.textContent = n + (n === 1 ? ' foto selecionada' : ' fotos selecionadas');
+    uploadTitle.style.color = 'var(--rosa, #981869)';
+    uploadSubtitle.textContent = "Clique em 'Enviar Arquivos' abaixo para salvar.";
+
+    Array.from(files).forEach(function(file) {
+      const thumb = document.createElement('div');
+      thumb.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #e5e5e5;border-radius:8px;background:#fafafa;font-size:12px;color:#444;';
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.alt = file.name;
+      img.style.cssText = 'width:36px;height:36px;object-fit:cover;border-radius:6px;';
+      const nome = document.createElement('span');
+      nome.textContent = file.name.length > 22 ? file.name.slice(0, 19) + '...' : file.name;
+      thumb.appendChild(img);
+      thumb.appendChild(nome);
+      preview.appendChild(thumb);
+    });
+  }
+
+  function aplicarArquivos(fileList) {
+    mostrarErro('');
+    const dt = new DataTransfer();
+    const ignorados = [];
+    Array.from(fileList || []).forEach(function(file) {
+      if (!tiposAceitos.includes(file.type)) {
+        ignorados.push(file.name + ' (formato inválido)');
+      } else if (file.size > maxBytes) {
+        ignorados.push(file.name + ' (maior que 5 MB)');
+      } else {
+        dt.items.add(file);
+      }
+    });
+    fileInput.files = dt.files;
+    atualizarPreview(fileInput.files);
+    if (ignorados.length > 0) {
+      mostrarErro('Ignorado: ' + ignorados.join(', ') + '. Use JPG, PNG ou WEBP até 5 MB.');
+    }
+  }
+
+  uploadZone.addEventListener('click', function(e) {
+    if (e.target.closest('#btnSelect') || e.target === fileInput) return;
+    fileInput.click();
   });
   btnSelect.addEventListener('click', function() {
     fileInput.click();
   });
 
-  // Simular progresso ao selecionar um arquivo
   fileInput.addEventListener('change', function() {
-    if (fileInput.files.length > 0) {
-      simularUpload();
+    aplicarArquivos(fileInput.files);
+  });
+
+  uploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    uploadZone.style.borderColor = 'var(--rosa, #981869)';
+    uploadZone.style.background = '#fdf5f9';
+  });
+  uploadZone.addEventListener('dragleave', function() {
+    uploadZone.style.borderColor = '';
+    uploadZone.style.background = '';
+  });
+  uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    uploadZone.style.borderColor = '';
+    uploadZone.style.background = '';
+    if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+      aplicarArquivos(e.dataTransfer.files);
     }
   });
 
-  function simularUpload() {
-    // 1. Estado de carregamento
-    uploadZone.style.pointerEvents = 'none';
-    uploadIcon.className = 'ti ti-loader';
-    uploadIcon.style.animation = 'spin 1s linear infinite';
-    uploadTitle.textContent = 'Enviando foto...';
-    uploadSubtitle.textContent = 'Por favor, aguarde.';
-    btnSelect.style.display = 'none';
-
-    // 2. Estado de sucesso (após 1.5s)
-    setTimeout(() => {
-      uploadIcon.style.animation = 'none';
-      uploadIcon.className = 'ti ti-check';
-      uploadIcon.style.color = 'var(--verde, #2ea36f)';
-      uploadTitle.textContent = 'Foto enviada com sucesso!';
-      uploadTitle.style.color = 'var(--verde, #2ea36f)';
-      uploadSubtitle.textContent = 'A página será recarregada em breve.';
-
-      // Resetar após 3s para fins de demonstração
-      setTimeout(() => {
-        uploadIcon.className = 'ti ti-cloud-upload';
-        uploadIcon.style.color = '';
-        uploadTitle.textContent = 'Arraste fotos aqui ou clique para selecionar';
-        uploadTitle.style.color = '';
-        uploadSubtitle.textContent = 'JPG, PNG ou WEBP · Máx. 5MB por foto';
-        btnSelect.style.display = '';
-        uploadZone.style.pointerEvents = 'auto';
-        fileInput.value = '';
-      }, 3000);
-    }, 1500);
-  }
+  form.addEventListener('submit', function(e) {
+    if (!fileInput.files || fileInput.files.length === 0) {
+      e.preventDefault();
+      mostrarErro('Selecione ao menos uma foto antes de enviar.');
+      return;
+    }
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = '<i class="ti ti-loader"></i> Enviando...';
+  });
 });
 </script>
-<style>
-@keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
 {% endblock %}
